@@ -25,9 +25,9 @@ namespace murciainvaders
         private InputActionAsset m_Input;
         private InputAction m_MovementInput;
 
-        //Speed parameter
+        //Speed parameter (in angles)
         [SerializeField]
-        private float m_PlayerSpeed = 3f;
+        private float m_PlayerSpeed = 30f;
 
         //For avoiding using some binary stuff, we set the layer through the Unity inspector with this
         [SerializeField]
@@ -69,7 +69,8 @@ namespace murciainvaders
         // Update is called once per frame
         void Update()
         {
-
+            Vector2 direction = m_MovementInput.ReadValue<Vector2>();
+            transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerSpeed * Time.deltaTime);
         }
 
         private void MovementPerformed(InputAction.CallbackContext context)
@@ -79,6 +80,7 @@ namespace murciainvaders
 
         private void ShootingAction(InputAction.CallbackContext context)
         {
+            Shooting();
             Debug.Log(context);
         }
 
@@ -88,13 +90,20 @@ namespace murciainvaders
             Debug.Log(context);
         }
 
+        private void Shooting()
+        {
+            GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
+            SpriteRenderer m_Sprite = m_CurrentBullet.GetComponent<SpriteRenderer>();
+            m_Sprite.color = m_BulletColor;
+        }
         private void SwitchBulletColor()
         {
             //It will switch the color of the button and bullets
             m_BulletColor = m_Colors[m_colorCount];
             m_ShootingButtonSprite = m_ShootingButton.GetComponent<Image>();
             m_ShootingButtonSprite.color = m_BulletColor;
-            if (m_colorCount < m_Colors.Count)
+            //Remember that Array.Count count its elements starting by 1, so a -1 is needed since the first element is 0.
+            if (m_colorCount < m_Colors.Count - 1)
             {
                 m_colorCount++;
             }
@@ -102,16 +111,6 @@ namespace murciainvaders
             {
                 m_colorCount = 0;
             }
-        }
-
-        private void Shoot()
-        {
-
-        }
-
-        private void SwitchColor()
-        {
-
         }
     }
 }
