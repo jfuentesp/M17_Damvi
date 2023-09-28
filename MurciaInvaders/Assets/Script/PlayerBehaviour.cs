@@ -8,6 +8,7 @@ namespace murciainvaders
 {
     public class PlayerBehaviour : MonoBehaviour
     {
+        [Header("GameObject References")]
         //Reference to PlayerBullets: Bullets will spawn from the cannon everytime you shoot
         [SerializeField]
         private GameObject m_PlayerBullet;
@@ -21,32 +22,44 @@ namespace murciainvaders
         [SerializeField]
         private GameObject m_ShootingButton;
         private Image m_ShootingButtonSprite;
+        
+        //Variable for saving the player rigidbody. Will be set in Awake() function.
+        private Rigidbody2D m_RigidBody;
         //Instance of InputActions!
         private InputActionAsset m_Input;
         private InputAction m_MovementInput;
 
-        //Speed parameter (in angles)
+        [Header("Speed parameter (in angles per second)")]
         [SerializeField]
-        private float m_PlayerSpeed = 30f;
+        private float m_PlayerAngularSpeed = 50f;
 
-        //For avoiding using some binary stuff, we set the layer through the Unity inspector with this
+        [Header("Angular limits on player rotation")]
         [SerializeField]
-        private LayerMask m_ActionLayerMask;
+        private float m_minClamp = -60;
+        [SerializeField]
+        private float m_maxClamp = 60;
 
+
+        //For avoiding using some binary stuff, we set the layer through the Unity inspector with this (if needed)
+        /*[SerializeField]
+        private LayerMask m_ActionLayerMask;*/
+
+        
         //Actual bullet color
         private Color m_BulletColor;
         private int m_colorCount = 0;
 
-        //Array of BulletColors
+        [Header("Array of bullet colors")]
         [SerializeField]
         private List<Color> m_Colors = new List<Color>();
 
         private void Awake()
         {
+            //Loading components
+            m_RigidBody = GetComponent<Rigidbody2D>();
             //Loading InputSystem
             //We need to instantiate InputActions first
             m_Input = Instantiate(m_InputActions);
-
             //Control over movement inputs
             m_MovementInput = m_Input.FindActionMap("PlayerActionMap").FindAction("Movement");
             m_MovementInput.performed += MovementPerformed;
@@ -69,8 +82,16 @@ namespace murciainvaders
         // Update is called once per frame
         void Update()
         {
+            // This movement set is for rotating based in transform rotations. But as we are rotating using physics, we will set a new code in FixedUpdate
+            /* Vector2 direction = m_MovementInput.ReadValue<Vector2>();
+            transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerAngularSpeed * Time.deltaTime);*/
+        }
+
+        private void FixedUpdate()
+        {
+            //We capture the direction set on our controller. This would be for keyboard input.
             Vector2 direction = m_MovementInput.ReadValue<Vector2>();
-            transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerSpeed * Time.deltaTime);
+            m_RigidBody.angularVelocity = m_PlayerAngularSpeed * direction.x;
         }
 
         private void MovementPerformed(InputAction.CallbackContext context)

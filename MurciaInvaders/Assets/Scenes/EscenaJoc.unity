@@ -1661,6 +1661,7 @@ GameObject:
   - component: {fileID: 1554949686}
   - component: {fileID: 1554949685}
   - component: {fileID: 1554949687}
+  - component: {fileID: 1554949688}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1752,7 +1753,8 @@ MonoBehaviour:
   m_Cannon: {fileID: 606278971}
   m_InputActions: {fileID: -944628639613478452, guid: 5ec09a3038dd80d4391569513799c67f, type: 3}
   m_ShootingButton: {fileID: 1876123532}
-  m_PlayerSpeed: 30
+  m_RigidBody: {fileID: 0}
+  m_PlayerAngularSpeed: 30
   m_ActionLayerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -1760,6 +1762,33 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
+--- !u!50 &1554949688
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554949684}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1 &1876123532
 GameObject:
   m_ObjectHideFlags: 0
