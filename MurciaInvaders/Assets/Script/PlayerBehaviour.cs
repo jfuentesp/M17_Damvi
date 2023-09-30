@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
 
 namespace murciainvaders
 {
@@ -32,12 +34,14 @@ namespace murciainvaders
         [Header("Speed parameter (in angles per second)")]
         [SerializeField]
         private float m_PlayerAngularSpeed = 50f;
+        [SerializeField]
+        private float m_PlayerRotationSpeed = 2f;
 
         [Header("Angular limits on player rotation")]
         [SerializeField]
-        private float m_minClamp = -60;
+        private float m_minClamp = 60;
         [SerializeField]
-        private float m_maxClamp = 60;
+        private float m_maxClamp = -60;
 
 
         //For avoiding using some binary stuff, we set the layer through the Unity inspector with this (if needed)
@@ -87,11 +91,17 @@ namespace murciainvaders
             transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerAngularSpeed * Time.deltaTime);*/
         }
 
+
         private void FixedUpdate()
         {
             //We capture the direction set on our controller. This would be for keyboard input.
             Vector2 direction = m_MovementInput.ReadValue<Vector2>();
-            m_RigidBody.angularVelocity = m_PlayerAngularSpeed * direction.x;
+            //We clamp the rotation giving it a minimum and maximum angle so the rotation has limits aside
+            float currentRotation = Mathf.Clamp(m_RigidBody.rotation, m_minClamp, m_maxClamp);
+            m_RigidBody.MoveRotation(currentRotation + (direction.x * m_PlayerRotationSpeed));
+            /*  A simple way to give angles per second velocity with no limitations!
+                 m_RigidBody.angularVelocity = m_PlayerAngularSpeed * direction.x;
+            */
         }
 
         private void MovementPerformed(InputAction.CallbackContext context)
