@@ -10,7 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62ec8edf70754184fb42dfe80f8bbedd, type: 3}
-  m_Name: EnemyTypeStats
+  m_Name: GreenEnemy
   m_EditorClassIdentifier: 
-  m_EnemySpeed: 0
-  m_ScoreValue: 0
+  m_EnemyType: 1
+  m_EnemySpeed: 3
+  m_ScoreValue: 80
+  m_EnemyColor: {r: 0, g: 1, b: 0, a: 1}
+  m_MaxHitpoints: 1
+  m_Hitpoints: 1

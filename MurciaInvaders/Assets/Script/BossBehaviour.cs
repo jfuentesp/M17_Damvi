@@ -28,6 +28,14 @@ public class NewBehaviourScript : MonoBehaviour
     //Pool object that will implement enemy pool
     Pool m_EnemyPool;
 
+    //LayerMask of PlayerBullets. It's better to serialize that field if you don't want to deal with binaries.
+    [SerializeField]
+    LayerMask m_LayerMaskBullets;
+
+    //Scriptable Object List that holds every enemy type stats 
+    [SerializeField]
+    private List<EnemyScriptableObject> m_EnemyScriptables;
+
     private void Awake()
     {
         //Loading components
@@ -39,7 +47,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(SpawnCoroutine());
     }
 
     // Update is called once per frame
@@ -69,5 +77,18 @@ public class NewBehaviourScript : MonoBehaviour
         m_RigidBody.velocity = m_Direction;
     }
 
+    private IEnumerator SpawnCoroutine()
+    {
+        while(true)
+        {
+            int random = Random.Range(0, m_EnemyScriptables.Count);
+            EnemyScriptableObject m_EnemyType = m_EnemyScriptables[random];
+            GameObject m_CurrentEnemy = m_EnemyPool.GetElement();
+            m_CurrentEnemy.GetComponent<EnemyBehaviour>().SetStats(m_EnemyType);
+            m_CurrentEnemy.transform.position = transform.position;
+            m_CurrentEnemy.transform.Rotate(-Vector3.forward * 180);
+            yield return new WaitForSeconds(2f);
+        }     
+    }
 
 }

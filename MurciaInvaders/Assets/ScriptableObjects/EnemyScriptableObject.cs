@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyTypeStats", menuName = "Scriptable Objects/Enemy Type Stats")]
-public class Enemy : ScriptableObject
+public class EnemyScriptableObject : ScriptableObject
 {
+    [SerializeField]
+    private int m_EnemyType;
     [SerializeField]
     private float m_EnemySpeed;
     [SerializeField]
@@ -17,6 +19,7 @@ public class Enemy : ScriptableObject
     private int m_Hitpoints;
 
     //Accessors to get the value (similar to getters)
+    public int EnemyType => m_EnemyType;
     public float EnemySpeed => m_EnemySpeed;
     public int ScoreValue => m_ScoreValue;
     public Color Color => m_EnemyColor;
