@@ -330,6 +330,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2d1ca2fa70a7b4d9c6845f76fce323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Enemy: {fileID: 0}
+  m_SpawnTime: 0
+  m_BossSpeed: 1.4
 --- !u!1 &359375214
 GameObject:
   m_ObjectHideFlags: 0
