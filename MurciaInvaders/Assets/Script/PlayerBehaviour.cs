@@ -32,8 +32,8 @@ namespace murciainvaders
         private InputAction m_MovementInput;
 
         [Header("Speed parameter (in angles per second)")]
-        [SerializeField]
-        private float m_PlayerAngularSpeed = 50f;
+        /*[SerializeField]
+        private float m_PlayerAngularSpeed = 50f;*/
         [SerializeField]
         private float m_PlayerRotationSpeed = 2f;
 
@@ -48,6 +48,8 @@ namespace murciainvaders
         /*[SerializeField]
         private LayerMask m_ActionLayerMask;*/
 
+        //Pool component which will have the bullets to instantiate
+        Pool m_BulletPool;
         
         //Actual bullet color
         private Color m_BulletColor;
@@ -61,6 +63,7 @@ namespace murciainvaders
         {
             //Loading components
             m_RigidBody = GetComponent<Rigidbody2D>();
+            m_BulletPool = this.GetComponentInChildren<Pool>();
             //Loading InputSystem
             //We need to instantiate InputActions first
             m_Input = Instantiate(m_InputActions);
@@ -91,7 +94,6 @@ namespace murciainvaders
             transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerAngularSpeed * Time.deltaTime);*/
         }
 
-
         private void FixedUpdate()
         {
             //We capture the direction set on our controller. This would be for keyboard input.
@@ -102,6 +104,11 @@ namespace murciainvaders
             /*  A simple way to give angles per second velocity with no limitations!
                  m_RigidBody.angularVelocity = m_PlayerAngularSpeed * direction.x;
             */
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            
         }
 
         private void MovementPerformed(InputAction.CallbackContext context)
@@ -123,7 +130,12 @@ namespace murciainvaders
 
         private void Shooting()
         {
-            GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
+            /* WIHOUT POOL */
+            //GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
+            /* WITH POOL */
+            GameObject m_CurrentBullet = m_BulletPool.GetElement();
+            m_CurrentBullet.transform.position = m_Cannon.transform.position;
+            m_CurrentBullet.transform.rotation = transform.rotation;           
             SpriteRenderer m_Sprite = m_CurrentBullet.GetComponent<SpriteRenderer>();
             m_Sprite.color = m_BulletColor;
         }
