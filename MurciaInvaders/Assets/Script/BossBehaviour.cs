@@ -17,6 +17,10 @@ public class NewBehaviourScript : MonoBehaviour
     //Movement speed of the boss to move in X Axis
     private float m_BossSpeed = 1.4f;
 
+    //Boss HP
+    private int m_MaxBossHP;
+    private int m_CurrentBossHP;
+
     [Header("Movement clamps")]
     private float m_Clamp = 2f;
 
@@ -47,6 +51,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Starting the spawning coroutine
         StartCoroutine(SpawnCoroutine());
     }
 
@@ -58,8 +63,8 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //We catch the current position of the boss
         float currentPosition = Mathf.Clamp(transform.position.x, -m_Clamp, m_Clamp);
-        Debug.Log("Current position boss: " + currentPosition);
         BossMovement(currentPosition);
     }
 
@@ -70,6 +75,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void BossMovement(float clampedPosition)
     {
+        //Movement function of the boss, side to side, checking the current position in order to call for a direction
         if (clampedPosition >= m_Clamp)
             m_Direction.x = -1 * m_BossSpeed;
         if (clampedPosition <= -m_Clamp)
@@ -81,6 +87,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         while(true)
         {
+            //Spawns an Enemy, randomly, from a total of 3 possible enemies. Then, gives its parameters such as Color, movement and type of enemy.
             int random = Random.Range(0, m_EnemyScriptables.Count);
             EnemyScriptableObject m_EnemyType = m_EnemyScriptables[random];
             GameObject m_CurrentEnemy = m_EnemyPool.GetElement();

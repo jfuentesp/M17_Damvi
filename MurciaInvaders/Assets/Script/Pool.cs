@@ -72,7 +72,6 @@ public class Pool : MonoBehaviour
             element.SetActive(false);
             return true;
         }
-        Debug.Log("Couldn't return the element. Element may have been deleted or is still active.");
         return false;
     }
 

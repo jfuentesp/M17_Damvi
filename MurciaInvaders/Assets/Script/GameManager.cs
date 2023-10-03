@@ -19,6 +19,23 @@ namespace murciainvaders
         private int m_CurrentScore = 0;
         //Variable for the Top Score
         private int m_TopScore = 0;
+        //Variable for the name input
+        private string m_NameInput;
+        //Getter and setter for the PlayerName function
+        public string m_PlayerName
+        {
+            get
+            {
+                return m_PlayerName;
+            }
+            set
+            {
+                m_PlayerName = m_NameInput;
+            }
+        }
+      
+        
+        
         public int TopScore //Getter and setter for the TopScore function.
         {
             get
@@ -36,7 +53,7 @@ namespace murciainvaders
 
         private void Awake()
         {
-            //First, we initialize an instance of GameManager.
+            //First, we initialize an instance of GameManager. If there is already an instance, it destroys the element and returns.
             if(m_Instance == null)
             {
                 m_Instance = this;

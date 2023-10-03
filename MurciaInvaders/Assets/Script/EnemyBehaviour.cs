@@ -33,7 +33,7 @@ public class EnemyBehaviour : MonoBehaviour
     private Transform m_LeftLimit;
     [SerializeField]
     private Transform m_RightLimit;*/
-    [Header("Parameters for Blue enemy sinoid")]
+    [Header("Parameters for Blue enemy with sinoidal movement")]
     [SerializeField]
     private float m_Frequency = 5f;
     [SerializeField]
@@ -42,6 +42,15 @@ public class EnemyBehaviour : MonoBehaviour
     private float m_Magnitude = 1f;
     private Vector3 m_Direction;
     private Vector3 m_Axis;
+
+    [Header("Layer masks")]
+    [SerializeField]
+    private LayerMask m_EliminatorLayerMask;
+    [SerializeField]
+    private LayerMask m_PlayerLayerMask;
+    [SerializeField]
+    private LayerMask m_PlayerBulletMask;
+
 
     private void Awake()
     {
@@ -55,13 +64,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         //Values used for the sinoid behavior of the blue enemy
         m_Direction = -Vector3.up;
-        m_Axis = transform.right;        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        m_Axis = transform.right;
     }
 
     private void FixedUpdate()
@@ -79,6 +82,37 @@ public class EnemyBehaviour : MonoBehaviour
         {
             BlueMovement();
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("collidedddd");
+        if (collision.gameObject.layer.Equals(m_PlayerBulletMask))
+        {
+            //If hits a player bullet, it will substract 1 hp. If hp hits 0, it will disable and will notify its score.
+            m_Hitpoints--;
+            if(m_Hitpoints == 0)
+            {
+                Debug.Log("I am an enemy, I collided with a playerbullet");
+                this.gameObject.SetActive(false);
+            }
+        }
+        if(collision.gameObject.layer == m_PlayerLayerMask)
+        {
+            //If hits the player, it disables and notifies the observer
+            Debug.Log("I am an enemy, I collided with player");
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.layer == m_EliminatorLayerMask || collision.gameObject.layer == m_PlayerLayerMask)
+        {
+            Debug.Log("I am an enemy, I collided with a trigger");
+            //If hits the eliminator trigger, it disables and notifies the observer
+            this.gameObject.SetActive(false);
+        }   
     }
 
     //This function will be called by the Spawner (boss) to set randomly an Scriptable object with the enemy prefab stats
@@ -112,9 +146,6 @@ public class EnemyBehaviour : MonoBehaviour
     private void BlueMovement()
     {
         m_RigidBody.velocity = m_Direction + m_Axis * Mathf.Sin(m_Frequency * Time.time + m_Offset) * m_Magnitude;
-        //m_RigidBody.velocity = (Vector3.up * m_EnemySpeed) * Mathf.Sin(Time.time * m_Frequency + m_Offset) * m_Magnitude;
-        //m_RigidBody.velocity = new Vector3(Mathf.Sin(1 * Time.time * m_Frequency + m_Offset) * m_Magnitude, -m_EnemySpeed, 0);
-        //float clamp = Mathf.Clamp(transform.position.x, m_LeftLimit.transform.position.x, m_RightLimit.transform.position.x);
     }
 
 }

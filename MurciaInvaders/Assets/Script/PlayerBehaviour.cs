@@ -43,6 +43,10 @@ namespace murciainvaders
         [SerializeField]
         private float m_maxClamp = -60;
 
+        //Player HP
+        private int m_MaxPlayerHP;
+        private int m_CurrentPlayerHP;
+
 
         //For avoiding using some binary stuff, we set the layer through the Unity inspector with this (if needed)
         /*[SerializeField]
