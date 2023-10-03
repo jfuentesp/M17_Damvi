@@ -168,9 +168,9 @@ MonoBehaviour:
   m_EnemyColor: {r: 0, g: 0, b: 0, a: 0}
   m_MaxHitpoints: 0
   m_Hitpoints: 0
-  m_Frequency: 5
-  m_Offset: 1
-  m_Magnitude: 1
+  m_Frequency: 2
+  m_Offset: 2
+  m_Magnitude: 2
 --- !u!114 &-2208187382165226199
 MonoBehaviour:
   m_ObjectHideFlags: 0

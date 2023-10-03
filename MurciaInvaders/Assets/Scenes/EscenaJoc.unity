@@ -355,7 +355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Pool: []
   m_PoolObject: {fileID: 3917604102664968380, guid: 423bb4ef13ca00d49a1b9f7aa526ed47, type: 3}
-  m_Capacity: 50
+  m_Capacity: 100
   m_TransformReference: {fileID: 299241897}
 --- !u!1 &359375214
 GameObject:
@@ -863,7 +863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Pool: []
   m_PoolObject: {fileID: 1271140786226255539, guid: dfbf4aeddda66b54d9deab105f76df50, type: 3}
-  m_Capacity: 50
+  m_Capacity: 100
   m_TransformReference: {fileID: 606278971}
 --- !u!1 &619394800
 GameObject:
