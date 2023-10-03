@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -39,8 +40,8 @@ public class EnemyBehaviour : MonoBehaviour
     private float m_Offset = 1f;
     [SerializeField]
     private float m_Magnitude = 1f;
-
-    
+    private Vector3 m_Direction;
+    private Vector3 m_Axis;
 
     private void Awake()
     {
@@ -52,7 +53,9 @@ public class EnemyBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Values used for the sinoid behavior of the blue enemy
+        m_Direction = -Vector3.up;
+        m_Axis = transform.right;        
     }
 
     // Update is called once per frame
@@ -90,6 +93,10 @@ public class EnemyBehaviour : MonoBehaviour
         //Setting the sprite color in here too
         SpriteRenderer enemySprite = GetComponent<SpriteRenderer>();
         enemySprite.color = m_EnemyColor;
+        //If the enemy is blue, we have to unlock the X axis constraint in order to be able to make the sinoidal move
+        if (m_EnemyType == 2)
+            //To unlock, we have to make an AND and pass a negate value of FreezePositionX (&= and the ~ char)
+            m_RigidBody.constraints &= ~RigidbodyConstraints2D.FreezePositionX;
     }
 
     private void RedMovement()
@@ -104,7 +111,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void BlueMovement()
     {
-        m_RigidBody.velocity = new Vector3(Mathf.Sin(Time.time * m_Frequency + m_Offset) * m_Magnitude, -m_EnemySpeed, 0);
+        m_RigidBody.velocity = m_Direction + m_Axis * Mathf.Sin(m_Frequency * Time.time + m_Offset) * m_Magnitude;
+        //m_RigidBody.velocity = (Vector3.up * m_EnemySpeed) * Mathf.Sin(Time.time * m_Frequency + m_Offset) * m_Magnitude;
+        //m_RigidBody.velocity = new Vector3(Mathf.Sin(1 * Time.time * m_Frequency + m_Offset) * m_Magnitude, -m_EnemySpeed, 0);
         //float clamp = Mathf.Clamp(transform.position.x, m_LeftLimit.transform.position.x, m_RightLimit.transform.position.x);
     }
 

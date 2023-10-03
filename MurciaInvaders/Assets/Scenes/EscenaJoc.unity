@@ -2035,6 +2035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4590302176561594204, guid: 423bb4ef13ca00d49a1b9f7aa526ed47, type: 3}
+      propertyPath: m_Constraints
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7474835854782506241, guid: 423bb4ef13ca00d49a1b9f7aa526ed47, type: 3}
       propertyPath: m_RootOrder
       value: 6
