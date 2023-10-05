@@ -63,6 +63,10 @@ namespace murciainvaders
         [SerializeField]
         private List<Color> m_Colors = new List<Color>();
 
+        [Header("Delegates")]
+        [SerializeField]
+        private BulletBehaviour m_Bullet;
+
         private void Awake()
         {
             //Loading components
@@ -137,11 +141,13 @@ namespace murciainvaders
             /* WIHOUT POOL */
             //GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
             /* WITH POOL */
-            GameObject m_CurrentBullet = m_BulletPool.GetElement();
-            m_CurrentBullet.transform.position = m_Cannon.transform.position;
-            m_CurrentBullet.transform.rotation = transform.rotation;           
+            GameObject m_CurrentBullet = m_BulletPool.GetElement(this.gameObject);
+            //m_CurrentBullet.transform.rotation = transform.rotation;
+            m_CurrentBullet.transform.position = m_Cannon.transform.position;           
+            Debug.Log("Bullet " + m_CurrentBullet.gameObject.name + " Rotation: " + m_CurrentBullet.transform.rotation);
             SpriteRenderer m_Sprite = m_CurrentBullet.GetComponent<SpriteRenderer>();
             m_Sprite.color = m_BulletColor;
+            
         }
         private void SwitchBulletColor()
         {

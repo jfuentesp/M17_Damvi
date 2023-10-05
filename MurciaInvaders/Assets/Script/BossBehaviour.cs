@@ -70,7 +70,12 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.CompareTag("PlayerBullet"))
+        {
+            //Delegate example. The boss ship will notify the gamemanager to substract 1 HP to the boss HP.
+            
+
+        }
     }
 
     private void BossMovement(float clampedPosition)
@@ -90,7 +95,7 @@ public class NewBehaviourScript : MonoBehaviour
             //Spawns an Enemy, randomly, from a total of 3 possible enemies. Then, gives its parameters such as Color, movement and type of enemy.
             int random = Random.Range(0, m_EnemyScriptables.Count);
             EnemyScriptableObject m_EnemyType = m_EnemyScriptables[random];
-            GameObject m_CurrentEnemy = m_EnemyPool.GetElement();
+            GameObject m_CurrentEnemy = m_EnemyPool.GetElement(this.gameObject);
             m_CurrentEnemy.GetComponent<EnemyBehaviour>().SetStats(m_EnemyType);
             m_CurrentEnemy.transform.position = transform.position;
             m_CurrentEnemy.transform.Rotate(-Vector3.forward * 180);

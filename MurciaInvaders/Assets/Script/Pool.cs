@@ -47,13 +47,15 @@ public class Pool : MonoBehaviour
         }
     }
 
-    public GameObject GetElement()
+    public GameObject GetElement(GameObject parent)
     {
         foreach (GameObject element in m_Pool)
         {
             //For each iteration in the Pool, we enable and return the first item that is available (disabled).
             if (element.activeInHierarchy == false)
             {
+                //Had to add the rotation inside here because there was a problem setting it into the shooting action in PlayerBehaviour. Called first this function than the properties given.
+                element.transform.rotation = parent.transform.rotation;
                 element.SetActive(true);
                 return element;
             }

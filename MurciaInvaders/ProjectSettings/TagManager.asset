@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Boss
+  - Enemy
+  - PlayerBullet
+  - Pickup
+  - Eliminator
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX

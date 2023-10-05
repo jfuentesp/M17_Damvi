@@ -52,6 +52,8 @@ public class EnemyBehaviour : MonoBehaviour
     private LayerMask m_PlayerBulletMask;
 
 
+
+
     private void Awake()
     {
         //Loading components
@@ -86,17 +88,18 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collidedddd");
-        if (collision.gameObject.layer.Equals(m_PlayerBulletMask))
+        if (collision.gameObject.CompareTag("PlayerBullet"))
         {
             //If hits a player bullet, it will substract 1 hp. If hp hits 0, it will disable and will notify its score.
             m_Hitpoints--;
-            if(m_Hitpoints == 0)
+            collision.gameObject.SetActive(false); //Bullet returned to the pool
+            if (m_Hitpoints <= 0)
             {
-                Debug.Log("I am an enemy, I collided with a playerbullet");
-                this.gameObject.SetActive(false);
+                Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
+                this.gameObject.SetActive(false); //Enemy returned to the pool
             }
         }
+
         if(collision.gameObject.layer == m_PlayerLayerMask)
         {
             //If hits the player, it disables and notifies the observer
