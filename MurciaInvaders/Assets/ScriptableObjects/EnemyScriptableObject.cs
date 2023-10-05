@@ -17,6 +17,8 @@ public class EnemyScriptableObject : ScriptableObject
     private int m_MaxHitpoints;
     [SerializeField]
     private int m_Hitpoints;
+    [SerializeField]
+    private int m_Damage;
 
     //Accessors to get the value (similar to getters)
     public int EnemyType => m_EnemyType;
@@ -25,6 +27,7 @@ public class EnemyScriptableObject : ScriptableObject
     public Color Color => m_EnemyColor;
     public int MaxHitpoints => m_MaxHitpoints;
     public int Hitpoints => m_Hitpoints;
+    public int Damage => m_Damage;
 
-    
+
 }

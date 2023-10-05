@@ -20,12 +20,22 @@ public class BulletBehaviour : MonoBehaviour
     [SerializeField]
     private LayerMask m_PickupsMask;
 
+    //Variable where the color of this bullet will be saved
+    private Color m_BulletColor;
+    public Color BulletColor
+    {
+        get { return m_BulletColor; }
+    }
+
+    private SpriteRenderer m_SpriteRenderer;
+
     public delegate void BulletCollision();
     public event BulletCollision OnBulletCollision;
 
     private void Awake()
     {
         m_RigidBody = GetComponent<Rigidbody2D>();
+        m_SpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
@@ -55,6 +65,8 @@ public class BulletBehaviour : MonoBehaviour
         m_RigidBody.AddForce(Vector2.up * m_BulletSpeed);
         //Start coroutine
         m_AliveCoroutine = StartCoroutine(BulletIsAlive());
+        //We save the color on the variable
+        m_BulletColor = m_SpriteRenderer.color;
     }
 
     private void OnDisable()

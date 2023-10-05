@@ -65,10 +65,12 @@ namespace murciainvaders
 
         [Header("Delegates")]
         [SerializeField]
-        private BulletBehaviour m_Bullet;
+        private EnemyBehaviour m_Enemy; //Observable
+
 
         private void Awake()
         {
+            m_Enemy.OnDamageDealt += ReceiveDamage;
             //Loading components
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_BulletPool = this.GetComponentInChildren<Pool>();
@@ -89,17 +91,8 @@ namespace murciainvaders
 
         void Start()
         {
-            //Loading components
             //Initializing actual color
             SwitchBulletColor();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            // This movement set is for rotating based in transform rotations. But as we are rotating using physics, we will set a new code in FixedUpdate
-            /* Vector2 direction = m_MovementInput.ReadValue<Vector2>();
-            transform.Rotate(new Vector3(0, 0, direction.x) * m_PlayerAngularSpeed * Time.deltaTime);*/
         }
 
         private void FixedUpdate()
@@ -164,6 +157,11 @@ namespace murciainvaders
             {
                 m_colorCount = 0;
             }
+        }
+
+        private void ReceiveDamage()
+        {
+
         }
     }
 }

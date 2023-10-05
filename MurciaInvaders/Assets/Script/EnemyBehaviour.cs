@@ -25,6 +25,10 @@ public class EnemyBehaviour : MonoBehaviour
     //Current HP. MaxHitpoints value on spawn.
     [SerializeField]
     private int m_Hitpoints;
+    //Damage that will deal to the player if lands
+    [SerializeField]
+    private int m_Damage;
+
 
     private Rigidbody2D m_RigidBody;
 
@@ -51,13 +55,14 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField]
     private LayerMask m_PlayerBulletMask;
 
-
+    public delegate void DamageDealt();
+    public event DamageDealt OnDamageDealt;
 
 
     private void Awake()
     {
         //Loading components
-        m_RigidBody = GetComponent<Rigidbody2D>();     
+        m_RigidBody = GetComponent<Rigidbody2D>(); 
     }
 
 
@@ -87,16 +92,19 @@ public class EnemyBehaviour : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
+    {     
         if (collision.gameObject.CompareTag("PlayerBullet"))
         {
-            //If hits a player bullet, it will substract 1 hp. If hp hits 0, it will disable and will notify its score.
-            m_Hitpoints--;
-            collision.gameObject.SetActive(false); //Bullet returned to the pool
-            if (m_Hitpoints <= 0)
-            {
-                Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
-                this.gameObject.SetActive(false); //Enemy returned to the pool
+            Color colorCollision = collision.gameObject.GetComponent<SpriteRenderer>().color;
+            //If hits a player bullet of the same color, it will substract 1 hp. If hp hits 0, it will disable and will notify its score.
+            if (colorCollision.Equals(m_EnemyColor)) {
+                m_Hitpoints--;
+                if (m_Hitpoints <= 0)
+                {
+                    Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
+                    this.gameObject.SetActive(false); //Enemy returned to the pool
+                }
+                collision.gameObject.SetActive(false); //Bullet returned to the pool
             }
         }
 
@@ -110,9 +118,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == m_EliminatorLayerMask || collision.gameObject.layer == m_PlayerLayerMask)
+        if(collision.gameObject.CompareTag("Eliminator"))
         {
-            Debug.Log("I am an enemy, I collided with a trigger");
             //If hits the eliminator trigger, it disables and notifies the observer
             this.gameObject.SetActive(false);
         }   
@@ -127,6 +134,7 @@ public class EnemyBehaviour : MonoBehaviour
         m_EnemyColor = enemyStats.Color;
         m_MaxHitpoints = enemyStats.MaxHitpoints;
         m_Hitpoints = enemyStats.Hitpoints;
+        m_Damage = enemyStats.Damage;
         //Setting the sprite color in here too
         SpriteRenderer enemySprite = GetComponent<SpriteRenderer>();
         enemySprite.color = m_EnemyColor;
