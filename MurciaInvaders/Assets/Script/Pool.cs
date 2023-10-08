@@ -40,7 +40,10 @@ public class Pool : MonoBehaviour
         for(int i = 0; i < m_Capacity; i++)
         {
             //Instantiating and disabling a new element for each iteration in List capacity (pool capacity). And add to the queue.
-            GameObject element = Instantiate(m_PoolObject, m_TransformReference.transform.position, m_TransformReference.transform.rotation); // Note about transform.pos/rot: if item needs to be spawned in a certain position, it should be set after activating it in the Behaviour script.
+            //GameObject element = Instantiate(m_PoolObject, m_TransformReference.transform.position, m_TransformReference.transform.rotation); 
+            // Note about transform.pos/rot or this.transform: if item needs to be spawned in a certain position, it should be set after activating it in the Behaviour script.
+            //this.transform sets the parent reference, so every item will be saved as a child from parent instead of replenishing all the scene with free gameobjects
+            GameObject element = Instantiate(m_PoolObject, this.transform);
             element.GetComponent<PoolItem>().SetPool(this);
             m_Pool.Add(element);
             element.SetActive(false);

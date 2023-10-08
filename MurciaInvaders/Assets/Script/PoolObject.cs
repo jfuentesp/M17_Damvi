@@ -6,11 +6,11 @@ public class PoolItem : MonoBehaviour
 {
     //Private variable to set which Pool will manage the PoolObject
     private Pool m_Owner;
-    private bool m_Created;
+    //private bool m_Created;
 
     private void Awake()
     {
-        m_Created = false;
+        //m_Created = false;
     }
 
     //Function that sets the Pool to the PoolObject
@@ -19,12 +19,14 @@ public class PoolItem : MonoBehaviour
         m_Owner = owner;
     }
 
+
     private void OnDisable()
     {
-        if (!m_Owner.ReturnElement(gameObject) && m_Created)
+        //Enable if you want to control who is returning the element.
+        /*if (!m_Owner.ReturnElement(gameObject))
             Debug.LogError(gameObject + "Pool Return error");
 
-        m_Created = true;
+        */
     }
 
 }

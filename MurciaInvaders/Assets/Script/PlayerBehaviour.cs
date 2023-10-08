@@ -10,6 +10,10 @@ namespace murciainvaders
 {
     public class PlayerBehaviour : MonoBehaviour
     {
+        //Instance of the Player. Refers to this own gameobject.
+        private static PlayerBehaviour m_Instance;
+        public static PlayerBehaviour PlayerInstance => m_Instance; //A getter for the instance of the player. Similar to get { return m_Instance }. (Accessor)
+
         [Header("GameObject References")]
         //Reference to PlayerBullets: Bullets will spawn from the cannon everytime you shoot
         [SerializeField]
@@ -43,18 +47,30 @@ namespace murciainvaders
         [SerializeField]
         private float m_maxClamp = -60;
 
-        //Player HP
-        private int m_MaxPlayerHP;
-        private int m_CurrentPlayerHP;
+        //Player HP. We will create a getter for MaxHP and a getter and setter for CurrentHP.
+        [Header("Player HP Values")]
+        [SerializeField]
+        private int m_MaxPlayerHP = 20;
+        public int MaxPlayerHP {
+            get { return m_MaxPlayerHP;}
+        }
 
+        private int m_CurrentPlayerHP;
+        public int CurrentPlayerHP
+        {
+            get { return m_CurrentPlayerHP; }
+            set { m_CurrentPlayerHP = value; }
+        }
 
         //For avoiding using some binary stuff, we set the layer through the Unity inspector with this (if needed)
         /*[SerializeField]
         private LayerMask m_ActionLayerMask;*/
 
-        //Pool component which will have the bullets to instantiate
+        [Header("Pools references")]
+        //Pool object that will implement bullet pool
+        [SerializeField]
         Pool m_BulletPool;
-        
+
         //Actual bullet color
         private Color m_BulletColor;
         private int m_colorCount = 0;
@@ -63,17 +79,26 @@ namespace murciainvaders
         [SerializeField]
         private List<Color> m_Colors = new List<Color>();
 
-        [Header("Delegates")]
-        [SerializeField]
-        private EnemyBehaviour m_Enemy; //Observable
-
+        //Delegate example
+        /*public delegate int OnPlayerDamageDelegate();
+        public event OnPlayerDamageDelegate OnPlayerDamageDelegateEvent; //Observer*/
 
         private void Awake()
         {
-            m_Enemy.OnDamageDealt += ReceiveDamage;
+            //First, we initialize an instance of Player. If there is already an instance, it destroys the element and returns.
+            if (m_Instance == null)
+            {
+                m_Instance = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             //Loading components
             m_RigidBody = GetComponent<Rigidbody2D>();
-            m_BulletPool = this.GetComponentInChildren<Pool>();
+            //m_BulletPool = this.GetComponentInChildren<Pool>();
             //Loading InputSystem
             //We need to instantiate InputActions first
             m_Input = Instantiate(m_InputActions);
@@ -93,6 +118,7 @@ namespace murciainvaders
         {
             //Initializing actual color
             SwitchBulletColor();
+            ReloadStats();
         }
 
         private void FixedUpdate()
@@ -109,7 +135,6 @@ namespace murciainvaders
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            
         }
 
         private void MovementPerformed(InputAction.CallbackContext context)
@@ -135,9 +160,7 @@ namespace murciainvaders
             //GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
             /* WITH POOL */
             GameObject m_CurrentBullet = m_BulletPool.GetElement(this.gameObject);
-            //m_CurrentBullet.transform.rotation = transform.rotation;
-            m_CurrentBullet.transform.position = m_Cannon.transform.position;           
-            Debug.Log("Bullet " + m_CurrentBullet.gameObject.name + " Rotation: " + m_CurrentBullet.transform.rotation);
+            m_CurrentBullet.transform.position = m_Cannon.transform.position;                       
             SpriteRenderer m_Sprite = m_CurrentBullet.GetComponent<SpriteRenderer>();
             m_Sprite.color = m_BulletColor;
             
@@ -159,9 +182,24 @@ namespace murciainvaders
             }
         }
 
-        private void ReceiveDamage()
+        public void OnPlayerDamage(int damageReceived) 
         {
+            Debug.Log("OnDamage executed.");
+            if(m_CurrentPlayerHP > 0)
+            {     
+                m_CurrentPlayerHP -= damageReceived;
+                Debug.Log("Damage received: " + damageReceived + " | Total HP: " + m_CurrentPlayerHP);
+                if(m_CurrentPlayerHP <= 0)
+                {
+                    //Dies
+                }
+            } 
+        }
 
+        public void ReloadStats()
+        {
+            m_CurrentPlayerHP = m_MaxPlayerHP;
+            Debug.Log(string.Format("Player now has {0} HP", m_CurrentPlayerHP));
         }
     }
 }

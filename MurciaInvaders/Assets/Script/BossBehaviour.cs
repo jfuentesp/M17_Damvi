@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using murciainvaders;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class BossBehaviour : MonoBehaviour
 {
+    //Instance of the Boss. Refers to this own gameobject.
+    private static BossBehaviour m_Instance;
+    public static BossBehaviour BossInstance => m_Instance; //A getter for the instance of the boss. Similar to get { return m_Instance }. (Accessor)
+
     [Header("GameObject References")]
     //Reference to Enemy: Enemies will spawn from the boss each cycle (based on time given)
     [SerializeField]
@@ -16,10 +21,19 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField]
     //Movement speed of the boss to move in X Axis
     private float m_BossSpeed = 1.4f;
-
     //Boss HP
-    private int m_MaxBossHP;
+    [SerializeField]
+    private int m_MaxBossHP = 20;
+    public int BossMaxHP
+    {
+        get { return m_MaxBossHP; }
+    }
     private int m_CurrentBossHP;
+    public int BossCurrentHP
+    {
+        get { return m_CurrentBossHP;}
+    }
+
 
     [Header("Movement clamps")]
     private float m_Clamp = 2f;
@@ -30,7 +44,11 @@ public class NewBehaviourScript : MonoBehaviour
     Rigidbody2D m_RigidBody;
 
     //Pool object that will implement enemy pool
+    [SerializeField]
     Pool m_EnemyPool;
+    //Pool object that will implement bullet pool
+    //[SerializeField]
+    //Pool m_BulletPool;
 
     //LayerMask of PlayerBullets. It's better to serialize that field if you don't want to deal with binaries.
     [SerializeField]
@@ -42,15 +60,27 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void Awake()
     {
+        //First, we initialize an instance of Boss. If there is already an instance, it destroys the element and returns.
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         //Loading components
         m_RigidBody = GetComponent<Rigidbody2D>();
-        m_EnemyPool = GetComponent<Pool>();
+        // m_EnemyPool = GetComponent<Pool>();
         m_Direction = new Vector2(1 * m_BossSpeed,0);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        ReloadStats();
         //Starting the spawning coroutine
         StartCoroutine(SpawnCoroutine());
     }
@@ -66,16 +96,6 @@ public class NewBehaviourScript : MonoBehaviour
         //We catch the current position of the boss
         float currentPosition = Mathf.Clamp(transform.position.x, -m_Clamp, m_Clamp);
         BossMovement(currentPosition);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("PlayerBullet"))
-        {
-            //Delegate example. The boss ship will notify the gamemanager to substract 1 HP to the boss HP.
-            
-
-        }
     }
 
     private void BossMovement(float clampedPosition)
@@ -99,8 +119,25 @@ public class NewBehaviourScript : MonoBehaviour
             m_CurrentEnemy.GetComponent<EnemyBehaviour>().SetStats(m_EnemyType);
             m_CurrentEnemy.transform.position = transform.position;
             m_CurrentEnemy.transform.Rotate(-Vector3.forward * 180);
+            Debug.Log(string.Format("Spawning enemy {0} color {1}", random, m_EnemyType.Color));
             yield return new WaitForSeconds(2f);
         }     
+    }
+
+    public void OnBossDamage(int damageReceived)
+    {
+        m_CurrentBossHP -= damageReceived;
+        Debug.Log(string.Format("Boss receives {0} damage. Current HP: {1}", damageReceived, m_CurrentBossHP));
+        if(m_CurrentBossHP <= 0)
+        {
+            //Dies and change scene
+        }
+    }
+
+    public void ReloadStats()
+    {
+        m_CurrentBossHP = m_MaxBossHP;
+        Debug.Log(string.Format("Boss now has {0} HP", m_CurrentBossHP));
     }
 
 }

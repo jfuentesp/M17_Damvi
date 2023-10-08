@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using murciainvaders;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -29,14 +30,16 @@ public class EnemyBehaviour : MonoBehaviour
     [SerializeField]
     private int m_Damage;
 
+    [Header("Pools references")]
+    //Parent pool to enable or disable this object properly
+    [SerializeField]
+    Pool m_ParentPool;
+
+    //Reference to an instance of the player.
+    PlayerBehaviour m_Player;
 
     private Rigidbody2D m_RigidBody;
 
-    /*[Header("Limit positions for Blue enemy sinoid")]
-    [SerializeField]
-    private Transform m_LeftLimit;
-    [SerializeField]
-    private Transform m_RightLimit;*/
     [Header("Parameters for Blue enemy with sinoidal movement")]
     [SerializeField]
     private float m_Frequency = 5f;
@@ -47,22 +50,20 @@ public class EnemyBehaviour : MonoBehaviour
     private Vector3 m_Direction;
     private Vector3 m_Axis;
 
-    [Header("Layer masks")]
+    //GameEvents and delegates
     [SerializeField]
-    private LayerMask m_EliminatorLayerMask;
+    private GameEventInt m_OnPlayerDamageEvent;
     [SerializeField]
-    private LayerMask m_PlayerLayerMask;
-    [SerializeField]
-    private LayerMask m_PlayerBulletMask;
-
-    public delegate void DamageDealt();
-    public event DamageDealt OnDamageDealt;
+    private GameEventInt m_OnEnemyDestroyedEvent;
+    
 
 
     private void Awake()
     {
         //Loading components
-        m_RigidBody = GetComponent<Rigidbody2D>(); 
+        m_Player = PlayerBehaviour.PlayerInstance;
+        m_ParentPool = GetComponentInParent<Pool>();
+        m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
 
@@ -91,28 +92,18 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+       
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {     
-        if (collision.gameObject.CompareTag("PlayerBullet"))
-        {
-            Color colorCollision = collision.gameObject.GetComponent<SpriteRenderer>().color;
-            //If hits a player bullet of the same color, it will substract 1 hp. If hp hits 0, it will disable and will notify its score.
-            if (colorCollision.Equals(m_EnemyColor)) {
-                m_Hitpoints--;
-                if (m_Hitpoints <= 0)
-                {
-                    Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
-                    this.gameObject.SetActive(false); //Enemy returned to the pool
-                }
-                collision.gameObject.SetActive(false); //Bullet returned to the pool
-            }
-        }
-
-        if(collision.gameObject.layer == m_PlayerLayerMask)
+        if(collision.gameObject.CompareTag("Player"))
         {
             //If hits the player, it disables and notifies the observer
-            Debug.Log("I am an enemy, I collided with player");
-            this.gameObject.SetActive(false);
+            m_OnPlayerDamageEvent.Raise(m_Damage);
+            m_ParentPool.ReturnElement(this.gameObject);          
         }
     }
 
@@ -121,8 +112,25 @@ public class EnemyBehaviour : MonoBehaviour
         if(collision.gameObject.CompareTag("Eliminator"))
         {
             //If hits the eliminator trigger, it disables and notifies the observer
-            this.gameObject.SetActive(false);
+            m_OnPlayerDamageEvent.Raise(m_Damage);
+            m_ParentPool.ReturnElement(this.gameObject);         
         }   
+    }
+
+    //This function will substract player bullet damage to the enemy
+    public void OnEnemyDamage(int damageReceived, Color bulletColor)
+    {
+        if (bulletColor.Equals(m_EnemyColor))
+        {
+            m_Hitpoints -= damageReceived;
+            Debug.Log(string.Format("Bullet hits an enemy and deals {0} damage. Current hp: {1}", damageReceived, m_Hitpoints));
+            if (m_Hitpoints == 0)
+            {
+                Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
+                m_OnEnemyDestroyedEvent.Raise(m_ScoreValue);
+                m_ParentPool.ReturnElement(this.gameObject); //Enemy returned to the pool
+            }
+        } 
     }
 
     //This function will be called by the Spawner (boss) to set randomly an Scriptable object with the enemy prefab stats

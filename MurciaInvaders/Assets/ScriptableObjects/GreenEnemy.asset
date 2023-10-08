@@ -18,3 +18,4 @@ MonoBehaviour:
   m_EnemyColor: {r: 0, g: 1, b: 0, a: 1}
   m_MaxHitpoints: 1
   m_Hitpoints: 1
+  m_Damage: 1

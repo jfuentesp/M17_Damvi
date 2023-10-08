@@ -9,13 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62ec8edf70754184fb42dfe80f8bbedd, type: 3}
-  m_Name: RedEnemy
+  m_Script: {fileID: 11500000, guid: df20da95e66733c4e8ad0aad90b1a20d, type: 3}
+  m_Name: OnBossDamage
   m_EditorClassIdentifier: 
-  m_EnemyType: 0
-  m_EnemySpeed: 0.8
-  m_ScoreValue: 120
-  m_EnemyColor: {r: 1, g: 0, b: 0, a: 1}
-  m_MaxHitpoints: 3
-  m_Hitpoints: 3
-  m_Damage: 2

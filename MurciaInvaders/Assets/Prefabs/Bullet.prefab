@@ -163,16 +163,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BulletSpeed: 5
-  m_RigidBody: {fileID: 0}
-  m_EnemyBulletMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  m_BossMask:
-    serializedVersion: 2
-    m_Bits: 256
-  m_PickupsMask:
-    serializedVersion: 2
-    m_Bits: 1024
+  m_ParentPool: {fileID: 0}
+  m_OnBossDamageEvent: {fileID: 11400000, guid: 6659eae2fc8927e458ce3cc0d8bbfa49, type: 2}
+  m_OnEnemyDamageEvent: {fileID: 11400000, guid: dad8b6a2b4acfab49b273c0e02176c99, type: 2}
 --- !u!114 &-6943938835109690793
 MonoBehaviour:
   m_ObjectHideFlags: 0

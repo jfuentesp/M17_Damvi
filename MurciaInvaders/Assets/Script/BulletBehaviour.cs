@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using murciainvaders;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,16 +10,14 @@ public class BulletBehaviour : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     float m_BulletSpeed = 5f;
+    int m_BulletDamage = 1;
 
     Rigidbody2D m_RigidBody;
 
-    [Header("Layer masks")]
+    [Header("Pools references")]
+    //Parent pool to enable or disable this object properly
     [SerializeField]
-    private LayerMask m_EnemyBulletMask;
-    [SerializeField]
-    private LayerMask m_BossMask;
-    [SerializeField]
-    private LayerMask m_PickupsMask;
+    Pool m_ParentPool;
 
     //Variable where the color of this bullet will be saved
     private Color m_BulletColor;
@@ -29,11 +28,15 @@ public class BulletBehaviour : MonoBehaviour
 
     private SpriteRenderer m_SpriteRenderer;
 
-    public delegate void BulletCollision();
-    public event BulletCollision OnBulletCollision;
+    [Header("Delegates and GameEvents")]
+    [SerializeField]
+    private GameEventInt m_OnBossDamageEvent;
+
 
     private void Awake()
-    {
+    {   
+        //Loading components
+        m_ParentPool = GetComponentInParent<Pool>();
         m_RigidBody = GetComponent<Rigidbody2D>();
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -46,12 +49,28 @@ public class BulletBehaviour : MonoBehaviour
         
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            EnemyBehaviour enemy = collision.gameObject.GetComponent<EnemyBehaviour>();
+            enemy.OnEnemyDamage(m_BulletDamage, m_BulletColor);
+            m_ParentPool.ReturnElement(this.gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Boss"))
+        {
+            m_OnBossDamageEvent.Raise(m_BulletDamage);
+            m_ParentPool.ReturnElement(this.gameObject);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Eliminator"))
         {
             Debug.Log("Bullet colides vs Eliminator");
-            gameObject.SetActive(false);
+            m_ParentPool.ReturnElement(this.gameObject);
         }
     }
 
@@ -81,6 +100,8 @@ public class BulletBehaviour : MonoBehaviour
     {
         //Coroutine will wait for 5 seconds, then will disable the object. We don't need a while as it will just be alive once for each game object activation.
         yield return new WaitForSeconds(5);
-        this.gameObject.SetActive(false);
+        m_ParentPool.ReturnElement(this.gameObject);
     }
+
+    
 }
