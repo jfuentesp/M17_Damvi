@@ -94,7 +94,7 @@
                     "id": "f150c32d-d7d3-4d10-a787-996dc7de9b65",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertY=false)",
                     "groups": "",
                     "action": "Movement",
                     "isComposite": true,

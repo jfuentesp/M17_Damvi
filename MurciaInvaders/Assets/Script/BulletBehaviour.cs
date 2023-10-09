@@ -85,7 +85,8 @@ public class BulletBehaviour : MonoBehaviour
         //Start coroutine
         m_AliveCoroutine = StartCoroutine(BulletIsAlive());
         //We save the color on the variable
-        m_BulletColor = m_SpriteRenderer.color;
+        m_BulletColor = PlayerBehaviour.PlayerInstance.BulletColor; 
+        SetColor(m_BulletColor);
     }
 
     private void OnDisable()
@@ -101,6 +102,11 @@ public class BulletBehaviour : MonoBehaviour
         //Coroutine will wait for 5 seconds, then will disable the object. We don't need a while as it will just be alive once for each game object activation.
         yield return new WaitForSeconds(5);
         m_ParentPool.ReturnElement(this.gameObject);
+    }
+
+    public void SetColor(Color color)
+    {
+        m_SpriteRenderer.color = color; 
     }
 
     

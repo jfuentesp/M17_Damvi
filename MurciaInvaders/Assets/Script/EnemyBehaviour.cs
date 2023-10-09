@@ -38,6 +38,11 @@ public class EnemyBehaviour : MonoBehaviour
     //Reference to an instance of the player.
     PlayerBehaviour m_Player;
 
+    //Reference to the sprite component
+    SpriteRenderer m_EnemySprite;
+    [SerializeField]
+    Color m_ActualSpriteColor; 
+
     private Rigidbody2D m_RigidBody;
 
     [Header("Parameters for Blue enemy with sinoidal movement")]
@@ -64,6 +69,7 @@ public class EnemyBehaviour : MonoBehaviour
         m_Player = PlayerBehaviour.PlayerInstance;
         m_ParentPool = GetComponentInParent<Pool>();
         m_RigidBody = GetComponent<Rigidbody2D>();
+        m_EnemySprite = GetComponent<SpriteRenderer>();
     }
 
 
@@ -144,8 +150,8 @@ public class EnemyBehaviour : MonoBehaviour
         m_Hitpoints = enemyStats.Hitpoints;
         m_Damage = enemyStats.Damage;
         //Setting the sprite color in here too
-        SpriteRenderer enemySprite = GetComponent<SpriteRenderer>();
-        enemySprite.color = m_EnemyColor;
+        m_EnemySprite.color = m_EnemyColor;
+        m_ActualSpriteColor = m_EnemyColor; //For debuggin purposes
         //If the enemy is blue, we have to unlock the X axis constraint in order to be able to make the sinoidal move
         if (m_EnemyType == 2)
             //To unlock, we have to make an AND and pass a negate value of FreezePositionX (&= and the ~ char)
