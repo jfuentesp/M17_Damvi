@@ -84,7 +84,7 @@ public class BulletBehaviour : MonoBehaviour
         m_RigidBody.AddForce(Vector2.up * m_BulletSpeed);
         //Start coroutine
         m_AliveCoroutine = StartCoroutine(BulletIsAlive());
-        //We save the color on the variable
+        //We save the color on the variable and set it through a function
         m_BulletColor = PlayerBehaviour.PlayerInstance.BulletColor; 
         SetColor(m_BulletColor);
     }

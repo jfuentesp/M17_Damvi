@@ -160,11 +160,7 @@ namespace murciainvaders
             //GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
             /* WITH POOL */
             GameObject m_CurrentBullet = m_BulletPool.GetElement(this.gameObject);
-            //m_CurrentBullet.GetComponent<BulletBehaviour>().SetColor(m_BulletColor);
-            m_CurrentBullet.transform.position = m_Cannon.transform.position;                       
-            //SpriteRenderer m_Sprite = m_CurrentBullet.GetComponent<SpriteRenderer>();
-            
-            
+            m_CurrentBullet.transform.position = m_Cannon.transform.position;                                          
         }
         private void SwitchBulletColor()
         {
@@ -192,7 +188,7 @@ namespace murciainvaders
                 Debug.Log("Damage received: " + damageReceived + " | Total HP: " + m_CurrentPlayerHP);
                 if(m_CurrentPlayerHP <= 0)
                 {
-                    //Dies
+                    GameManager.GameManagerInstance.OnGameOver();
                 }
             } 
         }

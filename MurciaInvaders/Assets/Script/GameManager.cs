@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,8 @@ namespace murciainvaders
         //Constant variables with the name of the scenes. Constant are variables on whose value cannot be modified, like a read-only value.
         public const string m_MainMenuScene = "EscenaTitol";
         public const string m_BulletGameScene = "EscenaJoc";
+        public const string m_MurciaScene = "EscenaJoc2";
+        public const string m_GameOver = "EscenaGameOver";
 
         //Variable for the actual game score
         private int m_CurrentScore = 0;
@@ -114,14 +117,19 @@ namespace murciainvaders
 
         }
 
-        private void OnGameOver()
+        public void OnGameOver()
         {
-
+            LoadScene(m_GameOver);
         }
 
         private void OnVictory()
         {
 
+        }
+
+        public void OnExitToMainMenu()
+        {
+            LoadScene(m_MainMenuScene);
         }
 
         public void UpdateCurrentScoreValue(int score)

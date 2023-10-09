@@ -19,6 +19,10 @@ public class MainTitleGUIBehaviour : MonoBehaviour
     private TextMeshProUGUI m_TopPlayerName;
     [SerializeField]
     private TextMeshProUGUI m_TopPlayerScore;
+    [SerializeField]
+    private Button m_StartButton;
+    [SerializeField]
+    private Button m_ExitButton;
 
     private GameManager m_GameManager;
     
@@ -34,9 +38,7 @@ public class MainTitleGUIBehaviour : MonoBehaviour
         {
             Destroy(this.gameObject);
             return;
-        }
-
-        
+        }        
     }
 
     private void Start()
@@ -44,6 +46,9 @@ public class MainTitleGUIBehaviour : MonoBehaviour
         m_GameManager = GameManager.GameManagerInstance;
 
         SetTopScore();
+
+        m_StartButton.onClick.AddListener(StartButtonAction);
+        m_ExitButton.onClick.AddListener(ExitButtonAction);
     }
 
     public void SetTopScore()
@@ -56,5 +61,15 @@ public class MainTitleGUIBehaviour : MonoBehaviour
     {
         string PlayerName = m_InputFieldName.text;
         return PlayerName;
+    }
+
+    private void StartButtonAction()
+    {
+        m_GameManager.StartGame();
+    }
+
+    private void ExitButtonAction()
+    {
+        m_GameManager.QuitGame();
     }
 }
