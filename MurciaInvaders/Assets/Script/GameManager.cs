@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -17,6 +18,7 @@ namespace murciainvaders
         public const string m_BulletGameScene = "EscenaJoc";
         public const string m_MurciaScene = "EscenaJoc2";
         public const string m_GameOver = "EscenaGameOver";
+        public const string m_VictoryScene = "EscenaVictory";
 
         //Variable for the actual game score
         private int m_CurrentScore = 0;
@@ -24,7 +26,6 @@ namespace murciainvaders
         public int CurrentScore
         {
             get { return m_CurrentScore; }
-            set { m_CurrentScore = value; }
         }
 
         //Variable for the Top Score
@@ -33,16 +34,14 @@ namespace murciainvaders
         public int TopScore
         {
             get { return m_TopScore; }
-            set { m_TopScore = value; }
         }
 
         //Variable for the name input
-        private string m_NameInput;
+        private string m_PlayerName;
         //Getter and setter for the PlayerName variable
         public string PlayerName
         {
-            get { return m_NameInput; }
-            set { m_NameInput = value; }
+            get { return m_PlayerName; }
         }
 
         //Variable for the Top Score Player
@@ -51,7 +50,18 @@ namespace murciainvaders
         public string TopScorePlayer
         {
             get { return m_TopScorePlayer; }
-            set { m_TopScorePlayer = value;}
+        }
+
+        private bool m_IsNewHighscore;
+        public bool IsNewHighscore
+        {
+            get { return m_IsNewHighscore;  }
+        }
+
+        private bool m_IsNewGame;
+        public bool IsNewGame
+        {
+            get { return m_IsNewGame; }
         }
 
         private void Awake()
@@ -69,19 +79,10 @@ namespace murciainvaders
             m_TopScorePlayer = "Player";
             m_TopScore = 100;
 
+            m_IsNewHighscore = false;
+            m_IsNewGame = true;
+
             DontDestroyOnLoad(this.gameObject);
-
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
 
         }
 
@@ -100,7 +101,7 @@ namespace murciainvaders
         public void StartGame()
         {
             //We set the name set on the input field as new player and reset the score to 0 when we start the game.
-            m_NameInput = MainTitleGUIBehaviour.MainTitleGUIInstance.GetPlayerName();
+            m_PlayerName = MainTitleGUIBehaviour.MainTitleGUIInstance.GetPlayerName();
             m_CurrentScore = 0;
             LoadScene(m_BulletGameScene);
         }
@@ -108,23 +109,40 @@ namespace murciainvaders
         //Shooting scene
         private void OnShootingSceneStart()
         {
-
+            if(m_IsNewGame)
+            {
+                PlayerBehaviour.PlayerInstance.ReloadStats();
+                BossBehaviour.BossInstance.ReloadStats();
+            } else
+            {
+                
+            }
         }
 
         //Tilemap scene
         private void OnLandingSceneStart()
         {
-
+            m_IsNewGame = false;
         }
 
         public void OnGameOver()
         {
             LoadScene(m_GameOver);
+            m_IsNewGame = true;
         }
 
-        private void OnVictory()
+        public void OnVictory()
         {
-
+            if(m_CurrentScore > m_TopScore)
+            {
+                m_IsNewHighscore = true;
+                m_TopScorePlayer = m_PlayerName;
+                m_TopScore = m_CurrentScore;
+            } else
+            {
+                m_IsNewHighscore = false;
+            }
+            LoadScene(m_VictoryScene);
         }
 
         public void OnExitToMainMenu()
