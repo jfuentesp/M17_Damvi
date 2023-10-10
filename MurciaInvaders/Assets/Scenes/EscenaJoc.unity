@@ -2516,6 +2516,7 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
+  m_AudioShoot: {fileID: 8300000, guid: 6ce0b98cdf4742a438e5479bca9f2802, type: 3}
 --- !u!50 &1554949688
 Rigidbody2D:
   serializedVersion: 4

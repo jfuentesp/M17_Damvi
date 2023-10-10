@@ -87,6 +87,11 @@ namespace murciainvaders
         /*public delegate int OnPlayerDamageDelegate();
         public event OnPlayerDamageDelegate OnPlayerDamageDelegateEvent; //Observer*/
 
+        [Header("Shooting sound effect")]
+        [SerializeField]
+        private AudioClip m_AudioShoot;
+        private AudioSource m_AudioSource;
+
         private void Awake()
         {
             //First, we initialize an instance of Player. If there is already an instance, it destroys the element and returns.
@@ -102,6 +107,7 @@ namespace murciainvaders
 
             //Loading components
             m_RigidBody = GetComponent<Rigidbody2D>();
+            
             //m_BulletPool = this.GetComponentInChildren<Pool>();
             //Loading InputSystem
             //We need to instantiate InputActions first
@@ -120,6 +126,7 @@ namespace murciainvaders
 
         void Start()
         {
+            m_AudioSource = GetComponent<AudioSource>();
             //Initializing actual color
             SwitchBulletColor();
             ReloadStats();
@@ -145,6 +152,7 @@ namespace murciainvaders
         private void ShootingAction(InputAction.CallbackContext context)
         {
             Shooting();
+            m_AudioSource.PlayOneShot(m_AudioShoot);
             Debug.Log(context);
         }
 
@@ -158,9 +166,9 @@ namespace murciainvaders
         {
             /* WIHOUT POOL */
             //GameObject m_CurrentBullet = Instantiate(m_PlayerBullet, m_Cannon.transform.position, transform.localRotation);
-            /* WITH POOL */
+            /* WITH POOL */        
             GameObject m_CurrentBullet = m_BulletPool.GetElement(this.gameObject);
-            m_CurrentBullet.transform.position = m_Cannon.transform.position;                                          
+            m_CurrentBullet.transform.position = m_Cannon.transform.position;
         }
         private void SwitchBulletColor()
         {
