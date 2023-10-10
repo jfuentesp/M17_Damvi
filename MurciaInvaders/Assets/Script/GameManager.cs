@@ -64,6 +64,13 @@ namespace murciainvaders
             get { return m_IsNewGame; }
         }
 
+        //Variable for the second scene
+        private int m_TimeLeft;
+        public int TimeLeft
+        {
+            get { return m_TimeLeft; }
+        }
+
         private void Awake()
         {
             //First, we initialize an instance of GameManager. If there is already an instance, it destroys the element and returns.
@@ -123,6 +130,7 @@ namespace murciainvaders
         private void OnLandingSceneStart()
         {
             m_IsNewGame = false;
+            SetTimeLeftScene();
         }
 
         public void OnGameOver()
@@ -154,6 +162,23 @@ namespace murciainvaders
         {
             m_CurrentScore += score;
         }
+
+        Coroutine m_TimeLeftCoroutine;
+        public void SetTimeLeftScene()
+        {
+            m_TimeLeft = 15;
+            m_TimeLeftCoroutine = StartCoroutine(TimeLeftCoroutine());
+        }
+
+        private IEnumerator TimeLeftCoroutine()
+        {
+            while(m_TimeLeft >= 0)
+            {
+                yield return new WaitForSeconds(1f);
+                m_TimeLeft--;
+            }
+        }
+
     }
 }
 

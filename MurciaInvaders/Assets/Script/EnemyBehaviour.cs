@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using murciainvaders;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -60,8 +62,10 @@ public class EnemyBehaviour : MonoBehaviour
     private GameEventInt m_OnPlayerDamageEvent;
     [SerializeField]
     private GameEventInt m_OnEnemyDestroyedEvent;
-    
 
+    //Particle System
+    [SerializeField]
+    private ParticleSystem m_Particles;
 
     private void Awake()
     {
@@ -106,7 +110,7 @@ public class EnemyBehaviour : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {     
         if(collision.gameObject.CompareTag("Player"))
-        {
+        {           
             //If hits the player, it disables and notifies the observer
             m_OnPlayerDamageEvent.Raise(m_Damage);
             m_ParentPool.ReturnElement(this.gameObject);          
@@ -132,9 +136,10 @@ public class EnemyBehaviour : MonoBehaviour
             Debug.Log(string.Format("Bullet hits an enemy and deals {0} damage. Current hp: {1}", damageReceived, m_Hitpoints));
             if (m_Hitpoints == 0)
             {
+                GameObject.Instantiate(m_Particles, transform.position, Quaternion.identity);
                 Debug.Log("Enemy destroyed. Providing score:" + m_ScoreValue);
-                m_OnEnemyDestroyedEvent.Raise(m_ScoreValue);
-                m_ParentPool.ReturnElement(this.gameObject); //Enemy returned to the pool
+                m_OnEnemyDestroyedEvent.Raise(m_ScoreValue);               
+                m_ParentPool.ReturnElement(this.gameObject); //Enemy returned to the pool               
             }
         } 
     }

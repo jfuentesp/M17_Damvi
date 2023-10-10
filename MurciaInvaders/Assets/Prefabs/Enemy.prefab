@@ -171,11 +171,13 @@ MonoBehaviour:
   m_Hitpoints: 0
   m_Damage: 0
   m_ParentPool: {fileID: 0}
+  m_ActualSpriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_Frequency: 2
   m_Offset: 2
   m_Magnitude: 2
   m_OnPlayerDamageEvent: {fileID: 11400000, guid: d4fed2bef7d7eb44aa8b004aba69f49b, type: 2}
   m_OnEnemyDestroyedEvent: {fileID: 11400000, guid: dad8b6a2b4acfab49b273c0e02176c99, type: 2}
+  m_Particles: {fileID: 5280650382730127209, guid: 6695a05e3812ac84aafd22e16a2f8318, type: 3}
 --- !u!114 &-2208187382165226199
 MonoBehaviour:
   m_ObjectHideFlags: 0

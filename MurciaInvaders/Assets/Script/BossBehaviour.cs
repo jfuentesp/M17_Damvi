@@ -130,7 +130,7 @@ public class BossBehaviour : MonoBehaviour
         Debug.Log(string.Format("Boss receives {0} damage. Current HP: {1}", damageReceived, m_CurrentBossHP));
         if(m_CurrentBossHP <= 0)
         {
-            //Dies and change scene
+            GameManager.GameManagerInstance.OnVictory();
         }
     }
 

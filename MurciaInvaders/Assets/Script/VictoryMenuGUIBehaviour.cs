@@ -29,12 +29,26 @@ public class VictoryMenuGUIBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_GameManager = GameManager.GameManagerInstance;
+        if (m_GameManager.IsNewHighscore)
+        {
+            m_HighScoreLayout.SetActive(true);
+            m_TopPlayerName.text = "Player => " + m_GameManager.PlayerName;
+            m_TopScore.text = "New highscore =>" + m_GameManager.CurrentScore;
+        } else
+        {
+            m_HighScoreLayout.SetActive(false);
+        }
+
+        m_ExitButton.onClick.AddListener(ToMainMenu);
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void ToMainMenu()
     {
-        
+        m_GameManager.OnExitToMainMenu();
     }
+
+
+
 }
