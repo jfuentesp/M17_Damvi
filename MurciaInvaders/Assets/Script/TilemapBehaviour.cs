@@ -23,6 +23,16 @@ public class TilemapBehaviour : MonoBehaviour
     [SerializeField]
     private Sprite m_DeadMurcianoSprite;
 
+    //Tile references
+    [SerializeField]
+    private Tile m_AlienTile;
+    [SerializeField]
+    private Tile m_MurcianoTile;
+    [SerializeField]
+    private Tile m_DeadAlienTile;
+    [SerializeField]
+    private Tile m_DeadMurcianoTile;
+
     //Reference to InputActions: Input controls to move the cannon
     [SerializeField]
     private InputActionAsset m_InputActions;
@@ -56,6 +66,8 @@ public class TilemapBehaviour : MonoBehaviour
     {
         //First, we set the reference to the instance of the gamemanager
         m_GameManager = GameManager.GameManagerInstance;
+        int tilemapLengthX = m_BaseTilemap.cellBounds.x;
+        int tilemapLengthY = m_BaseTilemap.cellBounds.y;
     }
 
     // Update is called once per frame

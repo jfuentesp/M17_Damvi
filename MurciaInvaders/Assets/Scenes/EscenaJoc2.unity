@@ -1473,6 +1473,10 @@ MonoBehaviour:
   m_MurcianoSprite: {fileID: 21300000, guid: 7a2d867586c7a5947a61fc6c083ab4fe, type: 3}
   m_DeadAlienSprite: {fileID: 21300000, guid: 28d585c77cf0fb24285f382b735466a3, type: 3}
   m_DeadMurcianoSprite: {fileID: 21300000, guid: 7f346387c231c834595e22f7a5c31140, type: 3}
+  m_AlienTile: {fileID: 11400000, guid: 02ee8fc3d40136745b181ec5d04827f4, type: 2}
+  m_MurcianoTile: {fileID: 11400000, guid: c58ee9a84e742fc48b1f7ee402c3d0fb, type: 2}
+  m_DeadAlienTile: {fileID: 11400000, guid: ad2760f352ee1524d9c01a07fbfc3e6f, type: 2}
+  m_DeadMurcianoTile: {fileID: 11400000, guid: fb6597348562077498d11da658911a80, type: 2}
   m_InputActions: {fileID: -944628639613478452, guid: 5ec09a3038dd80d4391569513799c67f, type: 3}
 --- !u!1 &867360759
 GameObject:
