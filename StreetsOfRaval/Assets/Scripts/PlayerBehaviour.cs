@@ -46,6 +46,7 @@ namespace streetsofraval
         // Update is called once per frame
         void Update()
         {
+            //Each frame, player behaviour will be listening 
             UpdateState();
         }
 
