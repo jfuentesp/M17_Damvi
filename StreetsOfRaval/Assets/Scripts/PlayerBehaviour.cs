@@ -35,7 +35,7 @@ namespace streetsofraval
 
 
         //Variables for the current state and an Enum for setting the Player States
-        private enum PlayerMachineStates { NONE, IDLE, WALK, HIT1, HIT2, JUMP, JUMPINGHIT1, JUMPINGHIT2 }
+        private enum PlayerMachineStates { NONE, IDLE, WALK, HIT1, HIT2, SHOOT1, SHOOT2, JUMP, AIRHIT1, AIRHIT2, CROUCHHIT1, CROUCHHIT2, CROUCH }
         private PlayerMachineStates m_CurrentState;
 
         [Header("Player parameters")]
@@ -64,7 +64,10 @@ namespace streetsofraval
             Assert.IsNotNull(m_InputAsset);
             m_Input = Instantiate(m_InputAsset);
             m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
-            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack;
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack1;
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed += Attack2;
+            m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed += Jump;
+            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
             m_Input.FindActionMap("PlayerActions").Enable();
         }
         // Start is called before the first frame update
@@ -100,7 +103,44 @@ namespace streetsofraval
 
 
 
-        private void Attack(InputAction.CallbackContext context)
+        private void Attack1(InputAction.CallbackContext context)
+        {
+            switch (m_CurrentState)
+            {
+                case PlayerMachineStates.IDLE:
+                    ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.WALK:
+                    ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.HIT1:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.HIT2);
+                    else
+                        ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.HIT2:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.HIT1);
+                    else
+                        ChangeState(PlayerMachineStates.HIT2);
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+
+        private void Attack2(InputAction.CallbackContext context)
         {
             switch (m_CurrentState)
             {
@@ -139,10 +179,65 @@ namespace streetsofraval
 
         private void Jump(InputAction.CallbackContext context)
         {
-            
+            switch (m_CurrentState)
+            {
+                case PlayerMachineStates.IDLE:
+                    ChangeState(PlayerMachineStates.JUMP);
+
+                    break;
+
+                case PlayerMachineStates.WALK:
+                    ChangeState(PlayerMachineStates.JUMP);
+
+                    break;
+
+                case PlayerMachineStates.HIT1:
+
+                    break;
+
+                case PlayerMachineStates.HIT2:
+
+                    break;
+
+                default:
+                    break;
+            }
         }
 
-        
+        private void Crouch(InputAction.CallbackContext context)
+        {
+            switch (m_CurrentState)
+            {
+                case PlayerMachineStates.IDLE:
+                    ChangeState(PlayerMachineStates.CROUCH);
+
+                    break;
+
+                case PlayerMachineStates.WALK:
+                    ChangeState(PlayerMachineStates.CROUCH);
+
+                    break;
+
+                case PlayerMachineStates.HIT1:
+                    ChangeState(PlayerMachineStates.CROUCH);
+
+                    break;
+
+                case PlayerMachineStates.HIT2:
+                    ChangeState(PlayerMachineStates.CROUCH);
+
+                    break;
+
+                case PlayerMachineStates.CROUCH:
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+
 
         /* !!! BUILDING UP STATE MACHINE !!! Always change state with the function ChangeState */
         private void ChangeState(PlayerMachineStates newState)
@@ -206,6 +301,13 @@ namespace streetsofraval
 
                     break;
 
+                case PlayerMachineStates.CROUCH:
+                    //Attack will set the velocity to zero, so it cant move while attacking
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_CrouchAnimationName);
+
+                    break;
+
                 default:
                     break;
             }
@@ -236,6 +338,10 @@ namespace streetsofraval
 
                     break;
 
+                case PlayerMachineStates.CROUCH:
+
+                    break;
+
                 default:
                     break;
             }
@@ -260,7 +366,8 @@ namespace streetsofraval
 
                 case PlayerMachineStates.WALK:
 
-                    m_RigidBody.velocity = Vector2.right * m_MovementAction.ReadValue<Vector2>().x * m_Speed; 
+                    m_RigidBody.velocity = new Vector2(m_MovementAction.ReadValue<Vector2>().x * m_Speed, m_RigidBody.velocity.y);
+                    //m_RigidBody.velocity = Vector2.right * m_MovementAction.ReadValue<Vector2>().x * m_Speed; 
 
                     if (m_RigidBody.velocity == Vector2.zero)
                         ChangeState(PlayerMachineStates.IDLE);
@@ -276,6 +383,10 @@ namespace streetsofraval
                     break;
 
                 case PlayerMachineStates.HIT2:
+
+                    break;
+
+                case PlayerMachineStates.CROUCH:
 
                     break;
 
