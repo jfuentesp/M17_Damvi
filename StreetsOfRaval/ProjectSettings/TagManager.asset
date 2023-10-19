@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - Scenario
+  - PlayerHitbox
+  - EnemyHitbox
+  - PlayerProjectile
+  - EnemyProjectile
+  - Pickup
   layers:
   - Default
   - TransparentFX
@@ -11,14 +18,14 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Scenario
+  - PlayerHitbox
+  - EnemyHitbox
+  - PlayerProjectile
+  - EnemyProjectile
+  - Pickup
   - 
   - 
   - 
