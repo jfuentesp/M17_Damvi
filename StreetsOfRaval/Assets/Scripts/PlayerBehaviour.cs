@@ -48,7 +48,8 @@ namespace streetsofraval
         private float m_JumpForce;
         [SerializeField]
         private bool m_IsFlipped;
-        
+        [SerializeField]
+        private bool m_ComboAvailable;
 
         private void Awake()
         {
@@ -63,7 +64,7 @@ namespace streetsofraval
             Assert.IsNotNull(m_InputAsset);
             m_Input = Instantiate(m_InputAsset);
             m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
-            m_Input.FindActionMap("PlayerActions").FindAction("Attac1").performed += Attack;
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack;
             m_Input.FindActionMap("PlayerActions").Enable();
         }
         // Start is called before the first frame update
@@ -80,10 +81,68 @@ namespace streetsofraval
             UpdateState();
         }
 
+        //Combo implementates with a boolean and few functions
+        //This public functions can be triggered from the clip events to trigger the begin and end of the combo frame and the end of the hit animation
+        public void InitComboWindow() 
+        {
+            m_ComboAvailable = true;
+        }
+
+        public void EndComboWindow() 
+        {
+            m_ComboAvailable = false;
+        }
+
+        public void EndHit()
+        {
+            ChangeState(PlayerMachineStates.IDLE);
+        }
+
+
+
         private void Attack(InputAction.CallbackContext context)
         {
+            switch (m_CurrentState)
+            {
+                case PlayerMachineStates.IDLE:
+                    ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.WALK:
+                    ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.HIT1:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.HIT2);
+                    else
+                        ChangeState(PlayerMachineStates.HIT1);
+
+                    break;
+
+                case PlayerMachineStates.HIT2:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.HIT1);
+                    else
+                        ChangeState(PlayerMachineStates.HIT2);
+                    break;
+
+                default:
+                    break;
+            }
 
         }
+
+        private void Jump(InputAction.CallbackContext context)
+        {
+            
+        }
+
+        
 
         /* !!! BUILDING UP STATE MACHINE !!! Always change state with the function ChangeState */
         private void ChangeState(PlayerMachineStates newState)
@@ -115,6 +174,7 @@ namespace streetsofraval
                 case PlayerMachineStates.IDLE:
 
                     m_RigidBody.velocity = Vector3.zero;
+                    
                     m_Animator.Play(m_IdleAnimationName);
 
                     break;
@@ -128,6 +188,7 @@ namespace streetsofraval
                 case PlayerMachineStates.JUMP:
 
                     m_Animator.Play(m_JumpAnimationName);
+                    m_RigidBody.AddForce(Vector2.up * m_JumpForce);
 
                     break;
 
