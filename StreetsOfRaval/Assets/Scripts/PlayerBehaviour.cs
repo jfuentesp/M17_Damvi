@@ -263,13 +263,7 @@ namespace streetsofraval
         {
             //We declare that the current state of the object is the new state we declare on the function
             m_CurrentState = currentState;
-            if (m_IsFlipped)
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.up * 180;
-            } else
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.zero;
-            }              
+                        
             
             //Then it will compare the current state to run the state actions
             switch (m_CurrentState)
@@ -358,6 +352,15 @@ namespace streetsofraval
         /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
         private void UpdateState()
         {
+            if (m_IsFlipped)
+            {
+                m_RigidBody.transform.eulerAngles = Vector3.up * 180;
+            }
+            else
+            {
+                m_RigidBody.transform.eulerAngles = Vector3.zero;
+            }
+
             switch (m_CurrentState)
             {
                 case PlayerMachineStates.IDLE:
@@ -398,8 +401,12 @@ namespace streetsofraval
                     break;
 
                 case PlayerMachineStates.CROUCH:
-                    //Once we finish pressing the crouch button, we return to the Idle State
-                    //ChangeState(PlayerMachineStates.IDLE);
+
+                    if (m_MovementAction.ReadValue<Vector2>().x < 0)
+                        m_IsFlipped = true;
+                    if (m_MovementAction.ReadValue<Vector2>().x > 0)
+                        m_IsFlipped = false;
+
                     break;
 
                 default:

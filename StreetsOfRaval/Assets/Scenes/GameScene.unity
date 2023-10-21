@@ -1328,7 +1328,7 @@ MonoBehaviour:
   m_InputAsset: {fileID: -944628639613478452, guid: 48102d80af0e9d74da6fb17c40bdf6a7, type: 3}
   m_Speed: 2
   m_Damage: 1
-  m_JumpForce: 2
+  m_JumpForce: 200
   m_IsFlipped: 0
   m_ComboAvailable: 0
 --- !u!1 &1900214685
