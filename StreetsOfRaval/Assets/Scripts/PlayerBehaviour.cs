@@ -21,21 +21,29 @@ namespace streetsofraval
         private InputAction m_MovementAction;
         public InputAction MovementAction => m_MovementAction;
 
+        
+
         //Player rigidbody
         private Rigidbody2D m_RigidBody;
         //Player animator
         private Animator m_Animator;
+
+
         //Animation names
         private const string m_IdleAnimationName = "idle";
         private const string m_WalkAnimationName = "walk";
         private const string m_JumpAnimationName = "jump";
         private const string m_Attack1AnimationName = "attack1";
         private const string m_Attack2AnimationName = "attack2";
+        private const string m_Combo1AnimationName = "combo1";
+        private const string m_Combo2AnimationName = "combo2";
         private const string m_CrouchAnimationName = "crouch";
+        private const string m_CrouchAttack1AnimationName = "crouchattack1";
+        private const string m_CrouchAttack2AnimationName = "crouchattack2";
 
 
         //Variables for the current state and an Enum for setting the Player States
-        private enum PlayerMachineStates { NONE, IDLE, WALK, ATTACK1, ATTACK2, SHOOT1, SHOOT2, JUMP, AIRHIT1, AIRHIT2, CROUCHHIT1, CROUCHHIT2, CROUCH }
+        private enum PlayerMachineStates { NONE, IDLE, WALK, ATTACK1, ATTACK2, COMBO1, COMBO2, SUPER, JUMP, CROUCHATTACK1, CROUCHATTACK2, CROUCH }
         private PlayerMachineStates m_CurrentState;
 
         [Header("Player parameters")]
@@ -51,12 +59,21 @@ namespace streetsofraval
         [SerializeField]
         private bool m_ComboAvailable;
 
+        [Header("References to another attached objects")]
+        [SerializeField]
+        private Pool m_BulletPool;
+
+
+        GameObject m_PlayerHitbox;
+
         private void Awake()
         {
             //We set the player gameobject rigid body
             m_RigidBody = GetComponent<Rigidbody2D>();
             //We set the player gameobject animator
             m_Animator = GetComponent<Animator>();
+            //We can set the Hitbox in a variable to instantiate projectiles from there
+            m_PlayerHitbox = this.transform.GetChild(0).gameObject;
             //We set the boolean that will control if the character is flipped as false
             m_IsFlipped = false;
 
@@ -126,7 +143,7 @@ namespace streetsofraval
                 case PlayerMachineStates.ATTACK1:
 
                     if (m_ComboAvailable)
-                        ChangeState(PlayerMachineStates.ATTACK2);
+                        ChangeState(PlayerMachineStates.COMBO1);
                     else
                         ChangeState(PlayerMachineStates.ATTACK1);
 
@@ -140,6 +157,15 @@ namespace streetsofraval
                         ChangeState(PlayerMachineStates.ATTACK2);
                     break;
 
+                case PlayerMachineStates.CROUCH:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.CROUCHATTACK2);
+                    else
+                        ChangeState(PlayerMachineStates.CROUCHATTACK1);
+
+                    break;
+
                 default:
                     break;
             }
@@ -151,12 +177,12 @@ namespace streetsofraval
             switch (m_CurrentState)
             {
                 case PlayerMachineStates.IDLE:
-                    ChangeState(PlayerMachineStates.ATTACK1);
+                    ChangeState(PlayerMachineStates.ATTACK2);
 
                     break;
 
                 case PlayerMachineStates.WALK:
-                    ChangeState(PlayerMachineStates.ATTACK1);
+                    ChangeState(PlayerMachineStates.ATTACK2);
 
                     break;
 
@@ -172,9 +198,19 @@ namespace streetsofraval
                 case PlayerMachineStates.ATTACK2:
 
                     if (m_ComboAvailable)
-                        ChangeState(PlayerMachineStates.ATTACK1);
+                        ChangeState(PlayerMachineStates.COMBO2);
                     else
                         ChangeState(PlayerMachineStates.ATTACK2);
+
+                    break;
+
+                case PlayerMachineStates.CROUCH:
+
+                    if (m_ComboAvailable)
+                        ChangeState(PlayerMachineStates.CROUCHATTACK1);
+                    else
+                        ChangeState(PlayerMachineStates.CROUCHATTACK2);
+
                     break;
 
                 default:
@@ -303,10 +339,41 @@ namespace streetsofraval
 
                     break;
 
+                case PlayerMachineStates.COMBO1:
+                    //Attack will set the velocity to zero, so it cant move while attacking
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_Combo1AnimationName);
+                    //It will instance a projectile that will start at the Hitbox position
+                    GameObject m_Bullet = m_BulletPool.GetElement(this.gameObject);
+                    m_Bullet.transform.position = m_PlayerHitbox.transform.position;
+
+                    break;
+
+                case PlayerMachineStates.COMBO2:
+                    //Attack will set the velocity to zero, so it cant move while attacking
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_Combo2AnimationName);
+
+                    break;
+
                 case PlayerMachineStates.CROUCH:
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
                     m_Animator.Play(m_CrouchAnimationName);
+
+                    break;
+
+                case PlayerMachineStates.CROUCHATTACK1:
+                    //Attack will set the velocity to zero, so it cant move while attacking
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_CrouchAttack1AnimationName);
+
+                    break;
+
+                case PlayerMachineStates.CROUCHATTACK2:
+                    //Attack will set the velocity to zero, so it cant move while attacking
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_CrouchAttack2AnimationName);
 
                     break;
 
