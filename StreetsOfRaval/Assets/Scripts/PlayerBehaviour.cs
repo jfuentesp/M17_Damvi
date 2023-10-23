@@ -9,8 +9,10 @@ namespace streetsofraval
 {
     public class PlayerBehaviour : MonoBehaviour
     {
+        //Instance of the Player. Refers to this own gameobject. It needs to be an instance if the prefabs should refer to this object. (As enemies, for example)
+        private static PlayerBehaviour m_Instance;
+        public static PlayerBehaviour PlayerInstance => m_Instance; //A getter for the instance of the player. Similar to get { return m_Instance }. (Accessor)
 
-        //Reference to the instance of the player
 
         //Reference to the InputSystem
         [Header("Reference to the Input System")]
@@ -37,6 +39,7 @@ namespace streetsofraval
         private const string m_Attack2AnimationName = "attack2";
         private const string m_Combo1AnimationName = "combo1";
         private const string m_Combo2AnimationName = "combo2";
+        private const string m_SuperAnimationName = "super";
         private const string m_CrouchAnimationName = "crouch";
         private const string m_CrouchAttack1AnimationName = "crouchattack1";
         private const string m_CrouchAttack2AnimationName = "crouchattack2";
@@ -56,6 +59,11 @@ namespace streetsofraval
         private float m_JumpForce;
         [SerializeField]
         private bool m_IsFlipped;
+        public bool IsFlipped
+        {
+            get { return m_IsFlipped;}
+        }
+        //public bool IsFlipped => m_IsFlipped;
         [SerializeField]
         private bool m_ComboAvailable;
 
@@ -68,6 +76,17 @@ namespace streetsofraval
 
         private void Awake()
         {
+            //First, we initialize an instance of Player. If there is already an instance, it destroys the element and returns.
+            if (m_Instance == null)
+            {
+                m_Instance = this;
+            }
+            else
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             //We set the player gameobject rigid body
             m_RigidBody = GetComponent<Rigidbody2D>();
             //We set the player gameobject animator
@@ -89,6 +108,22 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled += ReturnToIdleState;
             m_Input.FindActionMap("PlayerActions").Enable();
         }
+
+        private void OnDestroy()
+        {
+            //Disabling the inputs variables and delegates.
+            Assert.IsNotNull(m_InputAsset);
+            m_Input = Instantiate(m_InputAsset);
+            m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed -= Attack1;
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed -= Attack2;
+            m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed -= Jump;
+            //m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
+            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started -= Crouch;
+            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled -= ReturnToIdleState;
+            m_Input.FindActionMap("PlayerActions").Enable();
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -344,8 +379,10 @@ namespace streetsofraval
                     m_RigidBody.velocity = Vector3.zero;
                     m_Animator.Play(m_Combo1AnimationName);
                     //It will instance a projectile that will start at the Hitbox position
-                    GameObject m_Bullet = m_BulletPool.GetElement(this.gameObject);
+                    GameObject m_Bullet = m_BulletPool.GetElement();
                     m_Bullet.transform.position = m_PlayerHitbox.transform.position;
+                    //It will run the InitBullet function and give the Vector2 direction considering if its flipped or not
+                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* damage, speed,*/ IsFlipped ? Vector2.left: Vector2.right); 
 
                     break;
 

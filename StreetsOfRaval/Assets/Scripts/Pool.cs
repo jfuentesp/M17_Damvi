@@ -45,7 +45,7 @@ public class Pool : MonoBehaviour
         }
     }
 
-    public GameObject GetElement(GameObject parent)
+    public GameObject GetElement()
     {
         foreach (GameObject element in m_Pool)
         {
@@ -53,7 +53,6 @@ public class Pool : MonoBehaviour
             if (element.activeInHierarchy == false)
             {
                 //Had to add the rotation inside here because there was a problem setting it into the shooting action in PlayerBehaviour. Called first this function than the properties given.
-                element.transform.rotation = parent.transform.rotation;
                 element.SetActive(true);
                 return element;
             }

@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BulletDamage: 1
   m_BulletSpeed: 3
+  m_BulletLifetime: 4
 --- !u!114 &8236509732765355091
 MonoBehaviour:
   m_ObjectHideFlags: 0
