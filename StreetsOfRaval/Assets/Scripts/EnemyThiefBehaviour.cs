@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /* !!!! LIST OF ENEMIES:
@@ -28,35 +29,45 @@ namespace streetsofraval
         private float m_EnemyMaxHitpoints;
         private float m_EnemyHitpoints;
         private float m_EnemyDamage;
+        private float m_InitialSpeed;
         private float m_EnemySpeed;
+        private int m_EnemySpawnPoint;
 
         //Animation names
         private const string m_IdleAnimationName = "idle";
         private const string m_WalkAnimationName = "walk";
         private const string m_Attack1AnimationName = "attack1";
-        private const string m_Attack2AnimationName = "attack2";
+        //private const string m_Attack2AnimationName = "attack2";
         private const string m_HitAnimationName = "hit";
         private const string m_DieAnimationName = "die";
 
+        //Waypoint to patrol
+        private Vector2 m_SpawnPosition;
+        private float m_Direction;
 
+        //Player reference
+        PlayerBehaviour m_Player;
 
         private void Awake()
         {
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_Animator = GetComponent<Animator>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_SpawnPosition = transform.position;
+            m_Direction = 1;
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            
+            m_Player = PlayerBehaviour.PlayerInstance;
+            InitState(EnemyMachineStates.PATROL);
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            UpdateState();
         }
 
         /* !!! BUILDING UP STATE MACHINE !!! Always change state with the function ChangeState */
@@ -69,6 +80,8 @@ namespace streetsofraval
             ExitState();
             InitState(newState);
         }
+
+        Coroutine m_PatrolCoroutine;
 
         /* InitState will run every instruction that has to be started ONLY when enters a state */
         private void InitState(EnemyMachineStates currentState)
@@ -90,18 +103,30 @@ namespace streetsofraval
                 case EnemyMachineStates.PATROL:
 
                     m_Animator.Play(m_WalkAnimationName);
+                    m_EnemySpeed = m_InitialSpeed;
+                    if (m_EnemySpawnPoint == 0)
+                    {
+                        m_Direction = -1;
+                    }
+                    else
+                    {
+                        m_Direction = 1;
+                    }
+                    m_PatrolCoroutine = StartCoroutine(PatrolCoroutine());
 
                     break;
 
                 case EnemyMachineStates.CHASE:
 
                     m_Animator.Play(m_WalkAnimationName);
+                    m_EnemySpeed = m_InitialSpeed * 2;
 
                     break;
 
                 case EnemyMachineStates.FLEE:
 
                     m_Animator.Play(m_WalkAnimationName);
+                    m_EnemySpeed = m_InitialSpeed / 2;
 
                     break;
 
@@ -124,13 +149,17 @@ namespace streetsofraval
             {
                 case EnemyMachineStates.IDLE:
 
+                    
+
                     break;
 
                 case EnemyMachineStates.PATROL:
-
+                
                     break;
 
                 case EnemyMachineStates.CHASE:
+
+                    
 
                     break;
 
@@ -164,28 +193,34 @@ namespace streetsofraval
             {
                 case EnemyMachineStates.IDLE:
 
-                   /* if (m_MovementAction.ReadValue<Vector2>().x != 0)
-                    {
-                        if (m_MovementAction.ReadValue<Vector2>().x < 0)
-                            m_IsFlipped = true;
-                        if (m_MovementAction.ReadValue<Vector2>().x > 0)
-                            m_IsFlipped = false;
-                        ChangeState(PlayerMachineStates.WALK);
-                    }*/
+                    /* if (m_MovementAction.ReadValue<Vector2>().x != 0)
+                     {
+                         if (m_MovementAction.ReadValue<Vector2>().x < 0)
+                             m_IsFlipped = true;
+                         if (m_MovementAction.ReadValue<Vector2>().x > 0)
+                             m_IsFlipped = false;
+                         ChangeState(PlayerMachineStates.WALK);
+                     }*/
+                    if (m_PatrolCoroutine != null)
+                        StopCoroutine(m_PatrolCoroutine);
 
                     break;
 
-                case EnemyMachineStates.PATROL:
+                case EnemyMachineStates.PATROL:              
 
-                    /*m_RigidBody.velocity = new Vector2(m_MovementAction.ReadValue<Vector2>().x * m_Speed, m_RigidBody.velocity.y);
-                    //m_RigidBody.velocity = Vector2.right * m_MovementAction.ReadValue<Vector2>().x * m_Speed; 
+                    m_RigidBody.velocity = new Vector2(m_Direction * m_EnemySpeed, m_RigidBody.velocity.y);
 
                     if (m_RigidBody.velocity == Vector2.zero)
-                        ChangeState(PlayerMachineStates.IDLE);*/
+                        ChangeState(EnemyMachineStates.IDLE);
 
                     break;
 
                 case EnemyMachineStates.CHASE:
+
+                    if (m_PatrolCoroutine != null)
+                        StopCoroutine(m_PatrolCoroutine);
+
+                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x * m_EnemySpeed, 0);
 
                     /*if (m_RigidBody.velocity == Vector2.zero)
                         ChangeState(PlayerMachineStates.IDLE);*/
@@ -194,10 +229,22 @@ namespace streetsofraval
 
                 case EnemyMachineStates.ATTACK:
 
+                    if (m_PatrolCoroutine != null)
+                        StopCoroutine(m_PatrolCoroutine);
+
                     break;
 
                 default:
                     break;
+            }
+        }
+        private IEnumerator PatrolCoroutine()
+        {          
+            while (true)
+            {
+                m_Direction *= -1;
+                yield return new WaitForSeconds(Random.Range(1, 5));
+                
             }
         }
     }

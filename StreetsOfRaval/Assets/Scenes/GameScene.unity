@@ -3726,6 +3726,7 @@ GameObject:
   - component: {fileID: 2086543160}
   - component: {fileID: 2086543159}
   - component: {fileID: 2086543161}
+  - component: {fileID: 2086543162}
   m_Layer: 0
   m_Name: EnemyThief
   m_TagString: Untagged
@@ -3872,7 +3873,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &2086543161
 Animator:
   serializedVersion: 5
@@ -3894,3 +3895,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2086543162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086543156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7007045ef6f488e45970cf772c97d8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
