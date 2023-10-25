@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerHitbox : MonoBehaviour
 {
-    private float m_HitboxDamage = 0;
-    public float HitboxDamage => m_HitboxDamage;
+    private int m_HitboxDamage = 0;
+    public int HitboxDamage
+    {
+       get { return m_HitboxDamage; }
+    }
+
+    public void SetDamage(int damage)
+    {
+        m_HitboxDamage = damage;
+    }
 }

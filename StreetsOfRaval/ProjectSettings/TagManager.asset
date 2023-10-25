@@ -11,6 +11,8 @@ TagManager:
   - PlayerProjectile
   - EnemyProjectile
   - Pickup
+  - PatrolArea
+  - AttackArea
   layers:
   - Default
   - TransparentFX
@@ -26,8 +28,8 @@ TagManager:
   - PlayerProjectile
   - EnemyProjectile
   - Pickup
-  - 
-  - 
+  - PatrolArea
+  - AttackArea
   - 
   - 
   - 

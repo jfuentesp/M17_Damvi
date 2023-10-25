@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,6 +31,7 @@ namespace streetsofraval
         private float m_EnemyMaxHitpoints;
         private float m_EnemyHitpoints;
         private float m_EnemyDamage;
+        [SerializeField]
         private float m_InitialSpeed;
         private float m_EnemySpeed;
         private int m_EnemySpawnPoint;
@@ -40,6 +43,8 @@ namespace streetsofraval
         //private const string m_Attack2AnimationName = "attack2";
         private const string m_HitAnimationName = "hit";
         private const string m_DieAnimationName = "die";
+
+        private bool m_IsFlipped;
 
         //Waypoint to patrol
         private Vector2 m_SpawnPosition;
@@ -55,6 +60,9 @@ namespace streetsofraval
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
             m_SpawnPosition = transform.position;
             m_Direction = 1;
+            m_EnemySpeed = m_InitialSpeed;
+            //Ternary. Equals to: if (spawnpoint is 0, then false. Else true) and saves the result inside the variable
+            m_IsFlipped = m_EnemySpawnPoint == 0 ? false : true;
         }
 
         // Start is called before the first frame update
@@ -68,6 +76,33 @@ namespace streetsofraval
         void Update()
         {
             UpdateState();
+        }
+
+        public void InitEnemy(EnemyScriptableObject enemyInfo)
+        {
+            m_EnemyMaxHitpoints = enemyInfo.EnemyMaxHP;
+            m_EnemyHitpoints = m_EnemyMaxHitpoints;
+            m_EnemyDamage = enemyInfo.EnemyDamage;
+            m_EnemySpeed = enemyInfo.EnemySpeed;
+            m_SpriteRenderer.color = enemyInfo.SpriteColor;
+        } 
+
+        //Simple function that manages the damage the enemy receives
+        public void EnemyIsDamaged(int damage)
+        {
+            m_EnemyHitpoints -= damage;
+            if(m_EnemyHitpoints <= 0)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("PlayerHitbox"))
+            {
+                EnemyIsDamaged(collision.GetComponent<PlayerHitbox>().HitboxDamage);
+            }
         }
 
         /* !!! BUILDING UP STATE MACHINE !!! Always change state with the function ChangeState */
@@ -104,14 +139,8 @@ namespace streetsofraval
 
                     m_Animator.Play(m_WalkAnimationName);
                     m_EnemySpeed = m_InitialSpeed;
-                    if (m_EnemySpawnPoint == 0)
-                    {
-                        m_Direction = -1;
-                    }
-                    else
-                    {
-                        m_Direction = 1;
-                    }
+                    //Ternary. Equals to: if (spawnpoint is 0, then direction -1. Else 1) and saves the result inside the variable
+                    m_Direction = m_EnemySpawnPoint == 0 ? -1 : 1;
                     m_PatrolCoroutine = StartCoroutine(PatrolCoroutine());
 
                     break;
@@ -149,8 +178,6 @@ namespace streetsofraval
             {
                 case EnemyMachineStates.IDLE:
 
-                    
-
                     break;
 
                 case EnemyMachineStates.PATROL:
@@ -158,8 +185,6 @@ namespace streetsofraval
                     break;
 
                 case EnemyMachineStates.CHASE:
-
-                    
 
                     break;
 
@@ -179,7 +204,7 @@ namespace streetsofraval
         /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
         private void UpdateState()
         {
-            /*if (m_IsFlipped)
+            if (m_IsFlipped)
             {
                 m_RigidBody.transform.eulerAngles = Vector3.up * 180;
             }
@@ -187,20 +212,11 @@ namespace streetsofraval
             {
                 m_RigidBody.transform.eulerAngles = Vector3.zero;
             }
-            */
-
+        
             switch (m_CurrentState)
             {
                 case EnemyMachineStates.IDLE:
 
-                    /* if (m_MovementAction.ReadValue<Vector2>().x != 0)
-                     {
-                         if (m_MovementAction.ReadValue<Vector2>().x < 0)
-                             m_IsFlipped = true;
-                         if (m_MovementAction.ReadValue<Vector2>().x > 0)
-                             m_IsFlipped = false;
-                         ChangeState(PlayerMachineStates.WALK);
-                     }*/
                     if (m_PatrolCoroutine != null)
                         StopCoroutine(m_PatrolCoroutine);
 
@@ -243,8 +259,9 @@ namespace streetsofraval
             while (true)
             {
                 m_Direction *= -1;
-                yield return new WaitForSeconds(Random.Range(1, 5));
-                
+                //Ternary. Equals to: if (direction is lesser than 0, then true. Else false) and saves the result inside the variable
+                m_IsFlipped = m_Direction < 0 ? true : false;
+                yield return new WaitForSeconds(UnityEngine.Random.Range(1, 5));            
             }
         }
     }

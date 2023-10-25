@@ -51,10 +51,19 @@ namespace streetsofraval
 
         [Header("Player parameters")]
         [SerializeField]
+        private float m_MaxHitpoints;
+        private float m_Hitpoints;
+        [SerializeField]
         private float m_Speed;
         [SerializeField]
-        private float m_Damage;
-        public float Damage => m_Damage;
+        private int m_LightDamage;
+        public int LightDamage => m_LightDamage;
+        [SerializeField]
+        private int m_StrongDamage;
+        public int StrongDamage => m_StrongDamage;
+        [SerializeField]
+        private int m_ComboDamage;
+        public int ComboDamage => m_ComboDamage;
         [SerializeField]
         private float m_JumpForce;
         [SerializeField]
@@ -73,6 +82,7 @@ namespace streetsofraval
 
 
         GameObject m_PlayerHitbox;
+        PlayerHitbox m_Hitbox;
 
         private void Awake()
         {
@@ -93,8 +103,11 @@ namespace streetsofraval
             m_Animator = GetComponent<Animator>();
             //We can set the Hitbox in a variable to instantiate projectiles from there
             m_PlayerHitbox = this.transform.GetChild(0).gameObject;
+            m_Hitbox = m_PlayerHitbox.GetComponent<PlayerHitbox>();
             //We set the boolean that will control if the character is flipped as false
             m_IsFlipped = false;
+
+            m_Hitpoints = m_MaxHitpoints;
 
             //Setting the input variables. Don't forget to enable.
             Assert.IsNotNull(m_InputAsset);
@@ -159,6 +172,12 @@ namespace streetsofraval
         private void ReturnToIdleState(InputAction.CallbackContext context)
         {
             ChangeState(PlayerMachineStates.IDLE);
+        }
+
+        //Simple function that calls for damage that the player receives
+        public void PlayerIsDamaged(int damage)
+        {         
+            m_Hitpoints -= damage;
         }
 
         private void Attack1(InputAction.CallbackContext context)
@@ -364,6 +383,7 @@ namespace streetsofraval
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
                     m_Animator.Play(m_Attack1AnimationName);
+                    m_Hitbox.SetDamage(m_LightDamage);
 
                     break;
 
@@ -371,6 +391,7 @@ namespace streetsofraval
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
                     m_Animator.Play(m_Attack2AnimationName);
+                    m_Hitbox.SetDamage(m_StrongDamage);
 
                     break;
 
@@ -390,6 +411,7 @@ namespace streetsofraval
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
                     m_Animator.Play(m_Combo2AnimationName);
+                    m_Hitbox.SetDamage(m_ComboDamage);
 
                     break;
 
