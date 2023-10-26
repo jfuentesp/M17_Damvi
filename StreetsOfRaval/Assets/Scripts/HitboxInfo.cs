@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHitbox : MonoBehaviour
+public class HitboxInfo : MonoBehaviour
 {
     private int m_HitboxDamage = 0;
     public int HitboxDamage

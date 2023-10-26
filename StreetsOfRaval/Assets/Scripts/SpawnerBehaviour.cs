@@ -16,6 +16,11 @@ public class SpawnerBehaviour : MonoBehaviour
     private int m_EnemiesToSpawn;
     private int m_EnemiesSpawned;
 
+    private void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerBulletBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private float m_BulletDamage;
-    public float BulletDamage => m_BulletDamage;
+    private int m_BulletDamage;
+    public int BulletDamage => m_BulletDamage;
     [SerializeField]
     private float m_BulletSpeed;
     [SerializeField]
@@ -20,10 +20,11 @@ public class PlayerBulletBehaviour : MonoBehaviour
         m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
-    public void InitBullet(/*float speed, float damage,*/ Vector2 direction)
+    public void InitBullet(/*float speed,*/ int damage, Vector2 direction)
     {
-        /*m_BulletSpeed = speed;
-        m_BulletDamage = damage;*/
+        /*m_BulletSpeed = speed;*/
+        //It will set the bullet damage
+        m_BulletDamage = damage;
         //It will initiate the bullet direction and give it a speed
         m_RigidBody.velocity = direction * m_BulletSpeed;
         //If the direction is negative it will invert the sprite. If not, it will let it as default.
@@ -35,11 +36,6 @@ public class PlayerBulletBehaviour : MonoBehaviour
             transform.eulerAngles = Vector3.zero;
         }
         StartCoroutine(BulletAlive()); //Starting the lifetime coroutine
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-         
     }
 
     private IEnumerator BulletAlive()

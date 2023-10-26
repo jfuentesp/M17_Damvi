@@ -82,7 +82,7 @@ namespace streetsofraval
 
 
         GameObject m_PlayerHitbox;
-        PlayerHitbox m_Hitbox;
+        HitboxInfo m_Hitbox;
 
         private void Awake()
         {
@@ -103,7 +103,7 @@ namespace streetsofraval
             m_Animator = GetComponent<Animator>();
             //We can set the Hitbox in a variable to instantiate projectiles from there
             m_PlayerHitbox = this.transform.GetChild(0).gameObject;
-            m_Hitbox = m_PlayerHitbox.GetComponent<PlayerHitbox>();
+            m_Hitbox = m_PlayerHitbox.GetComponent<HitboxInfo>();
             //We set the boolean that will control if the character is flipped as false
             m_IsFlipped = false;
 
@@ -403,7 +403,7 @@ namespace streetsofraval
                     GameObject m_Bullet = m_BulletPool.GetElement();
                     m_Bullet.transform.position = m_PlayerHitbox.transform.position;
                     //It will run the InitBullet function and give the Vector2 direction considering if its flipped or not
-                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* damage, speed,*/ IsFlipped ? Vector2.left: Vector2.right); 
+                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, IsFlipped ? Vector2.left: Vector2.right); 
 
                     break;
 
