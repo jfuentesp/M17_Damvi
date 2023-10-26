@@ -37,27 +37,27 @@ public class GUIBehaviour : MonoBehaviour
         
     }
 
-    public void UpdateWaveGUI()
+    public void UpdateWaveGUI(int wave)
     {
         m_WaveText.text = "Wave: " + m_GameManager.Wave;
     }
 
-    public void UpdateScoreGUI()
+    public void UpdateScoreGUI(int score)
     {
         m_ScoreText.text = "Score: " + m_GameManager.Score;
     }
 
-    public void UpdateLivesGUI()
+    public void UpdateLivesGUI(int lives)
     {
         m_Lives.text = "Player lives: " + m_GameManager.Lives;
     }
 
-    public void UpdatePlayerHealthbarGUI()
+    public void UpdatePlayerHealthbarGUI(int hp)
     {
         m_HPBar.fillAmount = m_Player.Hitpoints / m_Player.MaxHitpoints;
     }
 
-    public void UpdatePlayerEnergyBarGUI()
+    public void UpdatePlayerEnergyBarGUI(int energy)
     {
         m_EnergyBar.fillAmount = m_Player.Energy / m_Player.MaxEnergy;
     }

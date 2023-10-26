@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3937591858506270168}
   - component: {fileID: 4127331691241839045}
   - component: {fileID: 1782646297567984093}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyHitbox
-  m_TagString: Untagged
+  m_TagString: EnemyHitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

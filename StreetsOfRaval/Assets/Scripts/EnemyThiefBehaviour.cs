@@ -30,6 +30,7 @@ namespace streetsofraval
         [Header("Enemy parameters")]
         private float m_EnemyMaxHitpoints;
         private float m_EnemyHitpoints;
+        [SerializeField]
         private float m_EnemyDamage;
         [SerializeField]
         private float m_InitialSpeed;
@@ -54,6 +55,7 @@ namespace streetsofraval
         PlayerBehaviour m_Player;
 
         //Child references
+        HitboxInfo m_Hitbox;
         AreaBehaviour m_ChaseArea;
         AreaBehaviour m_AttackArea;
 
@@ -62,6 +64,7 @@ namespace streetsofraval
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_Animator = GetComponent<Animator>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_Hitbox = this.transform.GetChild(0).GetComponent<HitboxInfo>();
             m_AttackArea = this.transform.GetChild(1).GetComponent<AreaBehaviour>();
             m_ChaseArea = this.transform.GetChild(2).GetComponent<AreaBehaviour>();
             m_SpawnPosition = transform.position;
@@ -183,6 +186,7 @@ namespace streetsofraval
                 case EnemyMachineStates.ATTACK:
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
+                    m_Hitbox.SetDamage((int)m_EnemyDamage);
                     m_Animator.Play(m_Attack1AnimationName); // This could be run from a coroutine if necessary
                     //m_AttackCoroutine = StartCoroutine(AttackCoroutine()); //If we would set this with a corroutine (make sure to StopCoroutine(m_AttackCoroutine); in Walkin states
                     break;

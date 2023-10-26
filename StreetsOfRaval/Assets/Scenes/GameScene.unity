@@ -441,6 +441,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304411315}
   m_CullTransparentMesh: 1
+--- !u!1001 &399649657
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2156593026808748311, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_Name
+      value: EnemyThief
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2944337004719982918, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0c6d4bad67de15f4ba086a17cdcf8bfc, type: 3}
 --- !u!1 &468705502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,6 +1368,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 865290268}
   m_CullTransparentMesh: 1
+--- !u!1001 &887896017
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 694108887917401546, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355550360489551964, guid: 73407ba0e2112c549be499e42384781b, type: 3}
+      propertyPath: m_Name
+      value: EnemyRanged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 73407ba0e2112c549be499e42384781b, type: 3}
 --- !u!1 &927836010
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,6 +2589,8 @@ GameObject:
   - component: {fileID: 1578691656}
   - component: {fileID: 1578691655}
   - component: {fileID: 1578691659}
+  - component: {fileID: 1578691660}
+  - component: {fileID: 1578691661}
   m_Layer: 5
   m_Name: GUI
   m_TagString: Untagged
@@ -2576,6 +2700,62 @@ MonoBehaviour:
   m_Lives: {fileID: 1296252404}
   m_HPBar: {fileID: 291090100}
   m_EnergyBar: {fileID: 1931749919}
+--- !u!114 &1578691660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578691654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: cbbdd37d180b21a419dc6d9fb635990b, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1578691659}
+        m_TargetAssemblyTypeName: GUIBehaviour, Assembly-CSharp
+        m_MethodName: UpdatePlayerHealthbarGUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1578691661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578691654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: fbf55c1fa51f7f24bb50be6825ef1254, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1578691659}
+        m_TargetAssemblyTypeName: GUIBehaviour, Assembly-CSharp
+        m_MethodName: UpdatePlayerEnergyBarGUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1594573674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2771,16 +2951,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InputAsset: {fileID: -944628639613478452, guid: 48102d80af0e9d74da6fb17c40bdf6a7, type: 3}
-  m_MaxHitpoints: 0
-  m_MaxEnergy: 0
+  m_MaxHitpoints: 25
+  m_MaxEnergy: 20
   m_Speed: 2
-  m_LightDamage: 0
-  m_StrongDamage: 0
-  m_ComboDamage: 0
+  m_LightDamage: 1
+  m_StrongDamage: 2
+  m_ComboDamage: 3
   m_JumpForce: 300
   m_IsFlipped: 0
   m_ComboAvailable: 0
   m_BulletPool: {fileID: 1192828954}
+  m_OnPlayerDamage: {fileID: 11400000, guid: cbbdd37d180b21a419dc6d9fb635990b, type: 2}
+  m_OnEnergyUsed: {fileID: 11400000, guid: fbf55c1fa51f7f24bb50be6825ef1254, type: 2}
 --- !u!1 &1822048770
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,6 +91,12 @@ namespace streetsofraval
         GameObject m_PlayerHitbox;
         HitboxInfo m_Hitbox;
 
+        [Header("References to GameEvents")]
+        [SerializeField]
+        private GameEventInt m_OnPlayerDamage;
+        [SerializeField]
+        private GameEventInt m_OnEnergyUsed;
+
         private void Awake()
         {
             //First, we initialize an instance of Player. If there is already an instance, it destroys the element and returns.
@@ -144,6 +150,20 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").Enable();
         }
 
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("EnemyHitbox"))
+            {
+                PlayerIsDamaged(collision.GetComponent<HitboxInfo>().HitboxDamage);
+            }
+
+            if (collision.CompareTag("EnemyProjectile"))
+            {
+                PlayerIsDamaged(collision.GetComponent<PlayerBulletBehaviour>().BulletDamage);
+                Destroy(collision.gameObject);
+            }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -185,6 +205,7 @@ namespace streetsofraval
         public void PlayerIsDamaged(int damage)
         {         
             m_Hitpoints -= damage;
+            m_OnPlayerDamage.Raise(damage);
         }
 
         private void Attack1(InputAction.CallbackContext context)

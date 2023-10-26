@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1355032783940326136}
   - component: {fileID: 4280452177038479601}
+  - component: {fileID: 3064215475410620591}
   m_Layer: 10
   m_Name: EnemyHitbox
   m_TagString: EnemyHitbox
@@ -77,6 +78,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.46948814, y: 0.48154545}
   m_EdgeRadius: 0
+--- !u!114 &3064215475410620591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296617839752762361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27364114e02279746ac80ac01556513f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2156593026808748311
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +128,7 @@ Transform:
   - {fileID: 7461677624263381558}
   - {fileID: 3535231972288494095}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1265122866612081544
 SpriteRenderer:
@@ -298,6 +311,7 @@ GameObject:
   - component: {fileID: 3535231972288494095}
   - component: {fileID: 8856802949284496439}
   - component: {fileID: 8108856603527749439}
+  - component: {fileID: 6074208165123240938}
   m_Layer: 14
   m_Name: PatrolArea
   m_TagString: PatrolArea
@@ -382,6 +396,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6074208165123240938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7867129654735993465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89623a62d8cc2d94c9f2e178ceb21d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9069204601469491496
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,6 +419,7 @@ GameObject:
   - component: {fileID: 7461677624263381558}
   - component: {fileID: 8500124883997392554}
   - component: {fileID: 5953131120700635480}
+  - component: {fileID: 8623329833145258412}
   m_Layer: 15
   m_Name: AttackArea
   m_TagString: AttackArea
@@ -487,3 +514,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &8623329833145258412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9069204601469491496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89623a62d8cc2d94c9f2e178ceb21d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
