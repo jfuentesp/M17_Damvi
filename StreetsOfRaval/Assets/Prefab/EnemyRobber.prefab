@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3937591858506270168}
   - component: {fileID: 4127331691241839045}
+  - component: {fileID: 1782646297567984093}
   m_Layer: 0
   m_Name: EnemyHitbox
   m_TagString: Untagged
@@ -77,6 +78,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7775211, y: 0.4815454}
   m_EdgeRadius: 0
+--- !u!114 &1782646297567984093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454500526542101124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27364114e02279746ac80ac01556513f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3504963644105037084
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +104,7 @@ GameObject:
   - component: {fileID: 2090812234913855401}
   - component: {fileID: 6371764729062485539}
   - component: {fileID: 562583717448068638}
+  - component: {fileID: -6809160529560313860}
   m_Layer: 7
   m_Name: EnemyRobber
   m_TagString: Enemy
@@ -114,7 +128,7 @@ Transform:
   - {fileID: 2462256180664195977}
   - {fileID: 1391865461149178105}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8516039958306234612
 SpriteRenderer:
@@ -273,6 +287,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cb935456dcaea349b02561cab381e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6809160529560313860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3504963644105037084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b1ef6433aebc34f8112cdb5625c531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InitialSpeed: 1
 --- !u!1 &5268943914328177657
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +311,7 @@ GameObject:
   - component: {fileID: 2462256180664195977}
   - component: {fileID: 6623154556008083257}
   - component: {fileID: 7194642454419357972}
+  - component: {fileID: 6352735297078171391}
   m_Layer: 15
   m_Name: AttackArea
   m_TagString: AttackArea
@@ -378,6 +406,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6352735297078171391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5268943914328177657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89623a62d8cc2d94c9f2e178ceb21d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8797150049850203796
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +429,7 @@ GameObject:
   - component: {fileID: 1391865461149178105}
   - component: {fileID: 3222413763953003572}
   - component: {fileID: 7430619639166140428}
+  - component: {fileID: 5819857228861598004}
   m_Layer: 14
   m_Name: PatrolArea
   m_TagString: PatrolArea
@@ -473,3 +514,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5819857228861598004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797150049850203796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89623a62d8cc2d94c9f2e178ceb21d56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

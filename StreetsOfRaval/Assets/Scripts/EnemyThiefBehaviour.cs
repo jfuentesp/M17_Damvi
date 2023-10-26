@@ -285,7 +285,7 @@ namespace streetsofraval
                 m_Direction *= -1;
                 //Ternary. Equals to: if (direction is lesser than 0, then true. Else false) and saves the result inside the variable
                 m_IsFlipped = m_Direction < 0 ? true : false;
-                yield return new WaitForSeconds(UnityEngine.Random.Range(1, 5));            
+                yield return new WaitForSeconds(5f);            
             }
         }
 
