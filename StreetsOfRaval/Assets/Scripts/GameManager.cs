@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
     private int m_Score;
     [SerializeField]
     private int m_Lives;
+
+    public int Wave => m_Wave;
+    public int Score => m_Score;
+    public int Lives => m_Lives;
 
     // Start is called before the first frame update
     void Start()

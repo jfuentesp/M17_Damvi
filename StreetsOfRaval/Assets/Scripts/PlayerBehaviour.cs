@@ -53,6 +53,13 @@ namespace streetsofraval
         [SerializeField]
         private float m_MaxHitpoints;
         private float m_Hitpoints;
+        public float Hitpoints => m_Hitpoints;
+        public float MaxHitpoints => m_MaxHitpoints;
+        [SerializeField]
+        private float m_MaxEnergy;
+        private float m_Energy;
+        public float Energy => m_Energy;
+        public float MaxEnergy => m_MaxEnergy;
         [SerializeField]
         private float m_Speed;
         [SerializeField]
