@@ -96,9 +96,9 @@ namespace streetsofraval
 
         [Header("References to GameEvents")]
         [SerializeField]
-        private GameEventInt m_OnPlayerDamage;
+        private GameEvent m_OnPlayerDamage;
         [SerializeField]
-        private GameEventInt m_OnEnergyUsed;
+        private GameEvent m_OnEnergyUsed;
 
         private void Awake()
         {
@@ -209,7 +209,7 @@ namespace streetsofraval
         public void PlayerIsDamaged(int damage)
         {         
             m_Hitpoints -= damage;
-            m_OnPlayerDamage.Raise(damage);
+            m_OnPlayerDamage.Raise();
         }
 
         private void Attack1(InputAction.CallbackContext context)
@@ -437,7 +437,7 @@ namespace streetsofraval
                     //It will run the InitBullet function and give the Vector2 direction considering if its flipped or not
                     m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, false, IsFlipped ? Vector2.left: Vector2.right);
                     m_Energy -= m_Combo1EnergyCost;
-                    m_OnEnergyUsed.Raise(m_Combo1EnergyCost);
+                    m_OnEnergyUsed.Raise();
 
                     break;
 

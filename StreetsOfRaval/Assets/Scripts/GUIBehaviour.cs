@@ -55,12 +55,12 @@ public class GUIBehaviour : MonoBehaviour
         m_Lives.text = "Player lives: " + m_GameManager.Lives;
     }
 
-    public void UpdatePlayerHealthbarGUI(int hp)
+    public void UpdatePlayerHealthbarGUI()
     {
         m_HPBar.fillAmount = m_Player.Hitpoints / m_Player.MaxHitpoints;
     }
 
-    public void UpdatePlayerEnergyBarGUI(int energy)
+    public void UpdatePlayerEnergyBarGUI()
     {
         m_EnergyBar.fillAmount = m_Player.Energy / m_Player.MaxEnergy;
     }
