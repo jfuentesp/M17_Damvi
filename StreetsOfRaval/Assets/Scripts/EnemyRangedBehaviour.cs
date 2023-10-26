@@ -30,6 +30,7 @@ namespace streetsofraval
         [Header("Enemy parameters")]
         private float m_EnemyMaxHitpoints;
         private float m_EnemyHitpoints;
+        [SerializeField]
         private float m_EnemyDamage;
         [SerializeField]
         private float m_InitialSpeed;

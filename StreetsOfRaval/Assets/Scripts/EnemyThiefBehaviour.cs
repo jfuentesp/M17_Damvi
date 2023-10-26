@@ -264,7 +264,8 @@ namespace streetsofraval
 
                 case EnemyMachineStates.CHASE:
 
-                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x , 0).normalized * m_EnemySpeed;
+                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x , 0).normalized 
+                        + new Vector2(0, m_RigidBody.velocity.y) * m_EnemySpeed;
                     m_IsFlipped = m_RigidBody.velocity.x < 0 ? true : false;
 
                     if (m_AttackArea.PlayerDetected)

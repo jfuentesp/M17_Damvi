@@ -79,6 +79,9 @@ namespace streetsofraval
         {
             get { return m_IsFlipped;}
         }
+        [SerializeField]
+        private int m_Combo1EnergyCost;
+
         //public bool IsFlipped => m_IsFlipped;
         [SerializeField]
         private bool m_ComboAvailable;
@@ -121,6 +124,7 @@ namespace streetsofraval
             m_IsFlipped = false;
 
             m_Hitpoints = m_MaxHitpoints;
+            m_Energy = m_MaxEnergy;
 
             //Setting the input variables. Don't forget to enable.
             Assert.IsNotNull(m_InputAsset);
@@ -224,7 +228,7 @@ namespace streetsofraval
 
                 case PlayerMachineStates.ATTACK1:
 
-                    if (m_ComboAvailable)
+                    if (m_ComboAvailable && m_Energy >= m_Combo1EnergyCost)
                         ChangeState(PlayerMachineStates.COMBO1);
                     else
                         ChangeState(PlayerMachineStates.ATTACK1);
@@ -431,7 +435,9 @@ namespace streetsofraval
                     GameObject m_Bullet = m_BulletPool.GetElement();
                     m_Bullet.transform.position = m_PlayerHitbox.transform.position;
                     //It will run the InitBullet function and give the Vector2 direction considering if its flipped or not
-                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, false, IsFlipped ? Vector2.left: Vector2.right); 
+                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, false, IsFlipped ? Vector2.left: Vector2.right);
+                    m_Energy -= m_Combo1EnergyCost;
+                    m_OnEnergyUsed.Raise(m_Combo1EnergyCost);
 
                     break;
 

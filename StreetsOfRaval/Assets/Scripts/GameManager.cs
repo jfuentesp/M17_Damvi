@@ -35,8 +35,18 @@ public class GameManager : MonoBehaviour
 
     public void InitializeGame()
     {
-        m_Wave = 0;
-        m_Score = 0;
-        m_Lives = 2;
+        SetScoreAndWave(0, 0);
+        SetLives(0);
+    }
+
+    private void SetScoreAndWave(int score, int wave)
+    {
+        m_Score = score;
+        m_Wave = wave;
+    }
+
+    private void SetLives(int lives)
+    {
+        m_Lives = lives;
     }
 }

@@ -9,6 +9,30 @@ using UnityEngine.Events;
 /// that matches with the same number of parameters.
 /// </summary>
 /// <typeparam name="T">Generic parameter</typeparam>
+public abstract class GameEventListener : MonoBehaviour
+{
+    [Tooltip("Event to register with.")]
+    public GameEvent Event;
+
+    [Tooltip("Response to invoke when Event is raised.")]
+    public UnityEvent Response;
+
+    private void OnEnable()
+    {
+        Event.RegisterListener(this);
+    }
+
+    private void OnDisable()
+    {
+        Event.UnregisterListener(this);
+    }
+
+    public void OnEventRaised()
+    {
+        Response.Invoke();
+    }
+}
+
 public abstract class GameEventListener<T> : MonoBehaviour
 {
     [Tooltip("Event to register with.")]

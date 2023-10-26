@@ -29,6 +29,9 @@ public class GUIBehaviour : MonoBehaviour
     {
         m_GameManager = GameManager.GameManagerInstance;
         m_Player = PlayerBehaviour.PlayerInstance;
+        UpdateScoreGUI(0);
+        UpdateWaveGUI(0);
+        UpdateLivesGUI(0);
     }
 
     // Update is called once per frame
