@@ -14,17 +14,19 @@ public class PlayerBulletBehaviour : MonoBehaviour
     private float m_BulletLifetime;
 
     private Rigidbody2D m_RigidBody;
+    private bool m_Destroyable;
 
     private void Awake()
     {
         m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
-    public void InitBullet(/*float speed,*/ int damage, Vector2 direction)
+    public void InitBullet(/*float speed,*/ int damage, bool destroyable, Vector2 direction)
     {
         /*m_BulletSpeed = speed;*/
         //It will set the bullet damage
         m_BulletDamage = damage;
+        m_Destroyable = destroyable;
         //It will initiate the bullet direction and give it a speed
         m_RigidBody.velocity = direction * m_BulletSpeed;
         //If the direction is negative it will invert the sprite. If not, it will let it as default.
@@ -41,6 +43,12 @@ public class PlayerBulletBehaviour : MonoBehaviour
     private IEnumerator BulletAlive()
     {
         yield return new WaitForSeconds(m_BulletLifetime);
-        this.gameObject.SetActive(false);
+        if (m_Destroyable)
+        {
+            Destroy(this.gameObject);
+        } else
+        {
+            this.gameObject.SetActive(false);
+        }    
     }
 }

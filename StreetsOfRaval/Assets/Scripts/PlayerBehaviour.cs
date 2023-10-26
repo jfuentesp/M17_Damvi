@@ -403,7 +403,7 @@ namespace streetsofraval
                     GameObject m_Bullet = m_BulletPool.GetElement();
                     m_Bullet.transform.position = m_PlayerHitbox.transform.position;
                     //It will run the InitBullet function and give the Vector2 direction considering if its flipped or not
-                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, IsFlipped ? Vector2.left: Vector2.right); 
+                    m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet(/* speed,*/m_LightDamage, false, IsFlipped ? Vector2.left: Vector2.right); 
 
                     break;
 

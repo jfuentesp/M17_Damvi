@@ -55,17 +55,21 @@ namespace streetsofraval
         //Child references
         AreaBehaviour m_ChaseArea;
         AreaBehaviour m_AttackArea;
+        GameObject m_EnemyHitbox;
 
-        //Pool of EnemyBullets
-        private Pool m_BulletPool;
+        //EnemyBullet prefab
+        [SerializeField]
+        private GameObject m_EnemyBullet;
+
 
         private void Awake()
         {
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_Animator = GetComponent<Animator>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
-            m_AttackArea = this.transform.GetChild(0).GetComponent<AreaBehaviour>();
-            //m_ChaseArea = this.transform.GetChild(1).GetComponent<AreaBehaviour>();
+            m_EnemyHitbox = this.transform.GetChild(0).gameObject;
+            m_AttackArea = this.transform.GetChild(1).GetComponent<AreaBehaviour>();
+            m_ChaseArea = this.transform.GetChild(2).GetComponent<AreaBehaviour>();
             m_SpawnPosition = transform.position;
             m_Direction = 1;
             m_EnemySpeed = m_InitialSpeed;
@@ -76,7 +80,7 @@ namespace streetsofraval
         // Start is called before the first frame update
         void Start()
         {
-            m_BulletPool = Pool.instance.GetComponent<Pool>();
+
             m_Player = PlayerBehaviour.PlayerInstance;
             InitState(EnemyMachineStates.PATROL);
         }
@@ -109,13 +113,14 @@ namespace streetsofraval
 
         public void EndOfHit()
         {
-            ChangeState(EnemyMachineStates.IDLE);
+             ChangeState(EnemyMachineStates.CHASE);               
         }
 
         public void Shoot()
         {
-            GameObject m_Bullet = m_BulletPool.GetElement();
-            m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet((int)m_EnemyDamage, m_IsFlipped ? Vector2.left : Vector2.right);
+            GameObject m_Bullet = Instantiate(m_EnemyBullet);
+            m_Bullet.transform.position = m_EnemyHitbox.transform.position;
+            m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet((int)m_EnemyDamage, true, m_IsFlipped ? Vector2.left : Vector2.right);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -158,31 +163,30 @@ namespace streetsofraval
             {
                 case EnemyMachineStates.IDLE:
 
-                    m_RigidBody.velocity = Vector3.zero;
-                    m_IdleCoroutine = StartCoroutine(IdleCoroutine());
+                    StartCoroutine(IdleCoroutine());
+                    m_RigidBody.velocity = Vector3.zero;              
                     m_Animator.Play(m_IdleAnimationName);
 
                     break;
 
                 case EnemyMachineStates.PATROL:
 
-                    
                     m_Animator.Play(m_WalkAnimationName);
-                    m_EnemySpeed = m_InitialSpeed;
+                    //m_EnemySpeed = m_InitialSpeed;
                     //Ternary. Equals to: if (spawnpoint is 0, then direction -1. Else 1) and saves the result inside the variable
                     m_Direction = m_EnemySpawnPoint == 0 ? -1 : 1;
                     m_PatrolCoroutine = StartCoroutine(PatrolCoroutine());
 
                     break;
 
-                /*case EnemyMachineStates.CHASE:
+                case EnemyMachineStates.CHASE:
 
                     if (m_PatrolCoroutine != null)
                         StopCoroutine(m_PatrolCoroutine);
                     m_Animator.Play(m_WalkAnimationName);
                     m_EnemySpeed = m_InitialSpeed;
 
-                    break;*/
+                    break;
 
                 case EnemyMachineStates.FLEE:
 
@@ -210,18 +214,15 @@ namespace streetsofraval
             {
                 case EnemyMachineStates.IDLE:
 
-                    if (m_IdleCoroutine != null)
-                        StopCoroutine(m_IdleCoroutine);
-
                     break;
 
                 case EnemyMachineStates.PATROL:
                 
                     break;
 
-                /*case EnemyMachineStates.CHASE:
+                case EnemyMachineStates.CHASE:
 
-                    break;*/
+                    break;
 
                 case EnemyMachineStates.FLEE:
 
@@ -251,42 +252,39 @@ namespace streetsofraval
             switch (m_CurrentState)
             {
                 case EnemyMachineStates.IDLE:
-                  
+
                     if (m_PatrolCoroutine != null)
                         StopCoroutine(m_PatrolCoroutine);
-                    if (m_AttackArea.PlayerDetected)
-                        ChangeState(EnemyMachineStates.ATTACK);
 
-                    ChangeState(EnemyMachineStates.PATROL);
+                    if (m_ChaseArea.PlayerDetected)
+                        ChangeState(EnemyMachineStates.CHASE);
+
+                    /*ChangeState(EnemyMachineStates.PATROL);*/
 
                     break;
 
-                case EnemyMachineStates.PATROL:              
+                case EnemyMachineStates.PATROL:
 
                     m_RigidBody.velocity = new Vector2(m_Direction * m_EnemySpeed, m_RigidBody.velocity.y);
 
-                    if (m_RigidBody.velocity == Vector2.zero)
-                        ChangeState(EnemyMachineStates.IDLE);
-                    if (m_AttackArea.PlayerDetected)
-                        ChangeState(EnemyMachineStates.ATTACK);
-                    /*if (m_ChaseArea.PlayerDetected)
-                        ChangeState(EnemyMachineStates.CHASE);*/
+                    if (m_ChaseArea.PlayerDetected)
+                        ChangeState(EnemyMachineStates.CHASE);
 
                     break;
 
-                /*case EnemyMachineStates.CHASE:
+                case EnemyMachineStates.CHASE:
 
-                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x , 0).normalized * m_EnemySpeed;
+                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x, 0).normalized * m_EnemySpeed;
                     m_IsFlipped = m_RigidBody.velocity.x < 0 ? true : false;
-
+                    
                     if (m_AttackArea.PlayerDetected)
                         ChangeState(EnemyMachineStates.ATTACK);
                     if (!m_ChaseArea.PlayerDetected)
-                        ChangeState(EnemyMachineStates.PATROL);
+                        ChangeState(EnemyMachineStates.IDLE);
 
-                    break;*/
+                    break;
 
-                case EnemyMachineStates.ATTACK:
+                case EnemyMachineStates.ATTACK:                     
 
                     break;
 
@@ -308,6 +306,7 @@ namespace streetsofraval
         private IEnumerator IdleCoroutine()
         {
             yield return new WaitForSeconds(3f);
+            ChangeState(EnemyMachineStates.PATROL);
         }
 
         /*private IEnumerator AttackCoroutine()

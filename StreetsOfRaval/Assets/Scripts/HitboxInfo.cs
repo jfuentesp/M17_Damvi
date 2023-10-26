@@ -14,4 +14,12 @@ public class HitboxInfo : MonoBehaviour
     {
         m_HitboxDamage = damage;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("EnemyProjectile"))
+        {
+            Destroy(collision.gameObject);
+        }
+    }
 }
