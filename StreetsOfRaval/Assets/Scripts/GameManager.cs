@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private int m_Lives = 2;
     [SerializeField]
     List<int> m_NumberOfEnemiesByWave;
+    private int m_EnemiesSpawned;
 
     private int m_RemainingEnemies;
 
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
     public int Score => m_Score;
     public int Lives => m_Lives;
     public List<int> NumberOfEnemiesByWave => m_NumberOfEnemiesByWave;
-    public int NumberOfEnemies => m_NumberOfEnemiesByWave[m_Wave];
+    public int NumberOfEnemies => m_EnemiesSpawned;
 
     [Header("GameEvents for the Game Mechanics")]
     [SerializeField]
@@ -72,10 +73,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!m_Spawner.IsSpawning && m_Spawner.EnemiesSpawned == 0)
+        if (!m_Spawner.IsSpawning && m_Spawner.EnemiesSpawned == 0)
         {
-            StartCoroutine(NextWaveCoroutine());
-            m_OnWaveFinished.Raise();
+            m_OnWaveFinished.Raise();    //!!!!!!!!!!!!!!    
         }
     }
 
@@ -116,6 +116,11 @@ public class GameManager : MonoBehaviour
     private void SubstractLives(int lives)
     {
         m_Lives -= lives;
+    }
+
+    public void OnEnemySpawn()
+    {
+        //m_EnemiesSpawned = m_Spawner.EnemiesSpawned;
     }
 
     private IEnumerator NextWaveCoroutine()

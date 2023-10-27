@@ -114,7 +114,6 @@ namespace streetsofraval
             {
                 m_OnEnemyDeath.Raise(m_EnemyScore);
                 gameObject.SetActive(false);
-                //Destroy(this.gameObject);
             }
         }
 

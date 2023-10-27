@@ -470,3 +470,4 @@ MonoBehaviour:
   m_InitialSpeed: 1
   m_OnEnemyDeath: {fileID: 11400000, guid: a602d7a897fe2fb4bb16995c3e09279f, type: 2}
   m_EnemyBullet: {fileID: 9135328012695836461, guid: 971655f3a1ec5e040b46c8b1984a54c0, type: 3}
+  m_OnEnemySpawned: {fileID: 11400000, guid: 9126319557d65104fb0ef254e6077e2e, type: 2}

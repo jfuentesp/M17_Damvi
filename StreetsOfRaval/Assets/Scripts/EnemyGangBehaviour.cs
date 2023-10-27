@@ -82,7 +82,7 @@ namespace streetsofraval
         void Update()
         {
             UpdateState();
-            Debug.Log(m_CurrentState);
+            //Debug.Log(m_CurrentState);
         }
 
         private void OnEnable()
@@ -116,7 +116,6 @@ namespace streetsofraval
             {
                 m_OnEnemyDeath.Raise(m_EnemyScore);
                 gameObject.SetActive(false);
-                //Destroy(this.gameObject);
             }
         }
 

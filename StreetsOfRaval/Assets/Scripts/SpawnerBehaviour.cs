@@ -31,6 +31,7 @@ public class SpawnerBehaviour : MonoBehaviour
     private int m_EnemiesToSpawn;
     private int m_EnemiesSpawned;
 
+
     public int EnemiesSpawned => m_EnemiesSpawned;
     public int EnemiesToSpawn => m_EnemiesToSpawn;
     public bool IsSpawning => m_IsSpawning;
@@ -45,14 +46,15 @@ public class SpawnerBehaviour : MonoBehaviour
     [Header("List of all enemy Scriptable Objects set in order from lower to higher stats")]
     [SerializeField]
     List<EnemyScriptableObject> m_EnemyInfoList;
-
-    [Header("Events references")]
     [SerializeField]
     GameEventVoid m_OnEnemySpawned;
+    [SerializeField]
+    GameEventVoid m_OnWaveCleared;
+
 
     private void Awake()
     {
-        //First, we initialize an instance of GameManager. If there is already an instance, it destroys the element and returns.
+        //First, we initialize an instance of Spawner. If there is already an instance, it destroys the element and returns.
         if (m_Instance == null)
         {
             m_Instance = this;
@@ -64,6 +66,8 @@ public class SpawnerBehaviour : MonoBehaviour
         }
         m_LowerDifficultyLevel = 0;
         m_HigherDifficultyLevel = 0;
+        m_EnemiesSpawned = 0;
+        m_EnemiesToSpawn = 0;
         m_IsSpawning = true;
     }
 
@@ -134,8 +138,11 @@ public class SpawnerBehaviour : MonoBehaviour
             int difficultylevel = Random.Range(m_LowerDifficultyLevel, m_HigherDifficultyLevel);
             SpawnEnemy(spawnpoint, difficultylevel);
             if (enemyCounter == m_EnemiesToSpawn)
+            {
                 m_IsSpawning = false;
+            }            
             enemyCounter++;
+            m_EnemiesSpawned++;
             yield return new WaitForSeconds(m_SpawnTime);
         }
     }
@@ -175,7 +182,5 @@ public class SpawnerBehaviour : MonoBehaviour
                 enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
                 break;
         }
-        m_EnemiesSpawned++;
-        m_OnEnemySpawned.Raise();
     }
 }

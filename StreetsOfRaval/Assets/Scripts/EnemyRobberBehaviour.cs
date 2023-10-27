@@ -58,7 +58,8 @@ namespace streetsofraval
         [SerializeField]
         GameEventInt m_OnEnemyDeath;
 
-      
+
+
 
         private void Awake()
         {
@@ -107,13 +108,17 @@ namespace streetsofraval
             {
                 m_OnEnemyDeath.Raise(m_EnemyScore);
                 gameObject.SetActive(false);
-                //Destroy(this.gameObject);
             }
         }
 
         public void EndOfHit()
         {
             ChangeState(EnemyMachineStates.IDLE);
+        }
+
+        private void OnEnable()
+        {
+            InitState(EnemyMachineStates.IDLE);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

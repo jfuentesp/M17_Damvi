@@ -94,6 +94,11 @@ namespace streetsofraval
             UpdateState();
         }
 
+        private void OnEnable()
+        {
+            InitState(EnemyMachineStates.PATROL);
+        }
+
         public void InitEnemy(EnemyScriptableObject enemyInfo, int spawnpoint)
         {
             m_EnemyMaxHitpoints = enemyInfo.EnemyMaxHP;
@@ -113,7 +118,6 @@ namespace streetsofraval
             {
                 m_OnEnemyDeath.Raise(m_EnemyScore);
                 gameObject.SetActive(false);
-                //Destroy(this.gameObject);
             }
         }
 

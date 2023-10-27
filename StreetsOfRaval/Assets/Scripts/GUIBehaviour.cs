@@ -24,15 +24,18 @@ namespace streetsofraval
 
         private GameManager m_GameManager;
         private PlayerBehaviour m_Player;
+        private SpawnerBehaviour m_Spawner;
 
         // Start is called before the first frame update
         void Start()
         {
             m_GameManager = GameManager.GameManagerInstance;
             m_Player = PlayerBehaviour.PlayerInstance;
+            /*SpawnerBehaviour.SpawnerInstance;*/
             UpdateScoreGUI(0);
             UpdateWaveGUI();
             UpdateLivesGUI();
+            UpdateMonstersGUI();
         }
 
         // Update is called once per frame
@@ -43,7 +46,7 @@ namespace streetsofraval
 
         public void UpdateMonstersGUI()
         {
-            m_EnemiesText.text = "/" + m_GameManager.NumberOfEnemies;
+            //m_EnemiesText.text = m_Spawner.EnemiesSpawned + "/" + m_Spawner.EnemiesToSpawn;
         }
 
         public void UpdateWaveGUI()
