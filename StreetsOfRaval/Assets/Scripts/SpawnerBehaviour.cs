@@ -1,35 +1,181 @@
 using System.Collections;
 using System.Collections.Generic;
+using streetsofraval;
 using UnityEngine;
 
 public class SpawnerBehaviour : MonoBehaviour
 {
+    //Instance of the Spawner. Refers to this own gameobject.
+    private static SpawnerBehaviour m_Instance;
+    public static SpawnerBehaviour SpawnerInstance => m_Instance; //A getter for the instance of the spawner. Similar to get { return m_Instance }. (Accessor)
+
     [Header("Spawnpoints references")]
     [SerializeField]
     private Transform m_LeftSpawnpoint;
     [SerializeField]
     private Transform m_RightSpawnpoint;
+    [Header("Pool references")]
+    [SerializeField]
+    private Pool m_RobberPool;
+    [SerializeField]
+    private Pool m_RangedPool;
+    [SerializeField]
+    private Pool m_ThiefPool;
+    [SerializeField]
+    private Pool m_GangPool;
 
+    [Header("Spawner settings")]
     [SerializeField]
     private float m_SpawnTime;
     private int m_Wave;
     private int m_EnemiesToSpawn;
     private int m_EnemiesSpawned;
 
+    public int EnemiesSpawned => m_EnemiesSpawned;
+    public int EnemiesToSpawn => m_EnemiesToSpawn;
+    public bool IsSpawning => m_IsSpawning;
+
+
+    GameManager m_GameManager;
+
+    private bool m_IsSpawning;
+    private int m_LowerDifficultyLevel;
+    private int m_HigherDifficultyLevel;
+
+    [Header("List of all enemy Scriptable Objects set in order from lower to higher stats")]
+    [SerializeField]
+    List<EnemyScriptableObject> m_EnemyInfoList;
+
+    [Header("Events references")]
+    [SerializeField]
+    GameEventVoid m_OnEnemySpawned;
+
     private void Awake()
     {
-        
+        //First, we initialize an instance of GameManager. If there is already an instance, it destroys the element and returns.
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        m_LowerDifficultyLevel = 0;
+        m_HigherDifficultyLevel = 0;
+        m_IsSpawning = true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_GameManager = GameManager.GameManagerInstance;
+        m_Wave = m_GameManager.Wave;
+        OnWaveStart();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnWaveStart()
     {
-        
+        m_EnemiesSpawned = 0;
+        m_IsSpawning = true;
+        switch (m_Wave)
+        {
+            case 0:
+                m_LowerDifficultyLevel = 0;
+                m_HigherDifficultyLevel = 0;
+                m_EnemiesToSpawn = 12;
+                break;
+
+            case 1:
+                m_LowerDifficultyLevel = 1;
+                m_HigherDifficultyLevel = 1;
+                m_EnemiesToSpawn = 12;
+                break;
+
+            case 2:
+                m_LowerDifficultyLevel = 0;
+                m_HigherDifficultyLevel = 2;
+                m_EnemiesToSpawn = 18;
+                break;
+
+            case 3:
+                m_LowerDifficultyLevel = 0;
+                m_HigherDifficultyLevel = 4;
+                m_EnemiesToSpawn = 25;
+                break;
+
+            case 4:
+                m_LowerDifficultyLevel = 2;
+                m_HigherDifficultyLevel = 6;
+                m_EnemiesToSpawn = 42;
+                break;
+
+            default:
+                m_LowerDifficultyLevel = 3;
+                m_HigherDifficultyLevel = 9;
+                m_EnemiesToSpawn = 52;
+                break;
+        }
+        StartCoroutine(SpawnCoroutine());
+    }
+
+    public void OnEnemyDeath(int score)
+    {
+        m_EnemiesSpawned--;
+    }
+
+    private IEnumerator SpawnCoroutine()
+    {
+        while (m_IsSpawning)
+        {
+            int enemyCounter = 0;
+            int spawnpoint = Random.Range(0, 2);
+            int difficultylevel = Random.Range(m_LowerDifficultyLevel, m_HigherDifficultyLevel);
+            SpawnEnemy(spawnpoint, difficultylevel);
+            if (enemyCounter == m_EnemiesToSpawn)
+                m_IsSpawning = false;
+            enemyCounter++;
+            yield return new WaitForSeconds(m_SpawnTime);
+        }
+    }
+
+    private void SpawnEnemy(int spawnpoint, int difficultylevel)
+    {
+        EnemyScriptableObject enemyInfo;
+        GameObject enemy;
+        switch (difficultylevel % 4)
+        {
+            case 0:
+                enemyInfo = m_EnemyInfoList[difficultylevel];
+                Pool RobberPool = m_RobberPool.GetComponent<Pool>();
+                enemy = RobberPool.GetComponent<Pool>().GetElement();              
+                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                break;
+            case 1:
+                enemyInfo = m_EnemyInfoList[difficultylevel];
+                Pool RangedPool = m_RangedPool.GetComponent<Pool>();
+                enemy = RangedPool.GetComponent<Pool>().GetElement();
+                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                break;
+            case 2:
+                enemyInfo = m_EnemyInfoList[difficultylevel];
+                Pool ThiefPool = m_RangedPool.GetComponent<Pool>();
+                enemy = ThiefPool.GetComponent<Pool>().GetElement();
+                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                break;
+            default:
+                enemyInfo = m_EnemyInfoList[difficultylevel];
+                Pool GangPool = m_RangedPool.GetComponent<Pool>();
+                enemy = GangPool.GetComponent<Pool>().GetElement();
+                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                break;
+        }
+        m_EnemiesSpawned++;
+        m_OnEnemySpawned.Raise();
     }
 }

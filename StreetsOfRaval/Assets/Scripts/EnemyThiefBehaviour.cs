@@ -35,6 +35,7 @@ namespace streetsofraval
         [SerializeField]
         private float m_InitialSpeed;
         private float m_EnemySpeed;
+        private int m_EnemyScore;
         private int m_EnemySpawnPoint;
 
         //Animation names
@@ -53,6 +54,8 @@ namespace streetsofraval
 
         //Player reference
         PlayerBehaviour m_Player;
+        [SerializeField]
+        GameEventInt m_OnEnemyDeath;
 
         //Child references
         HitboxInfo m_Hitbox;
@@ -85,16 +88,22 @@ namespace streetsofraval
         void Update()
         {
             UpdateState();
-            Debug.Log(m_CurrentState);
         }
 
-        public void InitEnemy(EnemyScriptableObject enemyInfo)
+        private void OnEnable()
+        {
+            InitState(EnemyMachineStates.PATROL);
+        }
+
+        public void InitEnemy(EnemyScriptableObject enemyInfo, int spawnpoint)
         {
             m_EnemyMaxHitpoints = enemyInfo.EnemyMaxHP;
             m_EnemyHitpoints = m_EnemyMaxHitpoints;
             m_EnemyDamage = enemyInfo.EnemyDamage;
             m_EnemySpeed = enemyInfo.EnemySpeed;
             m_SpriteRenderer.color = enemyInfo.SpriteColor;
+            m_EnemyScore = enemyInfo.ScoreValue;
+            m_Direction = spawnpoint == 0? 1 : -1;
         } 
 
         //Simple function that manages the damage the enemy receives
@@ -103,7 +112,9 @@ namespace streetsofraval
             m_EnemyHitpoints -= damage;
             if(m_EnemyHitpoints <= 0)
             {
-                Destroy(this.gameObject);
+                m_OnEnemyDeath.Raise(m_EnemyScore);
+                gameObject.SetActive(false);
+                //Destroy(this.gameObject);
             }
         }
 
@@ -138,7 +149,6 @@ namespace streetsofraval
         }
 
         Coroutine m_PatrolCoroutine;
-        Coroutine m_AttackCoroutine;
 
         /* InitState will run every instruction that has to be started ONLY when enters a state */
         private void InitState(EnemyMachineStates currentState)
@@ -152,7 +162,6 @@ namespace streetsofraval
                 case EnemyMachineStates.IDLE:
 
                     m_RigidBody.velocity = Vector3.zero;
-
                     m_Animator.Play(m_IdleAnimationName);
 
                     break;
@@ -169,8 +178,6 @@ namespace streetsofraval
 
                 case EnemyMachineStates.CHASE:
 
-                    if (m_PatrolCoroutine != null)
-                        StopCoroutine(m_PatrolCoroutine);
                     m_Animator.Play(m_WalkAnimationName);
                     m_EnemySpeed = m_InitialSpeed;
 
@@ -187,8 +194,7 @@ namespace streetsofraval
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
                     m_Hitbox.SetDamage((int)m_EnemyDamage);
-                    m_Animator.Play(m_Attack1AnimationName); // This could be run from a coroutine if necessary
-                    //m_AttackCoroutine = StartCoroutine(AttackCoroutine()); //If we would set this with a corroutine (make sure to StopCoroutine(m_AttackCoroutine); in Walkin states
+                    m_Animator.Play(m_Attack1AnimationName);
                     break;
 
                 default:
@@ -206,7 +212,8 @@ namespace streetsofraval
                     break;
 
                 case EnemyMachineStates.PATROL:
-                
+                    if(m_PatrolCoroutine != null)
+                        StopCoroutine(m_PatrolCoroutine);
                     break;
 
                 case EnemyMachineStates.CHASE:
@@ -229,21 +236,13 @@ namespace streetsofraval
         /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
         private void UpdateState()
         {
-            if (m_IsFlipped)
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.up * 180;
-            }
-            else
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.zero;
-            }
+
+            m_RigidBody.transform.eulerAngles = m_IsFlipped ? Vector3.up * 180 : Vector3.zero;
         
             switch (m_CurrentState)
             {
                 case EnemyMachineStates.IDLE:
                   
-                    if (m_PatrolCoroutine != null)
-                        StopCoroutine(m_PatrolCoroutine);
                     if (m_ChaseArea.PlayerDetected)
                         ChangeState(EnemyMachineStates.CHASE);
 
@@ -293,16 +292,5 @@ namespace streetsofraval
                 yield return new WaitForSeconds(5f);            
             }
         }
-
-        /*private IEnumerator AttackCoroutine()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(2f);
-                m_RigidBody.velocity = Vector3.zero;
-                m_Animator.Play(m_Attack1AnimationName);
-                Debug.Log("Ataco");               
-            }
-        }*/
     }
 }

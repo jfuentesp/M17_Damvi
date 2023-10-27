@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InitialSpeed: 1
+  m_OnEnemyDeath: {fileID: 11400000, guid: a602d7a897fe2fb4bb16995c3e09279f, type: 2}
 --- !u!1 &5268943914328177657
 GameObject:
   m_ObjectHideFlags: 0

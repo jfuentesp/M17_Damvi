@@ -287,7 +287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7007045ef6f488e45970cf772c97d8c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_EnemyDamage: 0
   m_InitialSpeed: 1
+  m_OnEnemyDeath: {fileID: 11400000, guid: a602d7a897fe2fb4bb16995c3e09279f, type: 2}
 --- !u!114 &1914266305216774345
 MonoBehaviour:
   m_ObjectHideFlags: 0

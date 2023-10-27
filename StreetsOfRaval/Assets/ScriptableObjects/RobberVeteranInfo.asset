@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a8b4a9720a044b4fb6f0381a7a0c534, type: 3}
-  m_Name: RobberVeteranInfo 1
+  m_Name: RobberVeteranInfo
   m_EditorClassIdentifier: 
   m_EnemyMaxHP: 28
   m_EnemyDamage: 4
   m_EnemySpeed: 2
   m_SpriteColor: {r: 1, g: 0.70980394, b: 0, a: 1}
+  m_ScoreValue: 130

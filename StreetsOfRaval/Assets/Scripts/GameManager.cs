@@ -11,42 +11,99 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Parameters")]
     [SerializeField]
-    private int m_Wave;
+    private int m_Wave = 0;
     [SerializeField]
-    private int m_Score;
+    private int m_Score = 0;
     [SerializeField]
-    private int m_Lives;
+    private int m_Lives = 2;
+    [SerializeField]
+    List<int> m_NumberOfEnemiesByWave;
+
+    private int m_RemainingEnemies;
 
     public int Wave => m_Wave;
     public int Score => m_Score;
     public int Lives => m_Lives;
+    public List<int> NumberOfEnemiesByWave => m_NumberOfEnemiesByWave;
+    public int NumberOfEnemies => m_NumberOfEnemiesByWave[m_Wave];
+
+    [Header("GameEvents for the Game Mechanics")]
+    [SerializeField]
+    GameEventVoid m_OnNextWave;
+    [SerializeField]
+    GameEventVoid m_OnWaveFinished;
+
+    SpawnerBehaviour m_Spawner;
+
+    private void Awake()
+    {
+        //First, we initialize an instance of GameManager. If there is already an instance, it destroys the element and returns.
+        if (m_Instance == null)
+        {
+            m_Instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(this.gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        InitializeGame();  
+        m_Spawner = SpawnerBehaviour.SpawnerInstance;
+        InitializeGame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(!m_Spawner.IsSpawning && m_Spawner.EnemiesSpawned == 0)
+        {
+            StartCoroutine(NextWaveCoroutine());
+            m_OnWaveFinished.Raise();
+        }
     }
 
     public void InitializeGame()
     {
-        SetScoreAndWave(0, 0);
-        SetLives(0);
+        AddScore(0);
+        AddWave(0);
+        AddLives(0);
     }
 
-    private void SetScoreAndWave(int score, int wave)
+    public void OnPlayerDeath()
     {
-        m_Score = score;
-        m_Wave = wave;
+        SubstractLives(1);
     }
 
-    private void SetLives(int lives)
+    public void AddScore(int score)
     {
-        m_Lives = lives;
+        m_Score += score;
+    }
+
+    private void AddWave(int wave)
+    {
+        m_Wave += wave;
+    }
+
+    private void AddLives(int lives)
+    {
+        m_Lives += lives;
+    }
+
+    private void SubstractLives(int lives)
+    {
+        m_Lives -= lives;
+    }
+
+    private IEnumerator NextWaveCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+        AddWave(1);
+        m_OnNextWave.Raise();
     }
 }

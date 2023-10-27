@@ -13,7 +13,6 @@ namespace streetsofraval
         private static PlayerBehaviour m_Instance;
         public static PlayerBehaviour PlayerInstance => m_Instance; //A getter for the instance of the player. Similar to get { return m_Instance }. (Accessor)
 
-
         //Reference to the InputSystem
         [Header("Reference to the Input System")]
         [SerializeField]
@@ -90,15 +89,18 @@ namespace streetsofraval
         [SerializeField]
         private Pool m_BulletPool;
 
-
         GameObject m_PlayerHitbox;
         HitboxInfo m_Hitbox;
+
+        Vector3 m_SpawnPointPosition;
 
         [Header("References to GameEvents")]
         [SerializeField]
         private GameEvent m_OnPlayerDamage;
         [SerializeField]
         private GameEvent m_OnEnergyUsed;
+        [SerializeField]
+        private GameEvent m_OnPlayerDeath;
 
         private void Awake()
         {
@@ -111,7 +113,9 @@ namespace streetsofraval
             {
                 Destroy(this.gameObject);
                 return;
-            }
+            }          
+
+            m_SpawnPointPosition = transform.position;
 
             //We set the player gameobject rigid body
             m_RigidBody = GetComponent<Rigidbody2D>();
@@ -127,6 +131,21 @@ namespace streetsofraval
             m_Energy = m_MaxEnergy;
 
             //Setting the input variables. Don't forget to enable.
+            /*Assert.IsNotNull(m_InputAsset);
+            m_Input = Instantiate(m_InputAsset);
+            m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack1;
+            m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed += Attack2;
+            m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed += Jump;
+            //m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
+            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started += Crouch;
+            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled += ReturnToIdleState;
+            m_Input.FindActionMap("PlayerActions").Enable();*/
+        }
+
+        private void OnEnable()
+        {
+            //Setting the input variables. Don't forget to enable.
             Assert.IsNotNull(m_InputAsset);
             m_Input = Instantiate(m_InputAsset);
             m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
@@ -137,9 +156,10 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started += Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled += ReturnToIdleState;
             m_Input.FindActionMap("PlayerActions").Enable();
+            InitState(PlayerMachineStates.IDLE);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             //Disabling the inputs variables and delegates.
             Assert.IsNotNull(m_InputAsset);
@@ -210,6 +230,29 @@ namespace streetsofraval
         {         
             m_Hitpoints -= damage;
             m_OnPlayerDamage.Raise();
+            if (m_Hitpoints <= 0)
+                OnPlayerDeath();
+        }
+
+        private void OnPlayerDeath()
+        {
+            m_OnPlayerDeath.Raise();
+            StartCoroutine(DeathCoroutine());
+        }
+
+        private IEnumerator DeathCoroutine()
+        {
+            m_Instance.gameObject.SetActive(false);
+            yield return new WaitForSeconds(2f);
+            ResetStats();
+            gameObject.transform.position = m_SpawnPointPosition;
+            m_Instance.gameObject.SetActive(true);
+        }
+
+        private void ResetStats()
+        {
+            m_Hitpoints = m_MaxHitpoints;
+            m_Energy = m_MaxEnergy;
         }
 
         private void Attack1(InputAction.CallbackContext context)
@@ -512,14 +555,7 @@ namespace streetsofraval
         /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
         private void UpdateState()
         {
-            if (m_IsFlipped)
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.up * 180;
-            }
-            else
-            {
-                m_RigidBody.transform.eulerAngles = Vector3.zero;
-            }
+            m_RigidBody.transform.eulerAngles = m_IsFlipped ? Vector3.up * 180 : Vector3.zero;
 
             switch (m_CurrentState)
             {

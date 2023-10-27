@@ -2,16 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* !!!! LIST OF ENEMIES:
- * 1. Thief: Turns invisible and static once you look at him. He follows you when you do not look at him and tries to stab you. sprite: enemy2
- * 2. Gang: Walks towards you an tries to stab you. If he is hit, he tries to runaway and throw you projectiles. sprite: enemy1
- * 3. Robber: Tank. Takes time to hit you, but he can resist more attacks. sprite: enemy3
- * 4. Ranger: Fires projectiles. You can hit the projectiles with the melee attack to block or crouch. sprite: enemy4
- */
-
 namespace streetsofraval
 {
-    public class EnemyRobberBehaviour : MonoBehaviour
+    public class EnemyGangBehaviour : MonoBehaviour
     {
         //Reference to this gameobject Rigidbody
         private Rigidbody2D m_RigidBody;
@@ -21,12 +14,13 @@ namespace streetsofraval
         private SpriteRenderer m_SpriteRenderer;
 
         //States from Enemy statemachine
-        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, FLEE }
+        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, ATTACK2, FLEE }
         private EnemyMachineStates m_CurrentState;
 
         [Header("Enemy parameters")]
         private float m_EnemyMaxHitpoints;
         private float m_EnemyHitpoints;
+        [SerializeField]
         private float m_EnemyDamage;
         [SerializeField]
         private float m_InitialSpeed;
@@ -38,7 +32,7 @@ namespace streetsofraval
         private const string m_IdleAnimationName = "idle";
         private const string m_WalkAnimationName = "walk";
         private const string m_Attack1AnimationName = "attack1";
-        //private const string m_Attack2AnimationName = "attack2";
+        private const string m_Attack2AnimationName = "attack2";
         private const string m_HitAnimationName = "hit";
         private const string m_DieAnimationName = "die";
 
@@ -50,21 +44,24 @@ namespace streetsofraval
 
         //Player reference
         PlayerBehaviour m_Player;
-
-        //Child references
-        AreaBehaviour m_ChaseArea;
-        AreaBehaviour m_AttackArea;
-
         [SerializeField]
         GameEventInt m_OnEnemyDeath;
 
-      
+        //Child references
+        HitboxInfo m_Hitbox;
+        AreaBehaviour m_ChaseArea;
+        AreaBehaviour m_AttackArea;
+
+        //EnemyBullet prefab
+        [SerializeField]
+        private GameObject m_EnemyBullet;
 
         private void Awake()
         {
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_Animator = GetComponent<Animator>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_Hitbox = this.transform.GetChild(0).GetComponent<HitboxInfo>();
             m_AttackArea = this.transform.GetChild(1).GetComponent<AreaBehaviour>();
             m_ChaseArea = this.transform.GetChild(2).GetComponent<AreaBehaviour>();
             m_SpawnPosition = transform.position;
@@ -72,20 +69,25 @@ namespace streetsofraval
             m_EnemySpeed = m_InitialSpeed;
             //Ternary. Equals to: if (spawnpoint is 0, then false. Else true) and saves the result inside the variable
             m_IsFlipped = m_EnemySpawnPoint == 0 ? false : true;
-            m_SpawnPosition = transform.position;
         }
 
         // Start is called before the first frame update
         void Start()
         {
             m_Player = PlayerBehaviour.PlayerInstance;
-            InitState(EnemyMachineStates.IDLE);
+            InitState(EnemyMachineStates.PATROL);
         }
 
         // Update is called once per frame
         void Update()
         {
             UpdateState();
+            Debug.Log(m_CurrentState);
+        }
+
+        private void OnEnable()
+        {
+            InitState(EnemyMachineStates.PATROL);
         }
 
         public void InitEnemy(EnemyScriptableObject enemyInfo, int spawnpoint)
@@ -97,6 +99,13 @@ namespace streetsofraval
             m_SpriteRenderer.color = enemyInfo.SpriteColor;
             m_EnemyScore = enemyInfo.ScoreValue;
             m_Direction = spawnpoint == 0 ? 1 : -1;
+        }
+
+        public void Shoot()
+        {
+            GameObject m_Bullet = Instantiate(m_EnemyBullet);
+            m_Bullet.transform.position = m_Hitbox.transform.position;
+            m_Bullet.GetComponent<PlayerBulletBehaviour>().InitBullet((int)m_EnemyDamage, true, m_IsFlipped ? Vector2.left : Vector2.right);
         }
 
         //Simple function that manages the damage the enemy receives
@@ -113,7 +122,7 @@ namespace streetsofraval
 
         public void EndOfHit()
         {
-            ChangeState(EnemyMachineStates.IDLE);
+            ChangeState(EnemyMachineStates.CHASE);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -141,6 +150,8 @@ namespace streetsofraval
             InitState(newState);
         }
 
+        Coroutine m_PatrolCoroutine;
+
         /* InitState will run every instruction that has to be started ONLY when enters a state */
         private void InitState(EnemyMachineStates currentState)
         {
@@ -157,10 +168,20 @@ namespace streetsofraval
 
                     break;
 
+                case EnemyMachineStates.PATROL:
+
+                    m_Animator.Play(m_WalkAnimationName);
+                    m_EnemySpeed = m_InitialSpeed;
+                    //Ternary. Equals to: if (spawnpoint is 0, then direction -1. Else 1) and saves the result inside the variable
+                    m_Direction = m_EnemySpawnPoint == 0 ? -1 : 1;
+                    m_PatrolCoroutine = StartCoroutine(PatrolCoroutine());
+
+                    break;
+
                 case EnemyMachineStates.CHASE:
 
                     m_Animator.Play(m_WalkAnimationName);
-                    m_EnemySpeed = m_InitialSpeed / 2;
+                    m_EnemySpeed = m_InitialSpeed;
 
                     break;
 
@@ -174,7 +195,14 @@ namespace streetsofraval
                 case EnemyMachineStates.ATTACK:
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
+                    m_Hitbox.SetDamage((int)m_EnemyDamage);
                     m_Animator.Play(m_Attack1AnimationName);
+                    break;
+
+                case EnemyMachineStates.ATTACK2:
+                    //Attack2 will set the velocity to zero, then shoot 
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_Attack2AnimationName);
                     break;
 
                 default:
@@ -192,7 +220,8 @@ namespace streetsofraval
                     break;
 
                 case EnemyMachineStates.PATROL:
-
+                    if (m_PatrolCoroutine != null)
+                        StopCoroutine(m_PatrolCoroutine);
                     break;
 
                 case EnemyMachineStates.CHASE:
@@ -215,6 +244,7 @@ namespace streetsofraval
         /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
         private void UpdateState()
         {
+
             m_RigidBody.transform.eulerAngles = m_IsFlipped ? Vector3.up * 180 : Vector3.zero;
 
             switch (m_CurrentState)
@@ -224,17 +254,31 @@ namespace streetsofraval
                     if (m_ChaseArea.PlayerDetected)
                         ChangeState(EnemyMachineStates.CHASE);
 
+                    ChangeState(EnemyMachineStates.PATROL);
+
+                    break;
+
+                case EnemyMachineStates.PATROL:
+
+                    m_RigidBody.velocity = new Vector2(m_Direction * m_EnemySpeed, m_RigidBody.velocity.y);
+
+                    if (m_RigidBody.velocity == Vector2.zero)
+                        ChangeState(EnemyMachineStates.IDLE);
+                    if (m_ChaseArea.PlayerDetected)
+                        ChangeState(EnemyMachineStates.CHASE);
+
                     break;
 
                 case EnemyMachineStates.CHASE:
 
-                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x, 0).normalized * m_EnemySpeed;
+                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x, 0).normalized
+                        + new Vector2(0, m_RigidBody.velocity.y) * m_EnemySpeed;
                     m_IsFlipped = m_RigidBody.velocity.x < 0 ? true : false;
 
                     if (m_AttackArea.PlayerDetected)
                         ChangeState(EnemyMachineStates.ATTACK);
                     if (!m_ChaseArea.PlayerDetected)
-                        ChangeState(EnemyMachineStates.IDLE);
+                        ChangeState(EnemyMachineStates.PATROL);
 
                     break;
 
@@ -246,5 +290,16 @@ namespace streetsofraval
                     break;
             }
         }
+        private IEnumerator PatrolCoroutine()
+        {
+            while (true)
+            {
+                m_Direction *= -1;
+                //Ternary. Equals to: if (direction is lesser than 0, then true. Else false) and saves the result inside the variable
+                m_IsFlipped = m_Direction < 0 ? true : false;
+                yield return new WaitForSeconds(5f);
+            }
+        }
     }
 }
+
