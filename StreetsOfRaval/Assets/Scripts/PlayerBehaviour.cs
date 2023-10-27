@@ -237,16 +237,7 @@ namespace streetsofraval
         private void OnPlayerDeath()
         {
             m_OnPlayerDeath.Raise();
-            StartCoroutine(DeathCoroutine());
-        }
-
-        private IEnumerator DeathCoroutine()
-        {
-            m_Instance.gameObject.SetActive(false);
-            yield return new WaitForSeconds(2f);
             ResetStats();
-            gameObject.transform.position = m_SpawnPointPosition;
-            m_Instance.gameObject.SetActive(true);
         }
 
         private void ResetStats()
