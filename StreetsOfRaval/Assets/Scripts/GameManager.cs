@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int m_Score = 0;
     [SerializeField]
-    private int m_Lives = 2;
+    private int m_Lives = 0;
     [SerializeField]
     List<int> m_NumberOfEnemiesByWave;
     private int m_EnemiesSpawned;
@@ -38,7 +38,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameEventVoid m_OnNextWave;
     [SerializeField]
-    GameEventVoid m_OnWaveFinished;
+    GameEventInt m_OnPlayerDeathUpdate;
+    [SerializeField]
+    GameEventInt m_OnWaveUpdate;
+    [SerializeField]
+    GameEventVoid m_OnPlayerRespawn;
+
 
     Vector3 m_PlayerSpawnPoint;
 
@@ -70,32 +75,36 @@ public class GameManager : MonoBehaviour
         InitializeGame();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!m_Spawner.IsSpawning && m_Spawner.EnemiesSpawned == 0)
-        {
-            m_OnWaveFinished.Raise();    //!!!!!!!!!!!!!!    
-        }
-    }
-
     public void InitializeGame()
     {
-        AddScore(0);
-        AddWave(0);
-        AddLives(0);
+        m_Score = 0;
+        m_Lives = 2;
+        m_Wave = 0;
     }
 
     public void OnPlayerDeath()
     {
         SubstractLives(1);
-        if(m_Lives != 0) 
+        m_OnPlayerDeathUpdate.Raise(m_Lives);
+        if(m_Lives > 0) 
         {
             StartCoroutine(PlayerDeathCoroutine());
         } else
         {
-            SceneManager.LoadScene("GameOverScene");
+            SceneManager.LoadScene(m_GameOverScene);
         }     
+    }
+
+    public void PlayAgain()
+    {
+        InitializeGame();
+        SceneManager.LoadScene(m_GameScene);
+    }
+
+    public void MainMenuScene()
+    {
+        InitializeGame();
+        SceneManager.LoadScene(m_MainTitleScene);
     }
 
     public void AddScore(int score)
@@ -118,21 +127,21 @@ public class GameManager : MonoBehaviour
         m_Lives -= lives;
     }
 
-    public void OnEnemySpawn()
+    public void OnWaveCleared()
     {
-        //m_EnemiesSpawned = m_Spawner.EnemiesSpawned;
+        StartCoroutine(NextWaveCoroutine());
     }
 
     private IEnumerator NextWaveCoroutine()
     {
         yield return new WaitForSeconds(5f);
         AddWave(1);
-        m_OnNextWave.Raise();
+        m_OnNextWave.Raise(); //For Spawner
+        m_OnWaveUpdate.Raise(m_Wave); //For GUI update
     }
 
     private IEnumerator PlayerDeathCoroutine()
     {
-        m_Player.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);
         m_Player.transform.position = m_PlayerSpawnPoint;
         m_Player.gameObject.SetActive(true);

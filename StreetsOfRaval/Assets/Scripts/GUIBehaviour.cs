@@ -31,11 +31,11 @@ namespace streetsofraval
         {
             m_GameManager = GameManager.GameManagerInstance;
             m_Player = PlayerBehaviour.PlayerInstance;
-            /*SpawnerBehaviour.SpawnerInstance;*/
+            m_Spawner = SpawnerBehaviour.SpawnerInstance;
             UpdateScoreGUI(0);
-            UpdateWaveGUI();
-            UpdateLivesGUI();
-            UpdateMonstersGUI();
+            UpdateWaveGUI(0);
+            UpdateLivesGUI(2);
+            UpdateMonstersGUI(1,12);
         }
 
         // Update is called once per frame
@@ -44,14 +44,14 @@ namespace streetsofraval
 
         }
 
-        public void UpdateMonstersGUI()
+        public void UpdateMonstersGUI(int spawneds, int tospawn)
         {
-            //m_EnemiesText.text = m_Spawner.EnemiesSpawned + "/" + m_Spawner.EnemiesToSpawn;
+            m_EnemiesText.text = spawneds + "/" + tospawn;
         }
 
-        public void UpdateWaveGUI()
+        public void UpdateWaveGUI(int wave)
         {
-            m_WaveText.text = "Wave: " + m_GameManager.Wave;
+            m_WaveText.text = "Wave: " + wave;
         }
 
         public void LoadingWaveGUI()
@@ -64,9 +64,9 @@ namespace streetsofraval
             m_ScoreText.text = "Score: " + m_GameManager.Score;
         }
 
-        public void UpdateLivesGUI()
+        public void UpdateLivesGUI(int lives)
         {
-            m_Lives.text = "Player lives: " + m_GameManager.Lives;
+            m_Lives.text = "Player lives: " + lives;
         }
 
         public void UpdatePlayerHealthbarGUI()

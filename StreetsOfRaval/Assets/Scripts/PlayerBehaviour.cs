@@ -40,12 +40,13 @@ namespace streetsofraval
         private const string m_Combo2AnimationName = "combo2";
         private const string m_SuperAnimationName = "super";
         private const string m_CrouchAnimationName = "crouch";
+        private const string m_HitAnimationName = "hit";
         private const string m_CrouchAttack1AnimationName = "crouchattack1";
         private const string m_CrouchAttack2AnimationName = "crouchattack2";
 
 
         //Variables for the current state and an Enum for setting the Player States
-        private enum PlayerMachineStates { NONE, IDLE, WALK, ATTACK1, ATTACK2, COMBO1, COMBO2, SUPER, JUMP, CROUCHATTACK1, CROUCHATTACK2, CROUCH }
+        private enum PlayerMachineStates { NONE, IDLE, WALK, ATTACK1, ATTACK2, COMBO1, COMBO2, SUPER, JUMP, CROUCHATTACK1, CROUCHATTACK2, CROUCH, HIT }
         private PlayerMachineStates m_CurrentState;
 
         [Header("Player parameters")]
@@ -92,8 +93,6 @@ namespace streetsofraval
         GameObject m_PlayerHitbox;
         HitboxInfo m_Hitbox;
 
-        Vector3 m_SpawnPointPosition;
-
         [Header("References to GameEvents")]
         [SerializeField]
         private GameEvent m_OnPlayerDamage;
@@ -115,8 +114,6 @@ namespace streetsofraval
                 return;
             }          
 
-            m_SpawnPointPosition = transform.position;
-
             //We set the player gameobject rigid body
             m_RigidBody = GetComponent<Rigidbody2D>();
             //We set the player gameobject animator
@@ -129,18 +126,6 @@ namespace streetsofraval
 
             m_Hitpoints = m_MaxHitpoints;
             m_Energy = m_MaxEnergy;
-
-            //Setting the input variables. Don't forget to enable.
-            /*Assert.IsNotNull(m_InputAsset);
-            m_Input = Instantiate(m_InputAsset);
-            m_MovementAction = m_Input.FindActionMap("PlayerActions").FindAction("Movement");
-            m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack1;
-            m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed += Attack2;
-            m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed += Jump;
-            //m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
-            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started += Crouch;
-            m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled += ReturnToIdleState;
-            m_Input.FindActionMap("PlayerActions").Enable();*/
         }
 
         private void OnEnable()
@@ -229,6 +214,7 @@ namespace streetsofraval
         public void PlayerIsDamaged(int damage)
         {         
             m_Hitpoints -= damage;
+            ChangeState(PlayerMachineStates.HIT);
             m_OnPlayerDamage.Raise();
             if (m_Hitpoints <= 0)
                 OnPlayerDeath();
@@ -236,8 +222,9 @@ namespace streetsofraval
 
         private void OnPlayerDeath()
         {
-            m_OnPlayerDeath.Raise();
+            gameObject.SetActive(false);
             ResetStats();
+            m_OnPlayerDeath.Raise();
         }
 
         private void ResetStats()
@@ -483,6 +470,13 @@ namespace streetsofraval
 
                     break;
 
+                case PlayerMachineStates.HIT:
+                    //Will play the animation and then set the state to Idle
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_HitAnimationName);
+
+                    break;
+
                 case PlayerMachineStates.CROUCH:
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
@@ -564,8 +558,7 @@ namespace streetsofraval
 
                 case PlayerMachineStates.WALK:
 
-                    m_RigidBody.velocity = new Vector2(m_MovementAction.ReadValue<Vector2>().x * m_Speed, m_RigidBody.velocity.y);
-                    //m_RigidBody.velocity = Vector2.right * m_MovementAction.ReadValue<Vector2>().x * m_Speed; 
+                    m_RigidBody.velocity = new Vector2(m_MovementAction.ReadValue<Vector2>().x * m_Speed, m_RigidBody.velocity.y); 
 
                     if (m_RigidBody.velocity == Vector2.zero)
                         ChangeState(PlayerMachineStates.IDLE);
@@ -576,14 +569,6 @@ namespace streetsofraval
 
                     if (m_RigidBody.velocity == Vector2.zero)
                         ChangeState(PlayerMachineStates.IDLE);
-
-                    break;
-
-                case PlayerMachineStates.ATTACK1:
-
-                    break;
-
-                case PlayerMachineStates.ATTACK2:
 
                     break;
 

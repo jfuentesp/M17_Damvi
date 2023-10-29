@@ -14,7 +14,7 @@ namespace streetsofraval
         private SpriteRenderer m_SpriteRenderer;
 
         //States from Enemy statemachine
-        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, ATTACK2, FLEE }
+        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, ATTACK2, FLEE, HIT }
         private EnemyMachineStates m_CurrentState;
 
         [Header("Enemy parameters")]
@@ -112,6 +112,7 @@ namespace streetsofraval
         public void EnemyIsDamaged(int damage)
         {
             m_EnemyHitpoints -= damage;
+            ChangeState(EnemyMachineStates.HIT);
             if (m_EnemyHitpoints <= 0)
             {
                 m_OnEnemyDeath.Raise(m_EnemyScore);
@@ -182,6 +183,12 @@ namespace streetsofraval
                     m_Animator.Play(m_WalkAnimationName);
                     m_EnemySpeed = m_InitialSpeed;
 
+                    break;
+
+                case EnemyMachineStates.HIT:
+
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_HitAnimationName);
                     break;
 
                 case EnemyMachineStates.FLEE:
@@ -270,8 +277,8 @@ namespace streetsofraval
 
                 case EnemyMachineStates.CHASE:
 
-                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x, 0).normalized
-                        + new Vector2(0, m_RigidBody.velocity.y) * m_EnemySpeed;
+                    Vector2 direction = new Vector2(m_Player.transform.position.x - transform.position.x, m_Player.transform.position.y - transform.position.y).normalized;
+                    m_RigidBody.velocity = new Vector2(direction.x * m_EnemySpeed, m_RigidBody.velocity.y);
                     m_IsFlipped = m_RigidBody.velocity.x < 0 ? true : false;
 
                     if (m_AttackArea.PlayerDetected)

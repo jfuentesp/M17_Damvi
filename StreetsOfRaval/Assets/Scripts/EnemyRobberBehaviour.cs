@@ -21,7 +21,7 @@ namespace streetsofraval
         private SpriteRenderer m_SpriteRenderer;
 
         //States from Enemy statemachine
-        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, FLEE }
+        private enum EnemyMachineStates { IDLE, PATROL, CHASE, ATTACK, FLEE, HIT }
         private EnemyMachineStates m_CurrentState;
 
         [Header("Enemy parameters")]
@@ -52,12 +52,15 @@ namespace streetsofraval
         PlayerBehaviour m_Player;
 
         //Child references
+        HitboxInfo m_Hitbox;
         AreaBehaviour m_ChaseArea;
         AreaBehaviour m_AttackArea;
 
         [SerializeField]
         GameEventInt m_OnEnemyDeath;
 
+        [SerializeField]
+        GameEventVoid m_OnEnemySpawned;
 
 
 
@@ -66,6 +69,7 @@ namespace streetsofraval
             m_RigidBody = GetComponent<Rigidbody2D>();
             m_Animator = GetComponent<Animator>();
             m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_Hitbox = this.transform.GetChild(0).GetComponent<HitboxInfo>();
             m_AttackArea = this.transform.GetChild(1).GetComponent<AreaBehaviour>();
             m_ChaseArea = this.transform.GetChild(2).GetComponent<AreaBehaviour>();
             m_SpawnPosition = transform.position;
@@ -104,10 +108,11 @@ namespace streetsofraval
         public void EnemyIsDamaged(int damage)
         {
             m_EnemyHitpoints -= damage;
+            ChangeState(EnemyMachineStates.HIT);
             if (m_EnemyHitpoints <= 0)
             {
-                m_OnEnemyDeath.Raise(m_EnemyScore);
                 gameObject.SetActive(false);
+                m_OnEnemyDeath.Raise(m_EnemyScore);              
             }
         }
 
@@ -118,6 +123,7 @@ namespace streetsofraval
 
         private void OnEnable()
         {
+            m_OnEnemySpawned.Raise();
             InitState(EnemyMachineStates.IDLE);
         }
 
@@ -169,6 +175,12 @@ namespace streetsofraval
 
                     break;
 
+                case EnemyMachineStates.HIT:
+
+                    m_RigidBody.velocity = Vector3.zero;
+                    m_Animator.Play(m_HitAnimationName);
+                    break;
+
                 case EnemyMachineStates.FLEE:
 
                     m_Animator.Play(m_WalkAnimationName);
@@ -179,6 +191,7 @@ namespace streetsofraval
                 case EnemyMachineStates.ATTACK:
                     //Attack will set the velocity to zero, so it cant move while attacking
                     m_RigidBody.velocity = Vector3.zero;
+                    m_Hitbox.SetDamage((int)m_EnemyDamage);
                     m_Animator.Play(m_Attack1AnimationName);
                     break;
 
@@ -232,9 +245,9 @@ namespace streetsofraval
                     break;
 
                 case EnemyMachineStates.CHASE:
-
-                    m_RigidBody.velocity = new Vector2(m_Player.transform.position.x - transform.position.x, 0).normalized
-                        + new Vector2(0, m_RigidBody.velocity.y) * m_EnemySpeed;
+                  
+                    Vector2 direction = new Vector2(m_Player.transform.position.x - transform.position.x, m_Player.transform.position.y - transform.position.y).normalized;
+                    m_RigidBody.velocity =  new Vector2(direction.x * m_EnemySpeed, m_RigidBody.velocity.y);
                     m_IsFlipped = m_RigidBody.velocity.x < 0 ? true : false;
 
                     if (m_AttackArea.PlayerDetected)

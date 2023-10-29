@@ -47,7 +47,9 @@ public class SpawnerBehaviour : MonoBehaviour
     [SerializeField]
     List<EnemyScriptableObject> m_EnemyInfoList;
     [SerializeField]
-    GameEventVoid m_OnEnemySpawned;
+    GameEventIntInt m_OnEnemySpawned;
+    [SerializeField]
+    GameEventIntInt m_OnEnemyDeathUpdate;
     [SerializeField]
     GameEventVoid m_OnWaveCleared;
 
@@ -64,6 +66,7 @@ public class SpawnerBehaviour : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+        //Giving all the variables a default value
         m_LowerDifficultyLevel = 0;
         m_HigherDifficultyLevel = 0;
         m_EnemiesSpawned = 0;
@@ -79,8 +82,10 @@ public class SpawnerBehaviour : MonoBehaviour
         OnWaveStart();
     }
 
+
     public void OnWaveStart()
     {
+        m_Wave = m_GameManager.Wave;
         m_EnemiesSpawned = 0;
         m_IsSpawning = true;
         switch (m_Wave)
@@ -127,23 +132,28 @@ public class SpawnerBehaviour : MonoBehaviour
     public void OnEnemyDeath(int score)
     {
         m_EnemiesSpawned--;
+        m_OnEnemyDeathUpdate.Raise(m_EnemiesSpawned, m_EnemiesToSpawn);
+        if(m_EnemiesSpawned == 0 && !m_IsSpawning)
+            m_OnWaveCleared.Raise();
     }
 
     private IEnumerator SpawnCoroutine()
     {
+        int counter = 0;
         while (m_IsSpawning)
-        {
-            int enemyCounter = 0;
+        {        
             int spawnpoint = Random.Range(0, 2);
             int difficultylevel = Random.Range(m_LowerDifficultyLevel, m_HigherDifficultyLevel);
+            Debug.Log(string.Format("Spawnpoint is: {0} And the difficulty level is: {1}", spawnpoint, difficultylevel));
             SpawnEnemy(spawnpoint, difficultylevel);
-            if (enemyCounter == m_EnemiesToSpawn)
+            m_EnemiesSpawned++;
+            counter++;
+            m_OnEnemySpawned.Raise(m_EnemiesSpawned, m_EnemiesToSpawn);
+            yield return new WaitForSeconds(m_SpawnTime);
+            if (counter == m_EnemiesToSpawn)
             {
                 m_IsSpawning = false;
-            }            
-            enemyCounter++;
-            m_EnemiesSpawned++;
-            yield return new WaitForSeconds(m_SpawnTime);
+            }
         }
     }
 
@@ -151,6 +161,9 @@ public class SpawnerBehaviour : MonoBehaviour
     {
         EnemyScriptableObject enemyInfo;
         GameObject enemy;
+        //Enemies will spawn in a random location on X axis between the two spawnpoints
+        float spawnX = Random.Range(m_LeftSpawnpoint.position.x, m_RightSpawnpoint.position.x); //spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position; if we want to spawn right in the spawnpoints
+        Vector2 spawnposition = new Vector2(spawnX, m_RightSpawnpoint.position.y);
         switch (difficultylevel % 4)
         {
             case 0:
@@ -158,28 +171,28 @@ public class SpawnerBehaviour : MonoBehaviour
                 Pool RobberPool = m_RobberPool.GetComponent<Pool>();
                 enemy = RobberPool.GetComponent<Pool>().GetElement();              
                 enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
-                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                enemy.transform.position = spawnposition;
                 break;
             case 1:
                 enemyInfo = m_EnemyInfoList[difficultylevel];
                 Pool RangedPool = m_RangedPool.GetComponent<Pool>();
                 enemy = RangedPool.GetComponent<Pool>().GetElement();
-                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
-                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                enemy.GetComponent<EnemyRangedBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnposition;
                 break;
             case 2:
                 enemyInfo = m_EnemyInfoList[difficultylevel];
                 Pool ThiefPool = m_RangedPool.GetComponent<Pool>();
                 enemy = ThiefPool.GetComponent<Pool>().GetElement();
-                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
-                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                enemy.GetComponent<EnemyThiefBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnposition;
                 break;
             default:
                 enemyInfo = m_EnemyInfoList[difficultylevel];
                 Pool GangPool = m_RangedPool.GetComponent<Pool>();
                 enemy = GangPool.GetComponent<Pool>().GetElement();
-                enemy.GetComponent<EnemyRobberBehaviour>().InitEnemy(enemyInfo, spawnpoint);
-                enemy.transform.position = spawnpoint == 0 ? m_LeftSpawnpoint.position : m_RightSpawnpoint.position;
+                enemy.GetComponent<EnemyGangBehaviour>().InitEnemy(enemyInfo, spawnpoint);
+                enemy.transform.position = spawnposition;
                 break;
         }
     }
