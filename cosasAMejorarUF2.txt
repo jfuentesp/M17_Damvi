@@ -27,4 +27,8 @@
 
 	- Organizar un poco mejor la carpeta de assets (scripts, gameevents, scriptables y tal)
 
+	- SI se quiere hacer el uso de effectors que influyen al personaje, el personaje tendrá que moverse por fuerzas (addforce).
+	La manera de hacerlo es hacer que se le vaya añadiendo una fuerza hasta clampearlo en la velocidad deseada. De esa manera,
+	se consigue un efecto de aceleración, se empieza corriendo a una velocidad y se va incrementando (rollo sonic).
+
 
