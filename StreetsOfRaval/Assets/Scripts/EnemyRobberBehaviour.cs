@@ -62,7 +62,9 @@ namespace streetsofraval
         [SerializeField]
         GameEventVoid m_OnEnemySpawned;
 
-
+        //Pickup prefab
+        [SerializeField]
+        private GameObject m_Pickup;
 
         private void Awake()
         {
@@ -112,7 +114,19 @@ namespace streetsofraval
             if (m_EnemyHitpoints <= 0)
             {
                 gameObject.SetActive(false);
+                SpawnPickup();
                 m_OnEnemyDeath.Raise(m_EnemyScore);              
+            }
+        }
+
+        private void SpawnPickup()
+        {
+            //25% chances of dropping a pickup
+            int probability = Random.Range(0, 5);
+            if (probability == 0)
+            {
+                GameObject m_CurrentPickup = Instantiate(m_Pickup);
+                m_CurrentPickup.transform.position = transform.position;
             }
         }
 

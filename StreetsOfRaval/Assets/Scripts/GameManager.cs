@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     GameEventVoid m_OnNextWave;
     [SerializeField]
-    GameEventInt m_OnPlayerDeathUpdate;
+    GameEventInt m_OnPlayerLifesUpdate;
     [SerializeField]
     GameEventInt m_OnWaveUpdate;
     [SerializeField]
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         SubstractLives(1);
-        m_OnPlayerDeathUpdate.Raise(m_Lives);
+        m_OnPlayerLifesUpdate.Raise(m_Lives);
         if(m_Lives > 0) 
         {
             StartCoroutine(PlayerDeathCoroutine());
@@ -117,9 +117,10 @@ public class GameManager : MonoBehaviour
         m_Wave += wave;
     }
 
-    private void AddLives(int lives)
+    public void AddLives(int lives)
     {
         m_Lives += lives;
+        m_OnPlayerLifesUpdate.Raise(m_Lives);
     }
 
     private void SubstractLives(int lives)

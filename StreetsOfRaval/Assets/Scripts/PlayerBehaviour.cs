@@ -82,7 +82,6 @@ namespace streetsofraval
         [SerializeField]
         private int m_Combo1EnergyCost;
 
-        //public bool IsFlipped => m_IsFlipped;
         [SerializeField]
         private bool m_ComboAvailable;
 
@@ -123,7 +122,6 @@ namespace streetsofraval
             m_Hitbox = m_PlayerHitbox.GetComponent<HitboxInfo>();
             //We set the boolean that will control if the character is flipped as false
             m_IsFlipped = false;
-
             m_Hitpoints = m_MaxHitpoints;
             m_Energy = m_MaxEnergy;
         }
@@ -137,7 +135,6 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed += Attack1;
             m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed += Attack2;
             m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed += Jump;
-            //m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started += Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled += ReturnToIdleState;
             m_Input.FindActionMap("PlayerActions").Enable();
@@ -153,7 +150,6 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").FindAction("Attack1").performed -= Attack1;
             m_Input.FindActionMap("PlayerActions").FindAction("Attack2").performed -= Attack2;
             m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed -= Jump;
-            //m_Input.FindActionMap("PlayerActions").FindAction("Crouch").performed += Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started -= Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled -= ReturnToIdleState;
             m_Input.FindActionMap("PlayerActions").Enable();
@@ -170,6 +166,18 @@ namespace streetsofraval
             {
                 PlayerIsDamaged(collision.GetComponent<PlayerBulletBehaviour>().BulletDamage);
                 Destroy(collision.gameObject);
+            }         
+        }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Pickup"))
+            {
+                if (m_CurrentState == PlayerMachineStates.CROUCH)
+                {
+                    collision.GetComponent<PickupBehaviour>().GetPickup();
+                    Destroy(collision.gameObject);
+                }
             }
         }
 
@@ -218,6 +226,22 @@ namespace streetsofraval
             m_OnPlayerDamage.Raise();
             if (m_Hitpoints <= 0)
                 OnPlayerDeath();
+        }
+
+        public void PlayerIsHealed(int healedHP)
+        {
+            m_Hitpoints += healedHP;
+            if (m_Hitpoints > m_MaxHitpoints)
+                m_Hitpoints = m_MaxHitpoints;
+            m_OnPlayerDamage.Raise();
+        }
+
+        public void PlayerRecoversMana(int recoveredMana)
+        {
+            m_Energy += recoveredMana;
+            if (m_Energy > m_MaxEnergy)
+                m_Energy = m_MaxEnergy;
+            m_OnPlayerDamage.Raise();
         }
 
         private void OnPlayerDeath()
