@@ -602,7 +602,7 @@ namespace streetsofraval
                         m_IsFlipped = true;
                     if (m_MovementAction.ReadValue<Vector2>().x > 0)
                         m_IsFlipped = false;
-
+                    //Physics2D.CircleCast(transform.position, 0.5f, Vector2.up, 0.5f, layer);
                     break;
 
                 default:
