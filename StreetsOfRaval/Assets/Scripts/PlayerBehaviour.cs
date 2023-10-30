@@ -152,7 +152,7 @@ namespace streetsofraval
             m_Input.FindActionMap("PlayerActions").FindAction("Jump").performed -= Jump;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").started -= Crouch;
             m_Input.FindActionMap("PlayerActions").FindAction("Crouch").canceled -= ReturnToIdleState;
-            m_Input.FindActionMap("PlayerActions").Enable();
+            m_Input.FindActionMap("PlayerActions").Disable();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
