@@ -91,7 +91,7 @@ public class PickupBehaviour : MonoBehaviour
                 m_OnPickupMana.Raise(20);
                 break;
             case 4:
-                m_OnPickupLife.Raise(20);
+                m_OnPickupHealth.Raise(20);
                 break;
             case 5:
                 m_OnPickupScore.Raise(1000);
