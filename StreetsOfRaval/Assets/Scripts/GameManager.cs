@@ -43,7 +43,8 @@ public class GameManager : MonoBehaviour
     GameEventInt m_OnWaveUpdate;
     [SerializeField]
     GameEventVoid m_OnPlayerRespawn;
-
+    [SerializeField]
+    GameEvent m_OnGUIUpdate;
 
     Vector3 m_PlayerSpawnPoint;
 
@@ -82,10 +83,10 @@ public class GameManager : MonoBehaviour
         m_Wave = 0;
     }
 
+    //Substracts a Live and checks if the lives are more than 0. If not, loads the GameOver scene.
     public void OnPlayerDeath()
     {
         SubstractLives(1);
-        m_OnPlayerLifesUpdate.Raise(m_Lives);
         if(m_Lives > 0) 
         {
             StartCoroutine(PlayerDeathCoroutine());
@@ -110,6 +111,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int score)
     {
         m_Score += score;
+        m_OnGUIUpdate.Raise();
     }
 
     private void AddWave(int wave)
@@ -120,12 +122,13 @@ public class GameManager : MonoBehaviour
     public void AddLives(int lives)
     {
         m_Lives += lives;
-        m_OnPlayerLifesUpdate.Raise(m_Lives);
+        m_OnGUIUpdate.Raise();
     }
 
     private void SubstractLives(int lives)
     {
         m_Lives -= lives;
+        m_OnGUIUpdate.Raise();
     }
 
     public void OnWaveCleared()
@@ -138,7 +141,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
         AddWave(1);
         m_OnNextWave.Raise(); //For Spawner
-        m_OnWaveUpdate.Raise(m_Wave); //For GUI update
+        m_OnGUIUpdate.Raise(); //For GUI update
     }
 
     private IEnumerator PlayerDeathCoroutine()

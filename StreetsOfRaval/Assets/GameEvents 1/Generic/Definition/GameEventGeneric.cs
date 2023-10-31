@@ -8,7 +8,7 @@ using UnityEngine;
 /// that matches with the same number of parameters.
 /// </summary>
 /// <typeparam name="T">Generic parameter</typeparam>
-public abstract class GameEvent : ScriptableObject
+/*public abstract class GameEvent : ScriptableObject
 {
     /// <summary>
     /// The list of listeners that this event will notify if it is raised
@@ -35,7 +35,7 @@ public abstract class GameEvent : ScriptableObject
         if (m_eventListeners.Contains(listener))
             m_eventListeners.Remove(listener);
     }
-}
+}*/
 
 
 public abstract class GameEvent<T> : ScriptableObject

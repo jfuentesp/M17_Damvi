@@ -2119,6 +2119,7 @@ MonoBehaviour:
   m_OnPlayerLifesUpdate: {fileID: 11400000, guid: f60cf4e57ae5b564aa32f65f401878ab, type: 2}
   m_OnWaveUpdate: {fileID: 11400000, guid: 937378748ed27b040b7a1184d9cd51a3, type: 2}
   m_OnPlayerRespawn: {fileID: 11400000, guid: 6b828cd7b62485a40a577140346a8fe3, type: 2}
+  m_OnGUIUpdate: {fileID: 11400000, guid: 56715cd4a85e19a4faaeed2f3d92ee79, type: 2}
 --- !u!4 &1264336163
 Transform:
   m_ObjectHideFlags: 0
@@ -2872,6 +2873,7 @@ GameObject:
   - component: {fileID: 1578691669}
   - component: {fileID: 1578691670}
   - component: {fileID: 1578691671}
+  - component: {fileID: 1578691672}
   m_Layer: 5
   m_Name: GUI
   m_TagString: Untagged
@@ -3265,6 +3267,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
         m_MethodName: UpdateScoreGUI
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1578691672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578691654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af697f02adf0024aa7eb51f600bd313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 56715cd4a85e19a4faaeed2f3d92ee79, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1578691659}
+        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
+        m_MethodName: UpdateGUI
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

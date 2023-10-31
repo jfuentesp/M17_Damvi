@@ -44,6 +44,16 @@ namespace streetsofraval
 
         }
 
+        public void UpdateGUI()
+        {
+            m_EnemiesText.text = m_Spawner.EnemiesSpawned + "/" + m_Spawner.EnemiesToSpawn;
+            m_WaveText.text = "Wave: " + m_GameManager.Wave;
+            m_ScoreText.text = "Score: " + m_GameManager.Score;
+            m_Lives.text = "Player lives: " + m_GameManager.Lives;
+            m_HPBar.fillAmount = m_Player.Hitpoints / m_Player.MaxHitpoints;
+            m_EnergyBar.fillAmount = m_Player.Energy / m_Player.MaxEnergy;
+        }
+
         public void UpdateMonstersGUI(int spawneds, int tospawn)
         {
             m_EnemiesText.text = spawneds + "/" + tospawn;
