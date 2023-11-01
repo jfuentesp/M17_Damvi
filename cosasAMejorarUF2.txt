@@ -1,7 +1,14 @@
 - Cosas a arreglar según revisión del Hector:
+
+	[SOLUCIONADO: El error era por que las instancias del Spawner, gamemanager, en el script de la GUI, se asignaban en el Start().
+	Pese a que puede ser correcto y es un tema de orden de objetos, se ha asignado las Instancias en la funcion UpdateGUI() y funciona.
+	Se ha convertido GameEventVoid en un GameEvent normal no genérico. Se han eliminado todos los GameEvents inservibles y clasificados
+	en carpetas																]
 	- La gui puede ser un solo evento que te actualice todos los valores de la GUI a la vez, y que se llame desde el gamemanager
 	tal y como pensaba que era terrorismo pero no es terrorismo, por que se tiene que actualizar primero el gamemanager y luego
 	reflejar esos datos actualizados en la GUI. Máquina que eres.
+
+	
 	
 	- Los daños pueden ir todos en un mismo script (hitboxinfo, damageinfo), incluidos proyectiles, además del proyectilbehavior
 	enemy behavior y tal. De esa manera, se puede controlar la colision del daño en los enemigos/players directamente con un OR
