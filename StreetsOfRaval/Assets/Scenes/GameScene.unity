@@ -770,7 +770,7 @@ Transform:
   - {fileID: 194080084}
   - {fileID: 732353364}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &590105140
 MonoBehaviour:
@@ -784,13 +784,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2611cd14806f24686b2b53503fb58e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SpawnTime: 3
+  m_EnemiesToSpawn: 0
+  m_EnemiesSpawned: 0
   m_LeftSpawnpoint: {fileID: 194080084}
   m_RightSpawnpoint: {fileID: 732353364}
   m_RobberPool: {fileID: 1845233193}
   m_RangedPool: {fileID: 718400414}
   m_ThiefPool: {fileID: 939455562}
   m_GangPool: {fileID: 1953569643}
-  m_SpawnTime: 3
+  m_OnWaveCleared: {fileID: 11400000, guid: cc3eac07c636c9b42be2cdbdd46e0aaa, type: 2}
+  m_OnGUIUpdate: {fileID: 11400000, guid: 56715cd4a85e19a4faaeed2f3d92ee79, type: 2}
   m_EnemyInfoList:
   - {fileID: 11400000, guid: 70ee3a7772119834ea90d45f6d225ee3, type: 2}
   - {fileID: 11400000, guid: 1565c3ee12035b548bc2f61cdc8e062f, type: 2}
@@ -804,9 +808,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 47ae0228bb80b83458a1c60eb4e25990, type: 2}
   - {fileID: 11400000, guid: cca15cb64501e0e43b5be2dc083dc663, type: 2}
   - {fileID: 11400000, guid: 906597642b25ce147adecb888ecb354b, type: 2}
-  m_OnEnemySpawned: {fileID: 11400000, guid: 4d10c75f49bdbee4dad1bfc5bf295c6d, type: 2}
-  m_OnEnemyDeathUpdate: {fileID: 11400000, guid: 403eac3f85170f74284cdcb65a3d1b4c, type: 2}
-  m_OnWaveCleared: {fileID: 11400000, guid: e256d0740cce5f949bee592c9015e31f, type: 2}
 --- !u!114 &590105141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -847,7 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 45bd01037abf39c429d49955dc1c5961, type: 2}
+  Event: {fileID: 11400000, guid: 58cb7d47492a9aa499407fe679e6f1b9, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -2115,10 +2116,8 @@ MonoBehaviour:
   m_Score: 0
   m_Lives: 2
   m_NumberOfEnemiesByWave: 
-  m_OnNextWave: {fileID: 11400000, guid: 45bd01037abf39c429d49955dc1c5961, type: 2}
-  m_OnPlayerLifesUpdate: {fileID: 11400000, guid: f60cf4e57ae5b564aa32f65f401878ab, type: 2}
+  m_OnNextWave: {fileID: 11400000, guid: 58cb7d47492a9aa499407fe679e6f1b9, type: 2}
   m_OnWaveUpdate: {fileID: 11400000, guid: 937378748ed27b040b7a1184d9cd51a3, type: 2}
-  m_OnPlayerRespawn: {fileID: 11400000, guid: 6b828cd7b62485a40a577140346a8fe3, type: 2}
   m_OnGUIUpdate: {fileID: 11400000, guid: 56715cd4a85e19a4faaeed2f3d92ee79, type: 2}
 --- !u!4 &1264336163
 Transform:
@@ -2133,7 +2132,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1264336164
 MonoBehaviour:
@@ -2175,7 +2174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 956f486edf25c214c83d3461a6debe36, type: 2}
+  Event: {fileID: 11400000, guid: 6bf98119b85c0634098b4fbd089677db, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -2203,7 +2202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e256d0740cce5f949bee592c9015e31f, type: 2}
+  Event: {fileID: 11400000, guid: cc3eac07c636c9b42be2cdbdd46e0aaa, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -2863,17 +2862,10 @@ GameObject:
   - component: {fileID: 1578691656}
   - component: {fileID: 1578691655}
   - component: {fileID: 1578691659}
-  - component: {fileID: 1578691661}
-  - component: {fileID: 1578691660}
-  - component: {fileID: 1578691662}
-  - component: {fileID: 1578691663}
-  - component: {fileID: 1578691666}
-  - component: {fileID: 1578691667}
-  - component: {fileID: 1578691668}
-  - component: {fileID: 1578691669}
-  - component: {fileID: 1578691670}
-  - component: {fileID: 1578691671}
-  - component: {fileID: 1578691672}
+  - component: {fileID: 1578691673}
+  - component: {fileID: 1578691674}
+  - component: {fileID: 1578691675}
+  - component: {fileID: 1578691676}
   m_Layer: 5
   m_Name: GUI
   m_TagString: Untagged
@@ -2958,7 +2950,7 @@ RectTransform:
   m_Children:
   - {fileID: 2068799523}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2983,7 +2975,7 @@ MonoBehaviour:
   m_Lives: {fileID: 1296252404}
   m_HPBar: {fileID: 291090100}
   m_EnergyBar: {fileID: 1931749919}
---- !u!114 &1578691660
+--- !u!114 &1578691673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2992,73 +2984,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1578691654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6af697f02adf0024aa7eb51f600bd313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: be32afaf4be578d46837ef42784c1144, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdatePlayerEnergyBarGUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: cbbdd37d180b21a419dc6d9fb635990b, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdatePlayerHealthbarGUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: a602d7a897fe2fb4bb16995c3e09279f, type: 2}
+  Event: {fileID: 11400000, guid: fec59b4a96c41a0489ceab4f2a4c0d6b, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1578691659}
         m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateScoreGUI
-        m_Mode: 0
+        m_MethodName: UpdateGUI
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3067,7 +3003,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1578691663
+--- !u!114 &1578691674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3076,10 +3012,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 1578691654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6af697f02adf0024aa7eb51f600bd313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: e256d0740cce5f949bee592c9015e31f, type: 2}
+  Event: {fileID: 11400000, guid: 68ab744b819042b44bd183c5eda15031, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1578691659}
+        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
+        m_MethodName: UpdateGUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1578691675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578691654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af697f02adf0024aa7eb51f600bd313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: cc3eac07c636c9b42be2cdbdd46e0aaa, type: 2}
   Response:
     m_PersistentCalls:
       m_Calls:
@@ -3095,187 +3059,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1578691666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eccc57ea1feff440a3eb4f857d32e24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 4d10c75f49bdbee4dad1bfc5bf295c6d, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateMonstersGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eccc57ea1feff440a3eb4f857d32e24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 403eac3f85170f74284cdcb65a3d1b4c, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateMonstersGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: f60cf4e57ae5b564aa32f65f401878ab, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateLivesGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 937378748ed27b040b7a1184d9cd51a3, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateWaveGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6d6efee43bfd5458768a7db5b825c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 6b828cd7b62485a40a577140346a8fe3, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdatePlayerEnergyBarGUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdatePlayerHealthbarGUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578691654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f63eb494f441e8146b4ea46b66af9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 456454c93b6309145952b3b93cd4b996, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1578691659}
-        m_TargetAssemblyTypeName: streetsofraval.GUIBehaviour, Assembly-CSharp
-        m_MethodName: UpdateScoreGUI
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1578691672
+--- !u!114 &1578691676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3511,9 +3295,9 @@ MonoBehaviour:
   m_Combo1EnergyCost: 3
   m_ComboAvailable: 0
   m_BulletPool: {fileID: 1192828954}
-  m_OnPlayerDamage: {fileID: 11400000, guid: cbbdd37d180b21a419dc6d9fb635990b, type: 2}
-  m_OnEnergyUsed: {fileID: 11400000, guid: be32afaf4be578d46837ef42784c1144, type: 2}
-  m_OnPlayerDeath: {fileID: 11400000, guid: 956f486edf25c214c83d3461a6debe36, type: 2}
+  m_OnPlayerDamage: {fileID: 11400000, guid: fec59b4a96c41a0489ceab4f2a4c0d6b, type: 2}
+  m_OnEnergyUsed: {fileID: 11400000, guid: 68ab744b819042b44bd183c5eda15031, type: 2}
+  m_OnPlayerDeath: {fileID: 11400000, guid: 6bf98119b85c0634098b4fbd089677db, type: 2}
 --- !u!114 &1594573681
 MonoBehaviour:
   m_ObjectHideFlags: 0
