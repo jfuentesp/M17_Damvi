@@ -100,6 +100,10 @@ namespace streetsofraval
         [SerializeField]
         private GameEvent m_OnPlayerDeath;
 
+        //LayerMask of the Pickups for casting it through Physics2D.CircleCast instead of OnTriggerStay
+        [SerializeField]
+        LayerMask m_PickupLayerMask;
+
         private void Awake()
         {
             //First, we initialize an instance of Player. If there is already an instance, it destroys the element and returns.
@@ -167,18 +171,6 @@ namespace streetsofraval
                 PlayerIsDamaged(collision.GetComponent<PlayerBulletBehaviour>().BulletDamage);
                 Destroy(collision.gameObject);
             }         
-        }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            if (collision.CompareTag("Pickup"))
-            {
-                if (m_CurrentState == PlayerMachineStates.CROUCH)
-                {
-                    collision.GetComponent<PickupBehaviour>().GetPickup();
-                    Destroy(collision.gameObject);
-                }
-            }
         }
 
         // Start is called before the first frame update
@@ -602,7 +594,12 @@ namespace streetsofraval
                         m_IsFlipped = true;
                     if (m_MovementAction.ReadValue<Vector2>().x > 0)
                         m_IsFlipped = false;
-                    //Physics2D.CircleCast(transform.position, 0.5f, Vector2.up, 0.5f, layer);
+
+                    //This gets the gameobject of the pickup, just as it would do in OnTriggerEnter/Stay, but with less load since it's a "Raycast"
+                    GameObject pickup = Physics2D.CircleCast(transform.position, 0.5f, Vector2.up, 0.5f, m_PickupLayerMask).collider.gameObject;
+                    pickup.GetComponent<PickupBehaviour>().GetPickup();
+                    Destroy(pickup.gameObject);
+
                     break;
 
                 default:

@@ -2117,7 +2117,6 @@ MonoBehaviour:
   m_Lives: 2
   m_NumberOfEnemiesByWave: 
   m_OnNextWave: {fileID: 11400000, guid: 58cb7d47492a9aa499407fe679e6f1b9, type: 2}
-  m_OnWaveUpdate: {fileID: 11400000, guid: 937378748ed27b040b7a1184d9cd51a3, type: 2}
   m_OnGUIUpdate: {fileID: 11400000, guid: 56715cd4a85e19a4faaeed2f3d92ee79, type: 2}
 --- !u!4 &1264336163
 Transform:
@@ -3298,6 +3297,9 @@ MonoBehaviour:
   m_OnPlayerDamage: {fileID: 11400000, guid: fec59b4a96c41a0489ceab4f2a4c0d6b, type: 2}
   m_OnEnergyUsed: {fileID: 11400000, guid: 68ab744b819042b44bd183c5eda15031, type: 2}
   m_OnPlayerDeath: {fileID: 11400000, guid: 6bf98119b85c0634098b4fbd089677db, type: 2}
+  m_PickupLayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!114 &1594573681
 MonoBehaviour:
   m_ObjectHideFlags: 0

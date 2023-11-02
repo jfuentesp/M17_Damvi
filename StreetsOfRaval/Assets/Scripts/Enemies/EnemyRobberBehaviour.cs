@@ -59,9 +59,6 @@ namespace streetsofraval
         [SerializeField]
         GameEventInt m_OnEnemyDeath;
 
-        [SerializeField]
-        GameEventVoid m_OnEnemySpawned;
-
         //Pickup prefab
         [SerializeField]
         private GameObject m_Pickup;
@@ -137,7 +134,7 @@ namespace streetsofraval
 
         private void OnEnable()
         {
-            m_OnEnemySpawned.Raise();
+            //m_OnEnemySpawned.Raise();
             InitState(EnemyMachineStates.IDLE);
         }
 

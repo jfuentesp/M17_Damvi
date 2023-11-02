@@ -8,7 +8,7 @@
 	tal y como pensaba que era terrorismo pero no es terrorismo, por que se tiene que actualizar primero el gamemanager y luego
 	reflejar esos datos actualizados en la GUI. Máquina que eres.
 
-	
+	-------------------------	
 	
 	- Los daños pueden ir todos en un mismo script (hitboxinfo, damageinfo), incluidos proyectiles, además del proyectilbehavior
 	enemy behavior y tal. De esa manera, se puede controlar la colision del daño en los enemigos/players directamente con un OR
@@ -23,11 +23,16 @@
 	Por ejemplo: enemigo que dispara requerirá el componente disparable. Si patrulla, requerirá el componente patrulla. 
 	Si salta... Si huye... si... etc. (es interesante ver herencia VS composición)
 	https://devexpert.io/herencia-vs-composicion/
+	------------------------------------
+
+	[CORREGIDO: Los pickups ya funcionan en el UpdateState de Crouch con CircleCast. Circlecast funciona como un RayCast, solo que en lugar
+	de ser un rayo es un círculo del tamaño que tu le digas que puede recorrer una distancia (o no)					]
 
 	- Los pickups pueden utilizar un elemento Physics2D.CircleCast, que retornará el primer object contra el que colisiones de
 	la layer indicada (en este caso el pickup). También existe el CircleCastAll que te retorna un array de todo lo que detecta
 	y ya lo controlas tu luego a manita. Esto hará que en lugar de comprobarlo en un ontriggerstay, lo controlará en el update
 	del crouch de la maquina de estados. (State crouch dentro de UpdateState).
+	--------------------------------------
 
 	- Funciones como el flipped, y cosas que se repiten se pueden hacer en funciones específicas cortas para no repetir 
 	tanto código.
