@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3937591858506270168}
   - component: {fileID: 4127331691241839045}
   - component: {fileID: 1782646297567984093}
+  - component: {fileID: 683696047924214209}
   m_Layer: 10
   m_Name: EnemyHitbox
   m_TagString: EnemyHitbox
@@ -90,6 +91,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27364114e02279746ac80ac01556513f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &683696047924214209
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454500526542101124}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &3504963644105037084
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +329,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InitialSpeed: 1
   m_OnEnemyDeath: {fileID: 11400000, guid: a602d7a897fe2fb4bb16995c3e09279f, type: 2}
-  m_OnEnemySpawned: {fileID: 11400000, guid: 9126319557d65104fb0ef254e6077e2e, type: 2}
   m_Pickup: {fileID: 37607804136430605, guid: d8a0feecb9658b54b96840013a3e37c1, type: 3}
 --- !u!1 &5268943914328177657
 GameObject:
@@ -331,7 +358,7 @@ Transform:
   m_GameObject: {fileID: 5268943914328177657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.24, y: -0.47, z: 0}
-  m_LocalScale: {x: 1.1875, y: 1, z: 1}
+  m_LocalScale: {x: 0.83125, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3952851039935868767}

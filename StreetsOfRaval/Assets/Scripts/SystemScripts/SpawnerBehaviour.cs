@@ -153,19 +153,19 @@ namespace streetsofraval
             Debug.Log("Llego al interior de la corrutina");
             int counter = 0;
             while (m_IsSpawning)
-            {        
+            {
                 int spawnpoint = Random.Range(0, 2);
                 int difficultylevel = Random.Range(m_LowerDifficultyLevel, m_HigherDifficultyLevel);
                 Debug.Log(string.Format("Spawnpoint is: {0} And the difficulty level is: {1}", spawnpoint, difficultylevel));
                 SpawnEnemy(spawnpoint, difficultylevel);
                 counter++;
                 m_EnemiesSpawned++;
-                m_OnGUIUpdate.Raise();  
-                yield return new WaitForSeconds(m_SpawnTime);
-                if (counter == m_EnemiesToSpawn)
+                m_OnGUIUpdate.Raise();
+                if (counter == m_EnemiesToSpawn - 1)
                 {
                     m_IsSpawning = false;
                 }
+                yield return new WaitForSeconds(m_SpawnTime);
             }
         }
 
