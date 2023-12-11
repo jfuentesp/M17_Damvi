@@ -6,7 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovableBehaviour : MonoBehaviour
 {
+    //Reference to the rigidbody
     private Rigidbody m_Rigidbody;
+
+    [Header("Reference to the Camera")]
+    [SerializeField]
+    private Camera m_Camera;
+
     [Header("Speed and rotation speed atributes")]
     [SerializeField]
     private float m_Speed;
@@ -16,10 +22,12 @@ public class MovableBehaviour : MonoBehaviour
     [Header("Limitations if it has a Y axis clamp")]
     [SerializeField]
     private float m_ClampY;
+    [SerializeField]
+    private bool m_InversePitch;
 
     Vector3 m_Movement;
-    Vector3 m_RotationMovement;
-    Vector3 m_RotationMovementY;
+    float m_RotationMovementX; //Pitch - turns based on X axis (View from top to down)
+    Vector3 m_RotationMovementY; //Yaw - turns based on Y axis (View from left to right)
 
     private void Awake()
     {
@@ -31,14 +39,23 @@ public class MovableBehaviour : MonoBehaviour
         m_Movement = direction;
     }
 
-    public void OnRotate(float direction)
+    public void OnRotateYaw(float direction)
     {
         m_RotationMovementY = Vector3.up * direction;
     }
 
+    public void OnRotatePitch(float direction)
+    {
+        m_RotationMovementX += direction /* m_RotationSpeed*/;
+    }
+
     private void Update()
     {
-        //m_RotationMovementY = Vector3.up * Mathf.Clamp(m_RotationMovement.y, -m_ClampY, m_ClampY);
+        //Rotation with clamped movement on X axis (pitch)
+        m_RotationMovementX = Mathf.Clamp(m_RotationMovementX, -m_ClampY, m_ClampY);
+        m_Camera.transform.localEulerAngles = (m_InversePitch ? Vector3.right : -Vector3.right) * m_RotationMovementX;
+        
+        //Simple rotation with no limits
         transform.Rotate(m_RotationMovementY * m_RotationSpeed * Time.deltaTime);
         m_RotationMovementY = Vector3.zero;
     }

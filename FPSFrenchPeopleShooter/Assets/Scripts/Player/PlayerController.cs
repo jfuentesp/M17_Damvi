@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     private InputActionAsset m_Input;
     private InputAction m_MovementAction;
     public InputAction MovementAction => m_MovementAction;
-    private InputAction m_CameraAction;
+    private InputAction m_CameraActionY;
+    private InputAction m_CameraActionX;
     private InputActionMap m_CurrentActionMap;
 
     //Setting up the rigid body variable
@@ -34,7 +35,8 @@ public class PlayerController : MonoBehaviour
         m_Input = Instantiate(m_InputAsset);
         m_CurrentActionMap = m_Input.FindActionMap("Character");
         m_MovementAction = m_CurrentActionMap.FindAction("Movement");
-        m_CameraAction = m_CurrentActionMap.FindAction("RotationY");
+        m_CameraActionY = m_CurrentActionMap.FindAction("RotationY");
+        m_CameraActionX = m_CurrentActionMap.FindAction("RotationX");
         m_Moving = GetComponent<MovableBehaviour>();
     }
 
@@ -71,14 +73,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if(m_MovementAction.ReadValue<Vector3>() != Vector3.zero)
-        {
-            m_Moving.OnMove(m_MovementAction.ReadValue<Vector3>());
-        }
-        Debug.Log(m_CameraAction.ReadValue<float>());
-        if(m_CameraAction.ReadValue<float>() != 0)
-        {
-            m_Moving.OnRotate(m_CameraAction.ReadValue<float>());
-        }
+            m_Moving.OnMove(m_MovementAction.ReadValue<Vector3>());     
+
+        if(m_CameraActionY.ReadValue<float>() != 0)
+            m_Moving.OnRotateYaw(m_CameraActionY.ReadValue<float>());
+
+        if (m_CameraActionX.ReadValue<float>() != 0)
+            m_Moving.OnRotatePitch(m_CameraActionX.ReadValue<float>());
+
+        //Debug.Log("Yaw: " + m_CameraActionY.ReadValue<float>() + " | Pitch: " + m_CameraActionX.ReadValue<float>());
     }
 
     private void FixedUpdate()
