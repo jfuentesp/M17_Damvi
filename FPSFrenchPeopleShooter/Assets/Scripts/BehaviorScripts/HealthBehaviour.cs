@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class HealthBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Health parameters")]
+    [SerializeField]
+    private float m_MaxHealth;
+    [SerializeField]
+    private float m_CurrentHealth;
+    [SerializeField]
+    private bool m_IsAlive;
+    public float MaxHealth => m_MaxHealth;
+    public float CurrentHealth => m_CurrentHealth;
+    public bool IsAlive => m_IsAlive;
+
+    private void Awake()
     {
-        
+        m_MaxHealth = m_CurrentHealth;
+        m_IsAlive = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnHealthModify(float value)
     {
-        
+        m_CurrentHealth += value;
+    }
+
+    public void OnSetCurrentHealth(float value)
+    {
+        m_CurrentHealth = value;
+    }
+
+    public void OnSetMaxHealth(float value)
+    {
+        m_MaxHealth = value;
     }
 }

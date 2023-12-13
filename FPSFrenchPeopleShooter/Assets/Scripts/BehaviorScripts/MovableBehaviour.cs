@@ -6,10 +6,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovableBehaviour : MonoBehaviour
 {
+    /*
+     * When to use Rigidbody to move by physics or a Character Controller?
+     * If has to interact with other physics objects, have any collider shapes, play with velocities -> Rigidbody + physics
+     * If has to handle with responsive and smooth movement, control to get stuck, handle in-air movement, etc -> Controller
+     * 
+     */
+
     //Reference to the rigidbody
     private Rigidbody m_Rigidbody;
 
-    [Header("Reference to the Camera")]
+    [Header("Reference to the Player Camera")]
     [SerializeField]
     private Camera m_Camera;
 
@@ -18,6 +25,8 @@ public class MovableBehaviour : MonoBehaviour
     private float m_Speed;
     [SerializeField]
     private float m_RotationSpeed;
+    [SerializeField, Range(0f, 1f)]
+    private float m_Sensivity;
 
     [Header("Limitations if it has a Y axis clamp")]
     [SerializeField]
@@ -36,7 +45,9 @@ public class MovableBehaviour : MonoBehaviour
 
     public void OnMove(Vector3 direction)
     {
+        Debug.Log(direction);
         m_Movement = direction;
+        Debug.Log(m_Movement);
     }
 
     public void OnRotateYaw(float direction)
@@ -46,23 +57,31 @@ public class MovableBehaviour : MonoBehaviour
 
     public void OnRotatePitch(float direction)
     {
-        m_RotationMovementX += direction /* m_RotationSpeed*/;
+        m_RotationMovementX += direction * m_Sensivity;
     }
 
     private void Update()
     {
         //Rotation with clamped movement on X axis (pitch)
         m_RotationMovementX = Mathf.Clamp(m_RotationMovementX, -m_ClampY, m_ClampY);
-        m_Camera.transform.localEulerAngles = (m_InversePitch ? Vector3.right : -Vector3.right) * m_RotationMovementX;
-        
+        m_Camera.transform.localRotation = Quaternion.Euler((m_InversePitch ? 1 : -1) * m_RotationMovementX, 0, 0); //Same than -> m_Camera.transform.localEulerAngles = (m_InversePitch ? Vector3.right : -Vector3.right) * m_RotationMovementX;
+
         //Simple rotation with no limits
-        transform.Rotate(m_RotationMovementY * m_RotationSpeed * Time.deltaTime);
+        transform.Rotate(m_RotationMovementY * m_RotationSpeed * m_Sensivity * Time.deltaTime);
         m_RotationMovementY = Vector3.zero;
+
+        /*Simple movement, similar to transform.position += m_Movement * m_Speed * Time.deltaTime; but with a big difference:
+        * Translate -> Moves in a direction based on local coords. That means the object is affected by its local rotation. Like giving values to transform.forward, right, etc.
+        * transform.position += -> Moves based on a global position in the world, even if its rotated. As Vector.up, right, works. */
+        transform.Translate(m_Movement * m_Speed * Time.deltaTime);
+        m_Movement = Vector3.zero;
     }
 
     private void FixedUpdate()
-    {
-        m_Rigidbody.velocity = m_Movement.normalized * m_Speed + Vector3.up * m_Rigidbody.velocity.y;
-        m_Movement = Vector3.zero;
+    {   
+        //If we move by physics
+        /*m_Rigidbody.velocity = m_Movement.normalized * m_Speed + Vector3.up * m_Rigidbody.velocity.y;
+        Debug.Log(m_Rigidbody.velocity);
+        m_Movement = Vector3.zero;*/
     }
 }

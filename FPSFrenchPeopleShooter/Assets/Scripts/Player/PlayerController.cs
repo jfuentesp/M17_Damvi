@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.EnhancedTouch;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(MovableBehaviour))]
+[RequireComponent(typeof(ShootingBehaviour))]
 public class PlayerController : MonoBehaviour
 {
     //Reference to the InputSystem
@@ -25,11 +26,20 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private CapsuleCollider m_Collider;
 
+    [Header("Reference to the player camera")]
+    [SerializeField]
+    private Camera m_Camera;
+
     //Declaration of components
     private MovableBehaviour m_Moving;
+    private ShootingBehaviour m_Shooting;
 
     private void Awake()
     {
+        //Loading components
+        m_Moving = GetComponent<MovableBehaviour>();
+        m_Shooting = GetComponent<ShootingBehaviour>();
+
         //Setting the Input Controls
         Assert.IsNotNull(m_InputAsset);
         m_Input = Instantiate(m_InputAsset);
@@ -37,13 +47,12 @@ public class PlayerController : MonoBehaviour
         m_MovementAction = m_CurrentActionMap.FindAction("Movement");
         m_CameraActionY = m_CurrentActionMap.FindAction("RotationY");
         m_CameraActionX = m_CurrentActionMap.FindAction("RotationX");
-        m_Moving = GetComponent<MovableBehaviour>();
     }
 
     private void OnEnable()
     {
-        //m_CurrentActionMap.FindAction("Attack1").performed += Shoot1;
-        //m_CurrentActionMap.FindAction("Attack2").performed += Shoot2;
+        m_CurrentActionMap.FindAction("Shoot1").performed += Shoot1;
+        //m_CurrentActionMap.FindAction("Shoot2").performed += Shoot2;
         //m_CurrentActionMap.FindAction("Jump").performed += Jump;
         //m_CurrentActionMap.FindAction("Crouch").started += Crouch;
         //m_CurrentActionMap.FindAction("Crouch").canceled += ReturnToIdleState;
@@ -54,8 +63,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        //m_CurrentActionMap.FindAction("Attack1").performed -= Shoot1;
-        //m_CurrentActionMap.FindAction("Attack2").performed -= Shoot2;
+        m_CurrentActionMap.FindAction("Shoot1").performed -= Shoot1;
+        //m_CurrentActionMap.FindAction("Shoot2").performed -= Shoot2;
         //m_CurrentActionMap.FindAction("Jump").performed -= Jump;
         //m_CurrentActionMap.FindAction("Crouch").started -= Crouch;
         //m_CurrentActionMap.FindAction("Crouch").canceled -= ReturnToIdleState;
@@ -66,7 +75,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        
+        //We set this in order to make the cursor to disappear and be locked
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -84,8 +95,8 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Yaw: " + m_CameraActionY.ReadValue<float>() + " | Pitch: " + m_CameraActionX.ReadValue<float>());
     }
 
-    private void FixedUpdate()
+    private void Shoot1(InputAction.CallbackContext context)
     {
-        
+        m_Shooting.OnPlayerShoot(m_Camera);
     }
 }
