@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,21 +7,20 @@ using UnityEngine;
 public class RagdollController : MonoBehaviour
 {
     private HealthBehaviour m_Health;
-    private float m_HP = 100f;
+    private DamageableBehaviour m_Damage;
 
+    [SerializeField]
+    private GameObject m_RigRoot;
     private Rigidbody[] m_Bones;
     private Animator m_Animator;
 
     private void Awake()
     {
-        m_Animator = GetComponent<Animator>();
+        m_Animator = GetComponentInChildren<Animator>();
         m_Health = GetComponent<HealthBehaviour>();
-        m_Bones = GetComponentsInChildren<Rigidbody>();
+        m_Damage = GetComponentInParent<DamageableBehaviour>();
+        m_Bones = m_RigRoot.GetComponentsInChildren<Rigidbody>();
         Activate(false);
-
-        foreach (Rigidbody bone in m_Bones)
-            if (bone.TryGetComponent<DamageableBehaviour>(out DamageableBehaviour damageable))
-                damageable.OnDamage += ReceiveDamage;
     }
 
     public void Activate(bool state)
@@ -30,19 +30,8 @@ public class RagdollController : MonoBehaviour
         m_Animator.enabled = !state;
     }
 
-    private void ReceiveDamage(float damage)
+    public void Die()
     {
-        m_HP -= damage;
-        if (m_HP <= 0)
-            Die();
-    }
-
-    private void Die()
-    {
-        foreach (Rigidbody bone in m_Bones)
-            if (bone.TryGetComponent<DamageableBehaviour>(out DamageableBehaviour damageable))
-                damageable.OnDamage -= ReceiveDamage;
-
         Activate(true);
     }
 }

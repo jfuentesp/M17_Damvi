@@ -23,11 +23,14 @@ public class ShootingBehaviour : MonoBehaviour
     public void OnPlayerShoot(Camera cameraReference)
     {
         RaycastHit hit;
-        if(Physics.Raycast(cameraReference.transform.position, cameraReference.transform.forward, out hit, 20f, m_ShootingLayerMask))
+        if (Physics.Raycast(cameraReference.transform.position, cameraReference.transform.forward, out hit, 20f, m_ShootingLayerMask))
         {
             Debug.DrawLine(cameraReference.transform.position, hit.point, Color.red, 1f);
             if (hit.collider.TryGetComponent<DamageableBehaviour>(out DamageableBehaviour target))
+            {
                 Debug.Log("He tocado en algo que se puede dañar.");
+                target.ReceiveDamage(target.Damage);
+            }
         }
     }
 }

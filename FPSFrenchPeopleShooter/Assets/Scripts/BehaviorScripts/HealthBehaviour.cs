@@ -15,15 +15,24 @@ public class HealthBehaviour : MonoBehaviour
     public float CurrentHealth => m_CurrentHealth;
     public bool IsAlive => m_IsAlive;
 
+    private RagdollController m_Ragdoll;
+
     private void Awake()
     {
         m_MaxHealth = m_CurrentHealth;
         m_IsAlive = true;
+        m_Ragdoll = GetComponent<RagdollController>();
     }
 
     public void OnHealthModify(float value)
     {
         m_CurrentHealth += value;
+        Debug.Log(string.Format("Current {0} health: {1}/{2} ", gameObject.name, m_CurrentHealth, m_MaxHealth));
+        if(m_CurrentHealth <= 0)
+        {
+            m_IsAlive = false;
+            m_Ragdoll.Die();
+        }
     }
 
     public void OnSetCurrentHealth(float value)

@@ -33,6 +33,8 @@ public class MovableBehaviour : MonoBehaviour
     private float m_ClampY;
     [SerializeField]
     private bool m_InversePitch;
+    [SerializeField]
+    private bool m_IsPlayer;
 
     Vector3 m_Movement;
     float m_RotationMovementX; //Pitch - turns based on X axis (View from top to down)
@@ -60,11 +62,26 @@ public class MovableBehaviour : MonoBehaviour
         m_RotationMovementX += direction * m_Sensivity;
     }
 
+    public void OnStopMovement()
+    {
+        m_Rigidbody.velocity = Vector3.zero;
+    }
+
+    //This function is made to use it on States machine
+    public void OnBasicMovement()
+    {
+        /*Simple movement, similar to transform.position += m_Movement * m_Speed * Time.deltaTime; but with a big difference:
+        * Translate -> Moves in a direction based on local coords. That means the object is affected by its local rotation. Like giving values to transform.forward, right, etc.
+        * transform.position += -> Moves based on a global position in the world, even if its rotated. As Vector.up, right, works. */
+        transform.Translate(m_Movement * m_Speed * Time.deltaTime);
+    }
+
     private void Update()
     {
         //Rotation with clamped movement on X axis (pitch)
         m_RotationMovementX = Mathf.Clamp(m_RotationMovementX, -m_ClampY, m_ClampY);
-        m_Camera.transform.localRotation = Quaternion.Euler((m_InversePitch ? 1 : -1) * m_RotationMovementX, 0, 0); //Same than -> m_Camera.transform.localEulerAngles = (m_InversePitch ? Vector3.right : -Vector3.right) * m_RotationMovementX;
+        if(m_IsPlayer)
+            m_Camera.transform.localRotation = Quaternion.Euler((m_InversePitch ? 1 : -1) * m_RotationMovementX, 0, 0); //Same than -> m_Camera.transform.localEulerAngles = (m_InversePitch ? Vector3.right : -Vector3.right) * m_RotationMovementX;
 
         //Simple rotation with no limits
         transform.Rotate(m_RotationMovementY * m_RotationSpeed * m_Sensivity * Time.deltaTime);
