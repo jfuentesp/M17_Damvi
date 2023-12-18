@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class MovableBehaviour : MonoBehaviour
@@ -74,6 +75,14 @@ public class MovableBehaviour : MonoBehaviour
         * Translate -> Moves in a direction based on local coords. That means the object is affected by its local rotation. Like giving values to transform.forward, right, etc.
         * transform.position += -> Moves based on a global position in the world, even if its rotated. As Vector.up, right, works. */
         transform.Translate(m_Movement * m_Speed * Time.deltaTime);
+    }
+
+    public void OnChase(GameObject player)
+    {
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        agent.isStopped = false;
+        agent.speed = 3f;
+        agent.SetDestination(player.transform.position);
     }
 
     private void Update()

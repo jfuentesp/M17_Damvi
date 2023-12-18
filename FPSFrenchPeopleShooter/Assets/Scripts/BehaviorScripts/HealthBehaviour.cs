@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,13 +16,12 @@ public class HealthBehaviour : MonoBehaviour
     public float CurrentHealth => m_CurrentHealth;
     public bool IsAlive => m_IsAlive;
 
-    private RagdollController m_Ragdoll;
+    public event Action OnDeath;
 
     private void Awake()
     {
         m_MaxHealth = m_CurrentHealth;
         m_IsAlive = true;
-        m_Ragdoll = GetComponent<RagdollController>();
     }
 
     public void OnHealthModify(float value)
@@ -30,8 +30,8 @@ public class HealthBehaviour : MonoBehaviour
         Debug.Log(string.Format("Current {0} health: {1}/{2} ", gameObject.name, m_CurrentHealth, m_MaxHealth));
         if(m_CurrentHealth <= 0)
         {
-            m_IsAlive = false;
-            m_Ragdoll.Die();
+            m_IsAlive = false;               
+            OnDeath?.Invoke();
         }
     }
 

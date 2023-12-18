@@ -15,7 +15,6 @@ public class DamageableBehaviour : MonoBehaviour
     private void Awake()
     {
         m_Health = GetComponentInParent<HealthBehaviour>();
-        //OnDamage += ReceiveDamage;
     }
 
     public void ReceiveDamage(float damage)
