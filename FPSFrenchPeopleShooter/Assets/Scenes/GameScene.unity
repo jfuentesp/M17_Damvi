@@ -725,7 +725,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352268462}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 70
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2289,7 +2289,10 @@ PrefabInstance:
       propertyPath: m_TargetDestinations.Array.data[7]
       value: 
       objectReference: {fileID: 1200513496}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7587229942830269496, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 1829984841873589792, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 3667585418172139361, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2402,7 +2405,10 @@ PrefabInstance:
       propertyPath: m_TargetDestinations.Array.data[7]
       value: 
       objectReference: {fileID: 1200513496}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7587229942830269496, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 1829984841873589792, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 3667585418172139361, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3182,7 +3188,10 @@ PrefabInstance:
       propertyPath: m_TargetDestinations.Array.data[7]
       value: 
       objectReference: {fileID: 1200513496}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3667585418172139361, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 7587229942830269496, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
+    - {fileID: 1829984841873589792, guid: b0ced47f1511922479699924c72d4e1e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

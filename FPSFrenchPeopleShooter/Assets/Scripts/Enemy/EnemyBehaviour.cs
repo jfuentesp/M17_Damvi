@@ -6,7 +6,6 @@ using UnityEngine.AI;
 using UnityEngine.Android;
 using Random = UnityEngine.Random;
 
-[RequireComponent(typeof(MovableBehaviour))]
 [RequireComponent(typeof(HealthBehaviour))]
 [RequireComponent(typeof(DamageableBehaviour))]
 public class EnemyBehaviour : MonoBehaviour
@@ -29,7 +28,6 @@ public class EnemyBehaviour : MonoBehaviour
     private const string m_DeadAnimationName = "death";
 
     //Components
-    private MovableBehaviour m_Moving;
     private HealthBehaviour m_Health;
     private RagdollController m_Ragdoll;
     private SpotableBehaviour m_PlayerSpotted;
@@ -47,7 +45,6 @@ public class EnemyBehaviour : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Animator = GetComponentInChildren<Animator>();
-        m_Moving = GetComponent<MovableBehaviour>();
         m_Health = GetComponent<HealthBehaviour>();
         m_Agent = GetComponent<NavMeshAgent>();
         m_Ragdoll = GetComponent<RagdollController>();
@@ -93,7 +90,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         while (true) { 
             float accuracy = Random.value;
-            float variation = Random.Range(-1f, 1f);
+            float variation = Random.Range(-.3f, .3f);
             if (accuracy < 0.5f)
             {
                 variation = 0f;
@@ -161,7 +158,6 @@ public class EnemyBehaviour : MonoBehaviour
                 break;
 
             case EnemyMachineStates.DEAD:
-                m_Moving.OnStopMovement();
                 m_Agent.isStopped = true;
                 m_Agent.speed = 0;
                 m_Ragdoll.Die();
