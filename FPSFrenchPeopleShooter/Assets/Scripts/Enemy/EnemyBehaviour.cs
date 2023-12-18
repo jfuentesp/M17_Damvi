@@ -68,6 +68,7 @@ public class EnemyBehaviour : MonoBehaviour
     void Update()
     {
         UpdateState();
+        //Debug.Log(gameObject.name + ": " + m_CurrentState);
     }
 
     private bool CheckPatrolPosition()
@@ -86,20 +87,23 @@ public class EnemyBehaviour : MonoBehaviour
         ChangeState(EnemyMachineStates.PATROL);
     }
 
+    private Coroutine m_ShootCoroutine;
+
     private IEnumerator ShootCoroutine()
     {
-        float accuracy = Random.value;
-        float variation = Random.Range(-1f, 1f);
-        if (accuracy < 0.5f)
-        {
-            variation = 0f;
-            m_Shooting.OnEnemyShoot(variation);
-        } else
-        {
-            m_Shooting.OnEnemyShoot(variation);
+        while (true) { 
+            float accuracy = Random.value;
+            float variation = Random.Range(-1f, 1f);
+            if (accuracy < 0.5f)
+            {
+                variation = 0f;
+                m_Shooting.OnEnemyShoot(variation);
+            } else
+            {
+                m_Shooting.OnEnemyShoot(variation);
+            }
+            yield return new WaitForSeconds(2f);
         }
-        yield return new WaitForSeconds(2f);
-        ChangeState(EnemyMachineStates.CHASE);
     }
 
     private void Death()
@@ -138,7 +142,7 @@ public class EnemyBehaviour : MonoBehaviour
                 m_Agent.isStopped = true;
                 m_Agent.speed = 0;
                 m_Animator.Play(m_Attack1AnimationName);
-                StartCoroutine(ShootCoroutine());
+                m_ShootCoroutine = StartCoroutine(ShootCoroutine());
                 break;
 
             case EnemyMachineStates.PATROL:
@@ -152,6 +156,7 @@ public class EnemyBehaviour : MonoBehaviour
             case EnemyMachineStates.CHASE:
                 m_Agent.isStopped = false;
                 m_Agent.speed = 3f;
+                m_Agent.SetDestination(m_PlayerSpotted.Target.transform.position);
                 m_Animator.Play(m_WalkAnimationName);
                 break;
 
@@ -175,6 +180,10 @@ public class EnemyBehaviour : MonoBehaviour
             //If needs to leave a Coroutine or do something at the finish of the action...
             case EnemyMachineStates.IDLE:
                 break;
+            case EnemyMachineStates.SHOOT:
+                if(m_ShootCoroutine != null)
+                    StopCoroutine(m_ShootCoroutine);
+                break;
             default:
                 break;
         }
@@ -183,8 +192,6 @@ public class EnemyBehaviour : MonoBehaviour
     /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
     private void UpdateState()
     {
-        //if (!m_IsInvulnerable)
-        //    m_Moving.OnFlipCharacter(m_MovementAction.ReadValue<Vector2>());
 
         switch (m_CurrentState)
         {
@@ -199,6 +206,9 @@ public class EnemyBehaviour : MonoBehaviour
                 break;
 
             case EnemyMachineStates.CHASE:
+                Debug.Log("Spotted: " + m_PlayerSpotted.PlayerIsInRange);
+                Debug.Log("In Shoot: " + m_Shooting.PlayerIsInRange);
+                m_Agent.SetDestination(m_PlayerSpotted.Target.transform.position);
                 if (!m_PlayerSpotted.PlayerIsInRange)
                     ChangeState(EnemyMachineStates.PATROL);
                 if (m_Shooting.PlayerIsInRange)
@@ -208,6 +218,9 @@ public class EnemyBehaviour : MonoBehaviour
             case EnemyMachineStates.SHOOT:
                 if (!m_Shooting.PlayerIsInRange)
                     ChangeState(EnemyMachineStates.CHASE);
+                break;
+
+            case EnemyMachineStates.DEAD:
                 break;
 
             default:

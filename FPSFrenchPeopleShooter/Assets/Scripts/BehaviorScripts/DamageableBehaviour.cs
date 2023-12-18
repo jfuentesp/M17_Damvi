@@ -12,9 +12,15 @@ public class DamageableBehaviour : MonoBehaviour
     private float m_Damage;
     public float Damage => m_Damage;
 
+    [SerializeField]
+    private bool m_IsPlayer;
+
     private void Awake()
     {
-        m_Health = GetComponentInParent<HealthBehaviour>();
+        if(!m_IsPlayer)
+            m_Health = GetComponentInParent<HealthBehaviour>();
+        if(m_IsPlayer)
+            m_Health = GetComponent<HealthBehaviour>();
     }
 
     public void ReceiveDamage(float damage)

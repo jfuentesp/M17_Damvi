@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Camera m_Camera;
 
+    [SerializeField]
+    private Camera m_SecondaryCamera;
+
     //Declaration of components
     private MovableBehaviour m_Moving;
     private ShootingBehaviour m_Shooting;
@@ -74,24 +77,16 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         m_CurrentActionMap.FindAction("Shoot1").performed += Shoot1;
-        //m_CurrentActionMap.FindAction("Shoot2").performed += Shoot2;
-        //m_CurrentActionMap.FindAction("Jump").performed += Jump;
-        //m_CurrentActionMap.FindAction("Crouch").started += Crouch;
-        //m_CurrentActionMap.FindAction("Crouch").canceled += ReturnToIdleState;
-        //m_CurrentActionMap.FindAction("Interact").performed += Interact;
-        //m_CurrentActionMap.FindAction("Inventory").performed += Inventory;
+        m_CurrentActionMap.FindAction("Shoot2").performed += Shoot2;
+        m_CurrentActionMap.FindAction("SwitchCamera").performed += SwitchCamera;
         m_CurrentActionMap.Enable();
     }
 
     private void OnDisable()
     {
         m_CurrentActionMap.FindAction("Shoot1").performed -= Shoot1;
-        //m_CurrentActionMap.FindAction("Shoot2").performed -= Shoot2;
-        //m_CurrentActionMap.FindAction("Jump").performed -= Jump;
-        //m_CurrentActionMap.FindAction("Crouch").started -= Crouch;
-        //m_CurrentActionMap.FindAction("Crouch").canceled -= ReturnToIdleState;
-        //m_CurrentActionMap.FindAction("Interact").performed -= Interact;
-        //m_CurrentActionMap.FindAction("Inventory").performed -= Inventory;
+        m_CurrentActionMap.FindAction("Shoot2").performed -= Shoot2;
+        m_CurrentActionMap.FindAction("SwitchCamera").performed += SwitchCamera;
         m_CurrentActionMap.Disable();
     }
 
@@ -100,6 +95,8 @@ public class PlayerController : MonoBehaviour
         //We set this in order to make the cursor to disappear and be locked
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        m_Camera.enabled = true;
+        m_SecondaryCamera.enabled = false;
     }
 
     // Update is called once per frame
@@ -137,84 +134,7 @@ public class PlayerController : MonoBehaviour
         switch (m_CurrentState)
         {
             case PlayerMachineStates.IDLE:
-                //m_Moving.OnStopMovement();
                 m_Animator.Play(m_IdleAnimationName);
-                break;
-
-            case PlayerMachineStates.WALK:
-                m_Animator.Play(m_WalkAnimationName);
-                break;
-
-            case PlayerMachineStates.JUMP:
-                m_Animator.Play(m_JumpAnimationName);
-                //m_Jumping.JumpByForce();
-                //OnObjectiveCheck(EMission.JUMP);
-                break;
-
-            case PlayerMachineStates.ATTACK1:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_Attack1AnimationName);
-                //_Damaging.SetComboMultiplier(1);
-                break;
-
-            case PlayerMachineStates.ATTACK2:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_Attack2AnimationName);
-                //m_Damaging.SetComboMultiplier(1.5f);
-                break;
-
-            case PlayerMachineStates.COMBO1:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_Combo1AnimationName);
-                //Then we call for the shooting action and we pass the spawnpoint. We do substract the mana in the UpdateState().
-                //m_Shooting.Shoot();
-                //m_Mana.OnChangeMana(-m_ManaCost.ManaCost);
-                //m_OnEnergyUsed.Raise();
-                //OnObjectiveCheck(EMission.SHOOT);
-                break;
-
-            case PlayerMachineStates.COMBO2:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_Combo2AnimationName);
-                //m_Damaging.SetComboMultiplier(1.5f);
-                break;
-
-            case PlayerMachineStates.HIT:
-                //Will play the animation and then set the state to Idle
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_HitAnimationName);
-                //m_Moving.OnKnockback(m_LastAttackSide, m_LastKnockbackPower);
-                //StartCoroutine(OnPlayerHitCoroutine());
-                break;
-
-            case PlayerMachineStates.CROUCH:
-                //Crouch sets the movement to zero and it doesn't move.
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_CrouchAnimationName);
-                break;
-
-            case PlayerMachineStates.CROUCHATTACK1:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_CrouchAttack1AnimationName);
-                //m_Damaging.SetComboMultiplier(1);
-                break;
-
-            case PlayerMachineStates.CROUCHATTACK2:
-                //Attack will set the velocity to zero, so it cant move while attacking
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_CrouchAttack2AnimationName);
-                //m_Damaging.SetComboMultiplier(1);
-                break;
-
-            case PlayerMachineStates.DEAD:
-                //m_Moving.OnStopMovement();
-                m_Animator.Play(m_DeadAnimationName);
-                //m_IsInvulnerable = true;
                 break;
 
             default:
@@ -236,39 +156,9 @@ public class PlayerController : MonoBehaviour
     /* UpdateState will control every frame since it will be called from Update() and will control when it changes the state */
     private void UpdateState()
     {
-        //if (!m_IsInvulnerable)
-        //    m_Moving.OnFlipCharacter(m_MovementAction.ReadValue<Vector2>());
 
         switch (m_CurrentState)
         {
-            case PlayerMachineStates.IDLE:
-                //      if (m_MovementAction.ReadValue<Vector2>().x != 0)
-                ChangeState(PlayerMachineStates.WALK);
-                break;
-
-            case PlayerMachineStates.WALK:
-                //      m_Moving.OnMoveByForce(m_MovementAction.ReadValue<Vector2>());
-                //     if (m_Rigidbody.velocity == Vector2.zero)
-                ChangeState(PlayerMachineStates.IDLE);
-                break;
-
-            case PlayerMachineStates.JUMP:
-                //     if (m_Rigidbody.velocity == Vector2.zero)
-                ChangeState(PlayerMachineStates.IDLE);
-                //     if (m_MovementAction.ReadValue<Vector2>().x != 0)
-                ChangeState(PlayerMachineStates.WALK);
-                break;
-
-            case PlayerMachineStates.CROUCH:
-                //This gets the gameobject of the pickup, just as it would do in OnTriggerEnter/Stay, but with less load since it's a "Raycast"
-                /*     if (Physics2D.CircleCast(transform.position, 0.5f, Vector2.up, 0.5f, m_PickupLayerMask))
-                     {
-                         GameObject pickup = Physics2D.CircleCast(transform.position, 0.5f, Vector2.up, 0.5f, m_PickupLayerMask).collider.gameObject;
-                         pickup.GetComponent<PickupBehaviour>().GetPickup(m_PlayerSelect);
-                         Destroy(pickup.gameObject);
-                         m_OnGUIUpdate.Raise();
-                     } */
-                break;
 
             default:
                 break;
@@ -279,5 +169,16 @@ public class PlayerController : MonoBehaviour
     private void Shoot1(InputAction.CallbackContext context)
     {
         m_Shooting.OnPlayerShoot(m_Camera);
+    }
+
+    private void Shoot2(InputAction.CallbackContext context) 
+    {
+        m_Shooting.OnPlayerSecondaryShoot(m_Camera);
+    }
+
+    private void SwitchCamera(InputAction.CallbackContext context)
+    {
+        m_Camera.enabled = !m_Camera.enabled;
+        m_SecondaryCamera.enabled = !m_SecondaryCamera.enabled;
     }
 }

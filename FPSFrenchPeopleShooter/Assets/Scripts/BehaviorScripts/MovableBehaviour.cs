@@ -48,9 +48,7 @@ public class MovableBehaviour : MonoBehaviour
 
     public void OnMove(Vector3 direction)
     {
-        Debug.Log(direction);
         m_Movement = direction;
-        Debug.Log(m_Movement);
     }
 
     public void OnRotateYaw(float direction)

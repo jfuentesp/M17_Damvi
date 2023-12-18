@@ -55,7 +55,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""SwitchCamera"",
                     ""type"": ""Button"",
                     ""id"": ""ff28c141-2dbd-43a2-949a-9f43ddd0e6b8"",
                     ""expectedControlType"": ""Button"",
@@ -121,7 +121,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Jump"",
+                    ""action"": ""SwitchCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -333,7 +333,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Character_Movement = m_Character.FindAction("Movement", throwIfNotFound: true);
         m_Character_Shoot1 = m_Character.FindAction("Shoot1", throwIfNotFound: true);
         m_Character_Shoot2 = m_Character.FindAction("Shoot2", throwIfNotFound: true);
-        m_Character_Jump = m_Character.FindAction("Jump", throwIfNotFound: true);
+        m_Character_SwitchCamera = m_Character.FindAction("SwitchCamera", throwIfNotFound: true);
         m_Character_Interaction = m_Character.FindAction("Interaction", throwIfNotFound: true);
         m_Character_RotationY = m_Character.FindAction("RotationY", throwIfNotFound: true);
         m_Character_RotationX = m_Character.FindAction("RotationX", throwIfNotFound: true);
@@ -401,7 +401,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Character_Movement;
     private readonly InputAction m_Character_Shoot1;
     private readonly InputAction m_Character_Shoot2;
-    private readonly InputAction m_Character_Jump;
+    private readonly InputAction m_Character_SwitchCamera;
     private readonly InputAction m_Character_Interaction;
     private readonly InputAction m_Character_RotationY;
     private readonly InputAction m_Character_RotationX;
@@ -412,7 +412,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Character_Movement;
         public InputAction @Shoot1 => m_Wrapper.m_Character_Shoot1;
         public InputAction @Shoot2 => m_Wrapper.m_Character_Shoot2;
-        public InputAction @Jump => m_Wrapper.m_Character_Jump;
+        public InputAction @SwitchCamera => m_Wrapper.m_Character_SwitchCamera;
         public InputAction @Interaction => m_Wrapper.m_Character_Interaction;
         public InputAction @RotationY => m_Wrapper.m_Character_RotationY;
         public InputAction @RotationX => m_Wrapper.m_Character_RotationX;
@@ -434,9 +434,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Shoot2.started += instance.OnShoot2;
             @Shoot2.performed += instance.OnShoot2;
             @Shoot2.canceled += instance.OnShoot2;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
+            @SwitchCamera.started += instance.OnSwitchCamera;
+            @SwitchCamera.performed += instance.OnSwitchCamera;
+            @SwitchCamera.canceled += instance.OnSwitchCamera;
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
@@ -459,9 +459,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Shoot2.started -= instance.OnShoot2;
             @Shoot2.performed -= instance.OnShoot2;
             @Shoot2.canceled -= instance.OnShoot2;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
+            @SwitchCamera.started -= instance.OnSwitchCamera;
+            @SwitchCamera.performed -= instance.OnSwitchCamera;
+            @SwitchCamera.canceled -= instance.OnSwitchCamera;
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
@@ -493,7 +493,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnShoot1(InputAction.CallbackContext context);
         void OnShoot2(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
+        void OnSwitchCamera(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnRotationY(InputAction.CallbackContext context);
         void OnRotationX(InputAction.CallbackContext context);
