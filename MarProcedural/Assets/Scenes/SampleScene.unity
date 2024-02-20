@@ -516,11 +516,11 @@ MonoBehaviour:
     range: 1
   m_OffsetX: 0
   m_OffsetY: 0
-  m_Frequency: 0
-  m_Octaves: 0
+  m_Frequency: 4
+  m_Octaves: 3
   m_Lacunarity: 2
-  m_Persistence: 0.5
-  m_Carve: 1
+  m_Persistence: 0.556
+  m_Carve: 0
 --- !u!1 &1776558276
 GameObject:
   m_ObjectHideFlags: 0

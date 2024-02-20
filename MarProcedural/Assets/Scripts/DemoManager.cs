@@ -72,47 +72,65 @@ public class DemoManager : MonoBehaviour
 
     void Start()
     {
-        m_ProceduralBehaviour = GetComponent<ProceduralBehaviour>();
         //First, we fill the tilemap with a base tile ?
+        GeneratePerlinMap();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("Q"))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             //Generate base?
+            GenerateBaseMap();
             Debug.Log("Q key was pressed");
         }
-        if (Input.GetKeyDown("W"))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             //Generate base?
             Debug.Log("W key was pressed");
         }
-        if (Input.GetKeyDown("E"))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             //Generate base?
             Debug.Log("E key was pressed");
         }
-        if (Input.GetKeyDown("R"))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             //Generate base?
             Debug.Log("R key was pressed");
         }
-        if (Input.GetKeyDown("T"))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             //Generate base?
             Debug.Log("T key was pressed");
         }
-        if (Input.GetKeyDown("Y"))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             //Generate base?
             Debug.Log("Y key was pressed");
         }
-        if (Input.GetKeyDown("H"))
+        if (Input.GetKeyDown(KeyCode.H))
         {
             //Hide show help?
             Debug.Log("Hide/Show help");
         }
+    }
+
+    private void GeneratePerlinMap()
+    {
+        for(int row = 0; row < m_Height; row++)
+        {
+            for(int col = 0; col < m_Width; col++)
+            {
+                float PerlinNoise = ProceduralBehaviour.CalculatePerlinNoise(col, row, m_Frequency, m_Width, m_Height, m_OffsetX, m_OffsetY, m_Octaves, m_Lacunarity, m_Persistence, m_Carve, false, false);
+                //Acción para comprobar posiciones y ver qué se debería pintar en cada casilla
+            }
+        }
+    }
+
+    private void GenerateBaseMap()
+    {
+
     }
 }
