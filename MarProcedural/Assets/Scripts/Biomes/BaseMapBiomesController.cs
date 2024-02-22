@@ -4,22 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class DemoManager : MonoBehaviour
+public class BaseMapBiomesController : MonoBehaviour
 {
-    //Components
-    private ProceduralBehaviour m_ProceduralBehaviour;
-
-    //Size of the area or texture we will fill with the perlin noise information (eg tilemap)
-    [Header("Size parameters")]
-    [SerializeField]
-    private int m_Width;
-    [SerializeField]
-    private int m_Height;
-
-    [Header("Tilemap parameters")]
-    //References to components
-    [SerializeField]
-    private Tilemap m_Tilemap;
     //We can set a struct and an array of structs to settle a tile and a range. So, once we have to set the tiles, we can loop and settle a tile or another given by its range.
     //Also, we can set the different perlin noise infos (for each component such as biome, land, details, npcs...) in scriptable objects and set an scriptable object instead of a tile inside the struct.
     [Serializable]
@@ -70,67 +56,33 @@ public class DemoManager : MonoBehaviour
     [SerializeField]
     private bool m_Carve = true;
 
+    //We set a new texture that will create on the double for loop, pixel by pixel, based on every point of the perlin noise, setting a color based on a Gradient
+    [Header("Texture parameters")]
+    private Texture2D m_Texture;
+    [SerializeField]
+    private Gradient m_Gradient;
+
+    // Start is called before the first frame update
     void Start()
     {
-        //First, we fill the tilemap with a base tile ?
-        GeneratePerlinMap();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            //Generate base?
-            GenerateBaseMap();
-            Debug.Log("Q key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            //Generate base?
-            Debug.Log("W key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            //Generate base?
-            Debug.Log("E key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //Generate base?
-            Debug.Log("R key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            //Generate base?
-            Debug.Log("T key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            //Generate base?
-            Debug.Log("Y key was pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            //Hide show help?
-            Debug.Log("Hide/Show help");
-        }
+
     }
 
-    private void GeneratePerlinMap()
+    private void GeneratePerlinMap(Tilemap tilemap, int width, int height)
     {
-        for(int row = 0; row < m_Height; row++)
+        for (int row = 0; row < height; row++)
         {
-            for(int col = 0; col < m_Width; col++)
+            for (int col = 0; col < width; col++)
             {
-                float PerlinNoise = ProceduralBehaviour.CalculatePerlinNoise(col, row, m_Frequency, m_Width, m_Height, m_OffsetX, m_OffsetY, m_Octaves, m_Lacunarity, m_Persistence, m_Carve, false, false);
+                float PerlinNoise = ProceduralBehaviour.CalculatePerlinNoise(col, row, m_Frequency, width, height, m_OffsetX, m_OffsetY, m_Octaves, m_Lacunarity, m_Persistence, m_Carve, false, false);
                 //Acción para comprobar posiciones y ver qué se debería pintar en cada casilla
             }
         }
-    }
-
-    private void GenerateBaseMap()
-    {
-
     }
 }
