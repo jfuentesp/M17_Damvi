@@ -11,7 +11,7 @@ public class DemoManager : MonoBehaviour
     public static DemoManager instance;
 
     //Components
-    private ProceduralBehaviour m_ProceduralBehaviour;
+    private BaseMapBiomesController m_BaseMap;
 
     //Size of the area or texture we will fill with the perlin noise information (eg tilemap)
     [Header("Size parameters")]
@@ -29,7 +29,9 @@ public class DemoManager : MonoBehaviour
     [SerializeField]
     private Image m_PerlinImage;
 
-
+    [Header("Tilemap")]
+    [SerializeField]
+    private Tilemap m_Tilemap;
     
 
     private void Awake()
@@ -42,6 +44,8 @@ public class DemoManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        m_BaseMap = GetComponent<BaseMapBiomesController>();
     }
 
     void Start()
@@ -55,8 +59,8 @@ public class DemoManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             //Generate base?
-            GenerateBaseMap();
-            Debug.Log("Q key was pressed");
+            m_BaseMap.GeneratePerlinMap(m_Tilemap, m_Width, m_Height, m_PerlinImage);
+            Debug.Log("Q key was pressed. Generating base map.");
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -90,10 +94,4 @@ public class DemoManager : MonoBehaviour
         }
     }
 
-
-
-    private void GenerateBaseMap()
-    {
-
-    }
 }

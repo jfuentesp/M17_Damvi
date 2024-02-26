@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class BaseMapBiomesController : MonoBehaviour
+public class WaterController : MonoBehaviour
 {
     //We can set a struct and an array of structs to settle a tile and a range. So, once we have to set the tiles, we can loop and settle a tile or another given by its range.
     //Also, we can set the different perlin noise infos (for each component such as biome, land, details, npcs...) in scriptable objects and set an scriptable object instead of a tile inside the struct.
@@ -93,6 +93,9 @@ public class BaseMapBiomesController : MonoBehaviour
                 //We extract the color given by a gradient that we previously have set, giving the perlin noise value as prompt for that position
                 Color color = m_Gradient.Evaluate(PerlinNoise); 
                 m_Texture.SetPixel(col, row, color); // Then set that color to the pixel
+
+                if (PerlinNoise < m_TileInfos[0].range)
+                    tilemap.SetTile(new Vector3Int(col, row, 0), m_TileInfos[0].tile);
             }
         }
 
