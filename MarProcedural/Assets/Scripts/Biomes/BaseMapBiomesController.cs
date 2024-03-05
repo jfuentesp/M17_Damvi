@@ -18,6 +18,11 @@ public class BaseMapBiomesController : MonoBehaviour
     [SerializeField]
     private PerlinTileInfo[] m_TileInfos;
 
+    private bool m_IsBiomeMapSaved;
+    public bool IsBiomeMapSaved => m_IsBiomeMapSaved;
+
+    private float[,] m_BiomesPerlinNoise;
+
     [Header("Perlin parameters")]
     /*
      Scale => The scale is the amount of "pixels", or grid points, the perlin noise texture has. It can be represented as a Zoom, since, as low as this value is, more smooth and bigger will be. The higher the value is,
@@ -67,13 +72,7 @@ public class BaseMapBiomesController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        m_IsBiomeMapSaved = false;
     }
 
     public void GeneratePerlinMap(Tilemap tilemap, int width, int height, Image GUIimage)
@@ -82,6 +81,8 @@ public class BaseMapBiomesController : MonoBehaviour
         m_Texture = new Texture2D(width, height);
         m_Texture.filterMode = FilterMode.Point; //This filtermode makes the result set pixel by pixel, less blurry
 
+        m_BiomesPerlinNoise = new float[width, height];
+
         Debug.Log(string.Format("Width received: {0} || Height received: {1}", width, height));
 
         for (int row = 0; row < height; row++)
@@ -89,7 +90,8 @@ public class BaseMapBiomesController : MonoBehaviour
             for (int col = 0; col < width; col++)
             {
                 float PerlinNoise = ProceduralBehaviour.CalculatePerlinNoise(col, row, m_Frequency, width, height, m_OffsetX, m_OffsetY, m_Octaves, m_Lacunarity, m_Persistence, m_Carve);
-                
+                m_BiomesPerlinNoise[col, row] = PerlinNoise;
+
                 //We extract the color given by a gradient that we previously have set, giving the perlin noise value as prompt for that position
                 Color color = m_Gradient.Evaluate(PerlinNoise); 
                 m_Texture.SetPixel(col, row, color); // Then set that color to the pixel
@@ -99,5 +101,21 @@ public class BaseMapBiomesController : MonoBehaviour
         m_Texture.Apply(); //Need to apply the changes to the texture before setting it
         m_FinalTexture = Sprite.Create(m_Texture, new Rect(0, 0, (float)width, (float)height), Vector2.zero); //We create a new sprite based on the Texture2D
         GUIimage.sprite = m_FinalTexture; //We set the sprite as the image on the GUI
+
+        m_IsBiomeMapSaved = true;
+    }
+
+    public BiomeEnum CheckBiomePosition(int x, int y)
+    {
+        float biome = m_BiomesPerlinNoise[x, y];
+        switch(biome)
+        {
+            case > 0.8f:
+                return BiomeEnum.SNOW;
+            case > 0.4f:
+                return BiomeEnum.WARM;
+            default:
+                return BiomeEnum.DESERT;
+        }
     }
 }

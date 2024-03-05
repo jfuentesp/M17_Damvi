@@ -1,18 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-public class WaterController : MonoBehaviour
+public class TerrainController : MonoBehaviour
 {
     //We can set a struct and an array of structs to settle a tile and a range. So, once we have to set the tiles, we can loop and settle a tile or another given by its range.
     //Also, we can set the different perlin noise infos (for each component such as biome, land, details, npcs...) in scriptable objects and set an scriptable object instead of a tile inside the struct.
     [Serializable]
     private struct PerlinTileInfo
     {
-        public Tile tile;
+        public TileBase tile;
         public float range;
         public BiomeEnum biome;
     }
@@ -60,10 +61,14 @@ public class WaterController : MonoBehaviour
 
     //We set a new texture that will create on the double for loop, pixel by pixel, based on every point of the perlin noise, setting a color based on a Gradient
     [Header("Texture parameters")]
-    private Texture2D m_Texture;
-    private Sprite m_FinalTexture;
+    private Texture2D m_NoiseTexture;
+    private Texture2D m_FriendlyTexture;
+    private Sprite m_FinalNoiseTexture;
+    private Sprite m_FinalFriendlyTexture;
     [SerializeField]
-    private Gradient m_Gradient;
+    private Gradient m_NoiseGradient;
+    [SerializeField]
+    private Gradient m_FriendlyGradient;
     private BaseMapBiomesController m_BiomesMap;
 
     private void Awake()
@@ -71,13 +76,15 @@ public class WaterController : MonoBehaviour
         m_BiomesMap = GetComponent<BaseMapBiomesController>();
     }
 
-    public void GeneratePerlinMap(Tilemap tilemap, int width, int height, Image GUIimage)
+    public void GeneratePerlinMap(Tilemap tilemap, int width, int height, Image GUINoiseimage, Image GUIFriendlyImage, Tilemap optionalTilemap = null)
     {
-        //Creating the texture2D
-        m_Texture = new Texture2D(width, height);
-        m_Texture.filterMode = FilterMode.Point; //This filtermode makes the result set pixel by pixel, less blurry
+        //Creating the texture2D for the noise
+        m_NoiseTexture = new Texture2D(width, height);
+        m_NoiseTexture.filterMode = FilterMode.Point; //This filtermode makes the result set pixel by pixel, less blurry
 
-        Debug.Log(string.Format("Width received: {0} || Height received: {1}", width, height));
+        //Creating a representative texture2D for human eye
+        m_FriendlyTexture = new Texture2D(width, height);
+        m_NoiseTexture.filterMode = FilterMode.Point;
 
         for (int row = 0; row < height; row++)
         {
@@ -86,17 +93,44 @@ public class WaterController : MonoBehaviour
                 float PerlinNoise = ProceduralBehaviour.CalculatePerlinNoise(col, row, m_Frequency, width, height, m_OffsetX, m_OffsetY, m_Octaves, m_Lacunarity, m_Persistence, m_Carve);
                 
                 //We extract the color given by a gradient that we previously have set, giving the perlin noise value as prompt for that position
-                Color color = m_Gradient.Evaluate(PerlinNoise); 
-                m_Texture.SetPixel(col, row, color); // Then set that color to the pixel
+                Color noisecolor = m_NoiseGradient.Evaluate(PerlinNoise); 
+                m_NoiseTexture.SetPixel(col, row, noisecolor); // Then set that color to the pixel
+                Color friendlycolor = m_FriendlyGradient.Evaluate(PerlinNoise);
+                m_FriendlyTexture.SetPixel(col, row, friendlycolor);
 
-                if (PerlinNoise < m_TileInfos[0].range)
-                    tilemap.SetTile(new Vector3Int(col, row, 0), m_TileInfos[0].tile);
-                
+                EvaluateAndSetTile(row, col, PerlinNoise, tilemap, optionalTilemap);             
             }
         }
+        m_NoiseTexture.Apply(); //Need to apply the changes to the texture before setting it
+        m_FriendlyTexture.Apply();
+        
+        m_FinalFriendlyTexture = Sprite.Create(m_FriendlyTexture, new Rect(0, 0, (float)width, (float)height), Vector2.zero);
+        m_FinalNoiseTexture = Sprite.Create(m_NoiseTexture, new Rect(0, 0, (float)width, (float)height), Vector2.zero); //We create a new sprite based on the Texture2D
+        GUINoiseimage.sprite = m_FinalNoiseTexture; //We set the sprite as the image on the GUI
+        GUIFriendlyImage.sprite = m_FinalFriendlyTexture;
+    }
 
-        m_Texture.Apply(); //Need to apply the changes to the texture before setting it
-        m_FinalTexture = Sprite.Create(m_Texture, new Rect(0, 0, (float)width, (float)height), Vector2.zero); //We create a new sprite based on the Texture2D
-        GUIimage.sprite = m_FinalTexture; //We set the sprite as the image on the GUI
+    public void EvaluateAndSetTile(int row, int col, float sample, Tilemap tilemap, Tilemap optionalTilemap = null)
+    {
+        //First we check in the biome perlin what kind of biome is it for the current position
+        BiomeEnum biome = m_BiomesMap.CheckBiomePosition(col, row);
+
+        switch (sample)
+        {
+            case >= 0.6f:
+                TileBase terrain = m_TileInfos.Where(tileinfo => tileinfo.biome == biome).Select(tileinfo => tileinfo.tile).First();
+                tilemap.SetTile(new Vector3Int(col, row), terrain);   
+                TileBase waterbackground = m_TileInfos.Where(tileinfo => tileinfo.range < 0.6f).Select(tileinfo => tileinfo.tile).First();
+                optionalTilemap.SetTile(new Vector3Int(col, row), waterbackground);
+                break;
+            case < 0.4f:
+                TileBase shorewater = m_TileInfos.Where(tileinfo => tileinfo.range < 0.4f).Select(tileinfo => tileinfo.tile).First();
+                optionalTilemap.SetTile(new Vector3Int(col, row), shorewater);
+                break;
+            case < 0.6f:
+                TileBase deepwater = m_TileInfos.Where(tileinfo => tileinfo.range < 0.6f).Select(tileinfo => tileinfo.tile).First();
+                optionalTilemap.SetTile(new Vector3Int(col, row), deepwater);
+                break;
+        }
     }
 }
