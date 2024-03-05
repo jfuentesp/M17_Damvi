@@ -1,0 +1,7 @@
+package Motor;
+
+public abstract class Character implements GameObject {
+	public Character() {
+		// TODO Auto-generated constructor stub
+	}
+}

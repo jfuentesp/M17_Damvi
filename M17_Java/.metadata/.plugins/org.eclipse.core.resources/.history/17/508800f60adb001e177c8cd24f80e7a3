@@ -1,0 +1,15 @@
+package Motor;
+
+public abstract class Character implements GameObject {
+	
+	private float velocity;
+	private int hp;
+	private int coins;
+	private int lives;
+	
+	public Character() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+}

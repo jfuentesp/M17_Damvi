@@ -1,0 +1,27 @@
+package Motor;
+
+public class GameLoop 
+{
+
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	public static void init()
+	{
+		
+	}
+	
+	public static void update(float deltaTime)
+	{
+		
+	}
+	
+	public static void render()
+	{
+		
+	}
+	
+}

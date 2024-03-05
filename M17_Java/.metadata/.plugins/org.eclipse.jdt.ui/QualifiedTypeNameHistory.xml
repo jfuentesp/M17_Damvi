@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="Motor.GameLoop"/>
+    <fullyQualifiedTypeName name="Motor.GameObject"/>
+    <fullyQualifiedTypeName name="java.lang.Character"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.atomic.AtomicIntegerFieldUpdater"/>
+</qualifiedTypeNameHistroy>
