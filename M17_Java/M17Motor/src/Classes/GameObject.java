@@ -1,0 +1,36 @@
+package Classes;
+
+import java.util.ArrayList;
+
+public interface GameObject {
+	
+	public String name = "GameObject";
+	public String sprite = null;
+	public ArrayList<Component> components = new ArrayList<Component>();
+	
+	
+	public void update();
+	
+	public default void addComponent(Component component)
+	{
+		
+	}
+	
+	public default void removeComponent(Component component)
+	{
+		
+	}
+	
+	public default boolean hasComponent(Class<? extends Component> componentClass)
+	{
+		return false;
+	}
+	
+	public default Class<?> getComponent(Class<? extends Component> componentClass)
+	{
+		return componentClass;		
+	}
+	
+	
+	
+}

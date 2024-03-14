@@ -1,0 +1,9 @@
+package Classes;
+
+public interface GameObject {
+	
+	public String name = "GameObject";
+	
+	public void update();
+	
+}

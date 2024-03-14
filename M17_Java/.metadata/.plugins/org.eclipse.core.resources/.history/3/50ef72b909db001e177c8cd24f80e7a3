@@ -1,6 +1,0 @@
-package Motor;
-
-public interface GameObject {
-	public void update(float deltaTime);
-	public void render();
-}

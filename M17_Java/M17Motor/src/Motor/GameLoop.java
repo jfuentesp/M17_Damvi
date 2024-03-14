@@ -1,29 +1,58 @@
 package Motor;
+import java.util.ArrayList;
+import Classes.GameObject;
 
 public class GameLoop 
 {
 
 	public static GameLoop Instance = null;
+	private int m_FixedFrames = 60;
+	private int m_FramesPerSecond = 1000 / m_FixedFrames;
+	private boolean m_endOfExecution;
 	
-	public static void main(String[] args) 
+	ArrayList<GameObject> m_GameObjects = new ArrayList<GameObject>();
+	
+	public void init()
 	{
-		// TODO Auto-generated method stub
+		StartExecution();
+		long previousTime = System.nanoTime();
+		long lag = 0;
+		while(!m_endOfExecution)
+		{
+			long currentTime = System.nanoTime();
+			long elapsedTime = currentTime - previousTime;
+			previousTime = currentTime;
+			lag += elapsedTime/1000000;
+			
+			System.out.println("Lag: " + lag);
+			//Here we would set pre update methods, like the player Inputs
+			while(lag >= m_FramesPerSecond)
+			{
+				update(elapsedTime);
+				lag -= m_FramesPerSecond;
+				try 
+				{
+					Thread.sleep(1);
+				} catch (InterruptedException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			//Here we would set post update methods, like rendering the graphics, late updates, etc
 
-	}
-
-	public static void init()
-	{
-		
+			System.out.println("Current time: " + currentTime + " \n Delta time: + " + elapsedTime + " \n --------------------------------------");
+		}
 	}
 	
-	public static void input()
+	//Function where we check the inputs made by the user 
+	@SuppressWarnings("unused")
+	private void input()
 	{
-		//Function where we check the inputs made by the user 
+		//Input won't be needed since we are not going to register any player input during the loop.
 	}
 	
-	public static void update(float deltaTime)
-	{
-		//Function where we execute the different actions of the game elements, keeping the timelapse since the last update (deltaTime)
+	//Function where we execute the different actions of the game elements, keeping the timelapse since the last update (deltaTime)
 		//Deltatime is an increment, meaning the difference of time between an update and the previous one. 
 		/*
 		 * There are different ways to handle the deltaTime matter. 
@@ -31,18 +60,50 @@ public class GameLoop
 		 *  - Making is as a static class Time (like unity has Time.deltaTime class and as a public variable)
 		 *  - Having it set as a read only variable in this own class GameLoop, having a getter to access it whenever a class need it. 
 		 */
+	private void update(long deltaTime)
+	{
+		System.out.println("Updating things.");
 	}
 	
-	//Render won't be needed since we are not going to show graphics on screen, just prompts.
-	/*public static void render()
+	//Function where we show on screen how the different elements of the game behave
+	public void render()
 	{
-		//Function where we show on screen how the different elements of the game behave
-	}*/
+		//Render won't be needed since we are not going to show graphics on screen, just prompts.
+	}
 	
-	public GameLoop getInstance()
+	public static GameLoop getInstance()
 	{
 		if(Instance == null)
-			Instance = this;
+			Instance = new GameLoop();
 		return Instance;
 	}
+	
+	private void StopExecution()
+	{
+		m_endOfExecution = true;
+	}
+	
+	private void StartExecution()
+	{
+		m_endOfExecution = false;
+	}
+
+	public int getFixedFrames() {
+		return m_FixedFrames;
+	}
+
+	public int getFramesPerSecond() {
+		return m_FramesPerSecond;
+	}
+	
+	public void addGameObject(GameObject gameObject)
+	{
+		
+	}
+	
+	public void removeGameObject(GameObject gameObject)
+	{
+		
+	}
+		
 }

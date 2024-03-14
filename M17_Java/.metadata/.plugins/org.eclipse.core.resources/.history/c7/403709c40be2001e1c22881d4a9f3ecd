@@ -1,0 +1,10 @@
+package Classes;
+
+public interface GameObject {
+	
+	public String name = "GameObject";
+	public String sprite = null;
+	
+	public void update();
+	
+}

@@ -1,0 +1,11 @@
+package Classes;
+
+public interface GameObject {
+	
+	public String name = "GameObject";
+	public String sprite = null;
+	//public Transform transform = new Transform(); //Transform Component
+	
+	public void update();
+	
+}
