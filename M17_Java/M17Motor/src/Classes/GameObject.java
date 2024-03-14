@@ -1,32 +1,52 @@
 package Classes;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
-public interface GameObject {
+public final class GameObject {
 	
-	public String name = "GameObject";
-	public String sprite = null;
-	public ArrayList<Component> components = new ArrayList<Component>();
+	private String name = "GameObject";
+	private ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList<Component> componentsToAdd = new ArrayList<Component>();
+	private ArrayList<Component> componentsToRemove = new ArrayList<Component>();
+ 	
+	public void start()
+	{
+		ListIterator<Component> iterator = componentsToAdd.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			components.add(currentComponent);
+			componentsToAdd.remove(currentComponent);
+		}
+	}
 	
-	
-	public void update();
-	
-	public default void addComponent(Component component)
+	public void update() 
 	{
 		
 	}
 	
-	public default void removeComponent(Component component)
+	public void destroy() 
 	{
 		
 	}
 	
-	public default boolean hasComponent(Class<? extends Component> componentClass)
+	public void addComponent(Component component)
+	{
+		componentsToAdd.add(component);
+	}
+	
+	public void removeComponent(Component component)
+	{
+		componentsToRemove.add(component);
+	}
+	
+	public boolean hasComponent(Class<? extends Component> componentClass)
 	{
 		return false;
 	}
 	
-	public default Class<?> getComponent(Class<? extends Component> componentClass)
+	public Class<?> getComponent(Class<? extends Component> componentClass)
 	{
 		return componentClass;		
 	}

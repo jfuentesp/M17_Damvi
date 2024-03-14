@@ -1,6 +1,6 @@
 package Classes;
 
-public abstract class Character implements GameObject {
+public abstract class Character {
 	
 	private float velocity;
 	private int hp;

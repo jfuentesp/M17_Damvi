@@ -1,0 +1,49 @@
+package Classes;
+
+import java.util.ArrayList;
+
+public final class GameObject {
+	
+	private String name = "GameObject";
+	private ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList<Component> componentsToAdd = new ArrayList<Component>();
+	private ArrayList<Component> componentsToRemove = new ArrayList<Component>();
+ 	
+	public void start()
+	{
+		
+	}
+	
+	public void update() 
+	{
+		
+	}
+	
+	public void destroy() 
+	{
+		
+	}
+	
+	public void addComponent(Component component)
+	{
+		componentsToAdd.add(component);
+	}
+	
+	public void removeComponent(Component component)
+	{
+		componentsToRemove.add(component);
+	}
+	
+	public boolean hasComponent(Class<? extends Component> componentClass)
+	{
+		return false;
+	}
+	
+	public Class<?> getComponent(Class<? extends Component> componentClass)
+	{
+		return componentClass;		
+	}
+	
+	
+	
+}
