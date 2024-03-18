@@ -1,0 +1,57 @@
+package Classes;
+
+import Enum.RigidbodyType;
+
+public class Rigidbody extends Component {
+
+	private GameObject m_Owner;
+	private RigidbodyType m_Type = RigidbodyType.DYNAMIC;
+	private float m_Velocity;
+	private float m_Drag = 0.1f;
+	private float m_GravityForce = 10;
+	
+	public Rigidbody(GameObject owner) 
+	{
+		super("Rigidbody");
+		this.m_Owner = owner;
+		System.out.println("Añadido un componente Rigidbody al objeto " + owner.getName());
+	}
+
+	public void SetBodyType(RigidbodyType type)
+	{
+		this.m_Type = type;
+		System.out.println("El Rigidbody del objeto " + m_Owner.getName() + " ha cambiado el tipo de cuerpo a " + type);
+	}
+	
+	public void SetVelocity(float velocity)
+	{
+		this.m_Velocity = velocity;
+		System.out.println("La velocidad del objeto " + m_Owner.getName() + " ha cambiado a " + velocity);
+	}
+	
+	public void SetDrag(float drag)
+	{
+		this.m_Drag = drag;
+		System.out.println("El rozamiento del objeto " + m_Owner.getName() + " ha cambiado a " + drag);
+	}
+	
+	public void SetGravity(float gravity)
+	{
+		this.m_GravityForce = gravity;
+		System.out.println("La fuerza de gravedad que afecta al objeto " + m_Owner.getName() + " ha cambiado a " + gravity);
+	}
+	
+	@Override
+	public void update() {
+		if(m_Type == RigidbodyType.STATIC)
+			return;
+		if(m_Type == RigidbodyType.DYNAMIC)
+		{
+			
+		} else 
+		{
+			
+		}
+	}
+
+}

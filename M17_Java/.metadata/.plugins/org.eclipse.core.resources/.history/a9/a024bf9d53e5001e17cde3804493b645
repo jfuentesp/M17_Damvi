@@ -1,0 +1,15 @@
+package Classes;
+
+public class Collider extends Component {
+
+	public Collider() {
+		super("Collider");
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -12,9 +12,13 @@ public class Main {
 		GameLoop _gameLoop = GameLoop.getInstance();
 		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
 		
-		GameObject esfera = new GameObject("Esfera");
-		Transform transformEsfera = new Transform(null, null, null);
-		esfera.addComponent(transformEsfera);
+		GameObject shooter = new GameObject("Shooter");
+		Transform shooterTransform = shooter.getComponent(Transform.class);
+		shooterTransform.setPosition(-13, 0, 0);
+		
+		GameObject dummy = new GameObject("Dummy");
+		Transform dummyTransform = dummy.getComponent(Transform.class);
+		dummyTransform.setPosition(13, 0, 0);
 		
 		System.out.println("Iniciando GameLoop...");
 		_gameLoop.init();

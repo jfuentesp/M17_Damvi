@@ -1,0 +1,36 @@
+package Classes;
+
+import Enum.RigidbodyType;
+
+public class Rigidbody extends Component {
+
+	private GameObject m_Owner;
+	private RigidbodyType m_Type = RigidbodyType.DYNAMIC;
+	private float m_Velocity;
+	private float m_GravityForce = 10;
+	
+	public Rigidbody(GameObject owner) 
+	{
+		super("Rigidbody");
+		this.m_Owner = owner;
+		System.out.println("Añadido un componente Rigidbody al objeto " + owner.getName());
+	}
+
+	public void SetBodyType(RigidbodyType type)
+	{
+		this.m_Type = type;
+		System.out.println("El Rigidbody del objeto " + m_Owner.getName() + " ha cambiado el tipo de cuerpo a " + type);
+	}
+	
+	public void SetVelocity(float velocity)
+	{
+		this.m_Velocity = velocity;
+		System.out.println("La velocidad del objeto " + m_Owner.getName() + " ha cambiado a " + velocity);
+	}
+	
+	@Override
+	public void update() {
+
+	}
+
+}

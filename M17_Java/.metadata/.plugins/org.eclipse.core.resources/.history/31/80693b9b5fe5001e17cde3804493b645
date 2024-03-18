@@ -1,0 +1,19 @@
+package Classes;
+
+public class ShooterBehaviour extends Component 
+{
+
+	public ShooterBehaviour(String name) 
+	{
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+}

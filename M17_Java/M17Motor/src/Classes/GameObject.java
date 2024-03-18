@@ -12,6 +12,9 @@ public final class GameObject {
  	
 	public GameObject(String name) {
 		this.m_Name = name;
+		Transform transform = new Transform(this);
+		m_Components.add(transform);
+		System.out.println("Creado un GameObject con nombre " + this.m_Name + " y un componente Transform requerido.");
 	}
 	
 	public void start()
@@ -47,22 +50,36 @@ public final class GameObject {
 	
 	public void addComponent(Component component)
 	{
-		m_ComponentsToAdd.add(component);
+		if(!hasComponent(component))
+			m_ComponentsToAdd.add(component);
 	}
 	
 	public void removeComponent(Component component)
 	{
-		m_ComponentsToRemove.add(component);
+		if(!hasComponent(component))
+			m_ComponentsToRemove.add(component);
 	}
 	
-	public boolean hasComponent(Class<? extends Component> componentClass)
+	public <T extends Component> boolean hasComponent(T componentClass)
 	{
+		for (Component component : m_Components) {
+			if(component.equals(componentClass))
+				return true;
+		}
 		return false;
 	}
 	
-	public Class<?> getComponent(Class<? extends Component> componentClass)
+	public <T extends Component> T getComponent(Class<T> componentClass)
 	{
-		return componentClass;		
+		for (Component component : m_Components) {
+			if(componentClass.isInstance(component))
+				return componentClass.cast(component);
+		}
+		return null;		
+	}
+
+	public String getName() {
+		return m_Name;
 	}
 	
 	

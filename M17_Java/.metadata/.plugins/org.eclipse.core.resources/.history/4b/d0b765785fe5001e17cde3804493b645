@@ -1,0 +1,17 @@
+package Classes;
+
+public class DummyBehaviour extends Component {
+	
+	public DummyBehaviour() {
+		super("Dummy");
+	}
+
+	private GameObject m_Owner;
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

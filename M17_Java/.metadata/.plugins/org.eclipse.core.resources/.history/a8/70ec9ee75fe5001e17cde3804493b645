@@ -1,0 +1,19 @@
+package Classes;
+
+public class Collider extends Component 
+{
+
+	private GameObject m_Owner;
+	
+	public Collider() 
+	{
+		super("Collider");
+	}
+
+	@Override
+	public void update() 
+	{
+
+	}
+
+}

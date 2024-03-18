@@ -1,0 +1,21 @@
+package Classes;
+
+import Enum.RigidbodyType;
+
+public class Rigidbody extends Component {
+
+	private RigidbodyType m_Type;
+	private float m_Velocity;
+	private float m_Force;
+	
+	public Rigidbody() {
+		super("Rigidbody");
+
+	}
+
+	@Override
+	public void update() {
+
+	}
+
+}
