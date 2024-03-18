@@ -1,0 +1,62 @@
+package Classes;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
+
+public final class GameObject {
+	
+	private String name = "GameObject";
+	private ArrayList<Component> components = new ArrayList<Component>();
+	private ArrayList<Component> componentsToAdd = new ArrayList<Component>();
+	private ArrayList<Component> componentsToRemove = new ArrayList<Component>();
+ 	
+	public void start()
+	{
+		ListIterator<Component> iterator = componentsToAdd.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			components.add(currentComponent);
+			componentsToAdd.remove(currentComponent);
+		}
+	}
+	
+	public void update() 
+	{
+		
+	}
+	
+	public void destroy() 
+	{
+		ListIterator<Component> iterator = componentsToRemove.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			components.remove(currentComponent);
+			componentsToRemove.remove(currentComponent);
+		}
+	}
+	
+	public void addComponent(Component component)
+	{
+		componentsToAdd.add(component);
+	}
+	
+	public void removeComponent(Component component)
+	{
+		componentsToRemove.add(component);
+	}
+	
+	public boolean hasComponent(Class<? extends Component> componentClass)
+	{
+		return false;
+	}
+	
+	public Class<?> getComponent(Class<? extends Component> componentClass)
+	{
+		return componentClass;		
+	}
+	
+	
+	
+}

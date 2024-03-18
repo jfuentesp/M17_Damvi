@@ -1,5 +1,7 @@
 package Main;
 
+import Classes.GameObject;
+import Classes.Transform;
 import Motor.GameLoop;
 
 public class Main {
@@ -10,8 +12,14 @@ public class Main {
 		GameLoop _gameLoop = GameLoop.getInstance();
 		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
 		
+		GameObject esfera = new GameObject("Esfera");
+		Transform transformEsfera = new Transform(null, null, null);
+		esfera.addComponent(transformEsfera);
+		
 		System.out.println("Iniciando GameLoop...");
 		_gameLoop.init();
+		
+		
 		
 		
 	}

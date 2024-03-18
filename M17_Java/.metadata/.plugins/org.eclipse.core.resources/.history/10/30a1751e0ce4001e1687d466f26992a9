@@ -1,0 +1,20 @@
+package Classes;
+
+public class Sprite extends Component {
+
+	private String m_Path;
+	private String description;
+	
+	public Sprite(String path, String description) {
+		super("Sprite");
+		this.m_Path = path;
+		this.description = description;
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

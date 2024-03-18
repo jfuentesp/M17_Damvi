@@ -6,4 +6,6 @@
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.util.concurrent.atomic.AtomicIntegerFieldUpdater"/>
     <fullyQualifiedTypeName name="java.util.ListIterator"/>
+    <fullyQualifiedTypeName name="Classes.GameObject"/>
+    <fullyQualifiedTypeName name="Classes.Transform"/>
 </qualifiedTypeNameHistroy>

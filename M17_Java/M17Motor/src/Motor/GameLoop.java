@@ -11,7 +11,9 @@ public class GameLoop
 	private double m_DeltaTime;
 	private boolean m_endOfExecution;
 	
-	ArrayList<GameObject> m_GameObjects = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjects = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjectsToAdd = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjectsToRemove = new ArrayList<GameObject>();
 
 	private GameLoop()
 	{

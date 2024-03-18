@@ -1,0 +1,21 @@
+package Classes;
+
+public class Transform extends Component {
+
+	//Default values will be x = 0, y = 0, z = 0
+	private float [] position = {0,0,0};
+	private float [] rotation = {0,0,0};
+	
+	public Transform(float [] position, float [] rotation) 
+	{
+		super("Transform");
+		this.position = position;
+		this.rotation = rotation;
+	}
+	
+	public void setRotation()
+	{
+		
+	}
+	
+}

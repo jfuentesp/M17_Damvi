@@ -1,0 +1,23 @@
+package Main;
+
+import Classes.GameObject;
+import Motor.GameLoop;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		//Initializing the GameLoop. It's a singleton so we initiate it using the method getInstance()
+		GameLoop _gameLoop = GameLoop.getInstance();
+		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
+		
+		GameObject esfera = new GameObject("Esfera");
+		
+		System.out.println("Iniciando GameLoop...");
+		_gameLoop.init();
+		
+		
+		
+		
+	}
+}

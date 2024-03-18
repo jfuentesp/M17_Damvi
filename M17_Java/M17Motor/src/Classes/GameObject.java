@@ -5,40 +5,54 @@ import java.util.ListIterator;
 
 public final class GameObject {
 	
-	private String name = "GameObject";
-	private ArrayList<Component> components = new ArrayList<Component>();
-	private ArrayList<Component> componentsToAdd = new ArrayList<Component>();
-	private ArrayList<Component> componentsToRemove = new ArrayList<Component>();
+	private String m_Name = "GameObject";
+	private ArrayList<Component> m_Components = new ArrayList<Component>();
+	private ArrayList<Component> m_ComponentsToAdd = new ArrayList<Component>();
+	private ArrayList<Component> m_ComponentsToRemove = new ArrayList<Component>();
  	
+	public GameObject(String name) {
+		this.m_Name = name;
+	}
+	
 	public void start()
 	{
-		ListIterator<Component> iterator = componentsToAdd.listIterator();
+		ListIterator<Component> iterator = m_ComponentsToAdd.listIterator();
 		while(iterator.hasNext())
 		{
 			Component currentComponent = iterator.next();
-			components.add(currentComponent);
-			componentsToAdd.remove(currentComponent);
+			m_Components.add(currentComponent);
+			m_ComponentsToAdd.remove(currentComponent);
 		}
 	}
 	
 	public void update() 
 	{
-		
+		for (Component component : m_Components) {
+			component.update();
+		}
+		start();
+		destroy();
 	}
 	
 	public void destroy() 
 	{
-		
+		ListIterator<Component> iterator = m_ComponentsToRemove.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			m_Components.remove(currentComponent);
+			m_ComponentsToRemove.remove(currentComponent);
+		}
 	}
 	
 	public void addComponent(Component component)
 	{
-		componentsToAdd.add(component);
+		m_ComponentsToAdd.add(component);
 	}
 	
 	public void removeComponent(Component component)
 	{
-		componentsToRemove.add(component);
+		m_ComponentsToRemove.add(component);
 	}
 	
 	public boolean hasComponent(Class<? extends Component> componentClass)

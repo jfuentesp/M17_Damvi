@@ -2,3 +2,15 @@
 1710412431211	Move compilation unit
 1710412441745	Delete element
 1710442284855	Rename local variable 'lag'
+1710496934993	Delete element
+1710543746995	Delete element
+1710644974532	Rename field 'name'
+1710644984706	Rename field 'components'
+1710644993589	Rename field 'componentsToAdd'
+1710645002359	Rename field 'componentsToRemove'
+1710645057766	Rename field 'position'
+1710645071298	Rename field 'rotation'
+1710645091650	Rename field 'scale'
+1710645107271	Rename field 'path'
+1710645119693	Rename field 'description'
+1710709943897	Rename field 'name'
