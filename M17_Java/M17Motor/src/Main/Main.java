@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//Initializing the GameLoop. It's a singleton so we initiate it using the method getInstance()
-		GameLoop _gameLoop = GameLoop.getInstance();
+		GameLoop gameLoop = GameLoop.getInstance();
 		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
 		
 		GameObject shooter = new GameObject("Shooter");
@@ -21,7 +21,7 @@ public class Main {
 		dummyTransform.setPosition(13, 0, 0);
 		
 		System.out.println("Iniciando GameLoop...");
-		_gameLoop.init();
+		gameLoop.init();
 		
 		
 		

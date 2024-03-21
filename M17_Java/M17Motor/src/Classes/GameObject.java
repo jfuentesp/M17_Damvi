@@ -15,9 +15,29 @@ public final class GameObject {
 		Transform transform = new Transform(this);
 		m_Components.add(transform);
 		System.out.println("Creado un GameObject con nombre " + this.m_Name + " y un componente Transform requerido.");
+		start();
 	}
 	
 	public void start()
+	{
+
+	}
+	
+	public void destroy() 
+	{
+
+	}
+	
+	public void update() 
+	{
+		for (Component component : m_Components) {
+			component.update();
+		}
+		addComponents();
+		removeComponents();
+	}
+	
+	public void addComponents()
 	{
 		ListIterator<Component> iterator = m_ComponentsToAdd.listIterator();
 		while(iterator.hasNext())
@@ -28,16 +48,7 @@ public final class GameObject {
 		}
 	}
 	
-	public void update() 
-	{
-		for (Component component : m_Components) {
-			component.update();
-		}
-		start();
-		destroy();
-	}
-	
-	public void destroy() 
+	public void removeComponents()
 	{
 		ListIterator<Component> iterator = m_ComponentsToRemove.listIterator();
 		while(iterator.hasNext())

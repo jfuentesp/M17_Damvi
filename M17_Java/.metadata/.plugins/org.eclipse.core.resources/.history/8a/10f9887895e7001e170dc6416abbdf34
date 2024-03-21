@@ -1,0 +1,16 @@
+package Classes;
+
+public class Pool extends Component 
+{
+
+	public Pool() {
+		super("Pool");
+	}
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

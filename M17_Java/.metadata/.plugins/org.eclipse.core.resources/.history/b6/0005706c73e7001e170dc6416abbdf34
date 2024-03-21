@@ -1,0 +1,100 @@
+package Classes;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
+
+public final class GameObject {
+	
+	private String m_Name = "GameObject";
+	private ArrayList<Component> m_Components = new ArrayList<Component>();
+	private ArrayList<Component> m_ComponentsToAdd = new ArrayList<Component>();
+	private ArrayList<Component> m_ComponentsToRemove = new ArrayList<Component>();
+ 	
+	public GameObject(String name) {
+		this.m_Name = name;
+		Transform transform = new Transform(this);
+		m_Components.add(transform);
+		System.out.println("Creado un GameObject con nombre " + this.m_Name + " y un componente Transform requerido.");
+		start();
+	}
+	
+	public void start()
+	{
+
+	}
+	
+	
+	public void destroy() 
+	{
+
+	}
+	
+	public void update() 
+	{
+		for (Component component : m_Components) {
+			component.update();
+		}
+		addComponents();
+		removeComponents();
+		destroy();
+	}
+	
+	public void addComponents()
+	{
+		ListIterator<Component> iterator = m_ComponentsToAdd.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			m_Components.add(currentComponent);
+			m_ComponentsToAdd.remove(currentComponent);
+		}
+	}
+	
+	public void removeComponents()
+	{
+		ListIterator<Component> iterator = m_ComponentsToRemove.listIterator();
+		while(iterator.hasNext())
+		{
+			Component currentComponent = iterator.next();
+			m_Components.remove(currentComponent);
+			m_ComponentsToRemove.remove(currentComponent);
+		}
+	}
+	
+	public void addComponent(Component component)
+	{
+		if(!hasComponent(component))
+			m_ComponentsToAdd.add(component);
+	}
+	
+	public void removeComponent(Component component)
+	{
+		if(!hasComponent(component))
+			m_ComponentsToRemove.add(component);
+	}
+	
+	public <T extends Component> boolean hasComponent(T componentClass)
+	{
+		for (Component component : m_Components) {
+			if(component.equals(componentClass))
+				return true;
+		}
+		return false;
+	}
+	
+	public <T extends Component> T getComponent(Class<T> componentClass)
+	{
+		for (Component component : m_Components) {
+			if(componentClass.isInstance(component))
+				return componentClass.cast(component);
+		}
+		return null;		
+	}
+
+	public String getName() {
+		return m_Name;
+	}
+	
+	
+	
+}
