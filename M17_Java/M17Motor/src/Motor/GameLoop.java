@@ -103,14 +103,19 @@ public class GameLoop
 		return m_FramesPerSecond;
 	}
 	
+	public double getDeltaTime()
+	{
+		return m_DeltaTime;
+	}
+	
 	public void addGameObject(GameObject gameObject)
 	{
-		
+		m_GameObjectsToAdd.add(gameObject);
 	}
 	
 	public void removeGameObject(GameObject gameObject)
 	{
-		
+		m_GameObjectsToRemove.add(gameObject);
 	}
 		
 }

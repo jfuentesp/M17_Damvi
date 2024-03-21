@@ -1,0 +1,42 @@
+package Classes;
+
+import java.util.ArrayList;
+
+public class Pool extends Component 
+{
+	private ArrayList<GameObject> m_GameObjects;
+	private GameObject m_GameObjectToPool;
+	private int m_Quantity;
+	
+	public Pool(GameObject gameObjectToPool, int quantity) 
+	{
+		super("Pool");
+		this.m_GameObjects = new ArrayList<>();
+		this.m_GameObjectToPool = gameObjectToPool;
+		this.m_Quantity = quantity;
+	}
+	
+	public void start()
+	{
+		for(int i = 0; i < m_Quantity; i++)
+		{
+			this.m_GameObjectToPool.SetActive(false);
+			this.m_GameObjects.add(m_GameObjectToPool);
+		}
+	}
+	
+	@Override
+	public void update() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public GameObject getElement()
+	{
+		for (GameObject gameObject : m_GameObjects) {
+			//if(gameObject.)
+		}
+	}
+
+}

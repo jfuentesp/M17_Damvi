@@ -22,7 +22,7 @@ public class Transform extends Component {
 		this.m_Position = position;
 		this.m_Rotation = rotation;
 		this.m_Scale = scale;
-		System.out.println(String.format("Añadido un componente Transform en la posición ({0},{1},{2}) con rotación ({3},{4},{5}) y escala ({6},{7},{8}).",
+		System.out.println(String.format("Añadido un componente Transform en la posición (%1$s,%2$s,%3$s) con rotación (%4$s,%5$s,%6$s) y escala (%7$s,%8$s,%9$s).",
 				position[0], position[1], position[2], rotation[0], rotation[1], rotation[2], scale[0], scale[1], scale[2]));
 	}
 	
@@ -31,7 +31,7 @@ public class Transform extends Component {
 		this.m_Rotation[0] = x % 360;
 		this.m_Rotation[1] = y % 360;
 		this.m_Rotation[2] = z % 360;
-		System.out.println(String.format("Cambiada la rotación del objeto {0} a la rotación (X={1} | Y={2} | Z={3}).",
+		System.out.println(String.format("Cambiada la rotación del objeto %1$s a la rotación (X=%1$f | Y=%2$f | Z=%3$f).",
 				this.m_Owner.getName(), this.m_Rotation[0], this.m_Rotation[1], this.m_Rotation[2]));
 	}
 	
@@ -40,7 +40,7 @@ public class Transform extends Component {
 		this.m_Position[0] = x;
 		this.m_Position[1] = y;
 		this.m_Position[2] = z;
-		System.out.println(String.format("Cambiada la posición del objeto {0} a la posición (X={1} | Y={2} | Z={3}).", 
+		System.out.println(String.format("Cambiada la posición del objeto %1$s a la posición (X=%1$f | Y=%2$f | Z=%3$f).", 
 				this.m_Owner.getName(), this.m_Position[0], this.m_Position[1], this.m_Position[2]));
 	}
 	
@@ -49,7 +49,7 @@ public class Transform extends Component {
 		this.m_Scale[0] = x;
 		this.m_Scale[1] = y;
 		this.m_Scale[2] = z;
-		System.out.println(String.format("Cambiada la escala del objeto {0} a la escala (X={1} | Y={2} | Z={3}).", 
+		System.out.println(String.format("Cambiada la escala del objeto %1$s a la escala (X=%1$f | Y=%2$f | Z=%3$f).", 
 				this.m_Owner.getName(), this.m_Scale[0], this.m_Scale[1], this.m_Scale[2]));
 	}
 
