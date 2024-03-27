@@ -1,9 +1,0 @@
-package Classes;
-
-public abstract class Component {
-	public String name = "Component";
-	
-	public Component(String name) {
-		this.name = name;
-	}
-}

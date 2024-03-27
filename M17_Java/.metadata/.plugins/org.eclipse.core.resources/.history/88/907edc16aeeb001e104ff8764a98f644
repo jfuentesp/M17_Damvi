@@ -1,0 +1,121 @@
+package Motor;
+import java.util.ArrayList;
+import Classes.GameObject;
+
+public class GameLoop 
+{
+
+	public static GameLoop Instance = null;
+	private int m_FixedFrames = 60;
+	private int m_FramesPerSecond = 1000 / m_FixedFrames;
+	private double m_DeltaTime;
+	private boolean m_endOfExecution;
+	
+	private ArrayList<GameObject> m_GameObjects = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjectsToAdd = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjectsToRemove = new ArrayList<GameObject>();
+
+	private GameLoop()
+	{
+		StartExecution();
+	}
+
+	public static GameLoop getInstance()
+	{
+		if(Instance == null)
+			Instance = new GameLoop();
+		return Instance;
+	}
+	
+	
+	public void init()
+	{
+		long previousTime = System.nanoTime();
+		long executionTime = 0;
+		while(!m_endOfExecution)
+		{
+			long currentTime = System.nanoTime();
+			long elapsedTime = currentTime - previousTime;
+			previousTime = currentTime;
+			
+			m_DeltaTime = elapsedTime/1000000000d;
+			update();
+			
+			executionTime = System.nanoTime() - previousTime;
+			try 
+			{
+				Thread.sleep((long) (m_FramesPerSecond - executionTime/1000000d));
+			} catch (InterruptedException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Here we would set post update methods, like rendering the graphics, late updates, etc
+
+			System.out.println("FPS: " + (1 / (elapsedTime/1000000000d)));
+		}
+	}
+	
+	//Function where we check the inputs made by the user 
+	@SuppressWarnings("unused")
+	private void input()
+	{
+		//Input won't be needed since we are not going to register any player input during the loop.
+	}
+	
+	//Function where we execute the different actions of the game elements, keeping the timelapse since the last update (deltaTime)
+		//Deltatime is an increment, meaning the difference of time between an update and the previous one. 
+		/*
+		 * There are different ways to handle the deltaTime matter. 
+		 * 	- Passing it as update() parameter so every gameobject can have it as reference.
+		 *  - Making is as a static class Time (like unity has Time.deltaTime class and as a public variable)
+		 *  - Having it set as a read only variable in this own class GameLoop, having a getter to access it whenever a class need it. 
+		 */
+	private void update()
+	{
+		System.out.println("Updating things.");
+		for (GameObject gameObject : m_GameObjects) {
+			gameObject.update();
+		}
+	}
+	
+	//Function where we show on screen how the different elements of the game behave
+	public void render()
+	{
+		//Render won't be needed since we are not going to show graphics on screen, just prompts.
+	}
+	
+	private void StopExecution()
+	{
+		m_endOfExecution = true;
+	}
+	
+	private void StartExecution()
+	{
+		m_endOfExecution = false;
+	}
+
+	public int getFixedFrames() {
+		return m_FixedFrames;
+	}
+
+	public int getFramesPerSecond() {
+		return m_FramesPerSecond;
+	}
+	
+	public double getDeltaTime()
+	{
+		return m_DeltaTime;
+	}
+	
+	public void addGameObject(GameObject gameObject)
+	{
+		m_GameObjectsToAdd.add(gameObject);
+	}
+	
+	public void removeGameObject(GameObject gameObject)
+	{
+		m_GameObjectsToRemove.add(gameObject);
+	}
+		
+}

@@ -1,6 +1,10 @@
 package Main;
 
+import Classes.DummyBehaviour;
 import Classes.GameObject;
+import Classes.Health;
+import Classes.ShooterBehaviour;
+import Classes.SpawnerBehaviour;
 import Classes.Transform;
 import Motor.GameLoop;
 
@@ -12,18 +16,31 @@ public class Main {
 		GameLoop gameLoop = GameLoop.getInstance();
 		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
 		
+		
 		GameObject shooter = new GameObject("Shooter");
 		Transform shooterTransform = shooter.getComponent(Transform.class);
+		ShooterBehaviour shooterComponent = new ShooterBehaviour(shooter, 5);
+		shooter.addComponent(shooterComponent);
 		shooterTransform.setPosition(-13, 0, 0);
 		
 		GameObject dummy = new GameObject("Dummy");
 		Transform dummyTransform = dummy.getComponent(Transform.class);
+		DummyBehaviour dummyComponent = new DummyBehaviour(dummy);
+		dummy.addComponent(dummyComponent);
+		Health healthComponent = new Health(dummy, 5);
+		dummy.addComponent(healthComponent);
 		dummyTransform.setPosition(13, 0, 0);
+		
+		//Spawner will be spawning dummies 
+		GameObject spawner = new GameObject("Spawner");
+		SpawnerBehaviour spawnerComponent = new SpawnerBehaviour(spawner, 5, 3);
+		spawner.addComponent(spawnerComponent);
+		gameLoop.addGameObject(spawner);
 		
 		System.out.println("Iniciando GameLoop...");
 		gameLoop.init();
 		
-		
+		System.out.println(gameLoop.getGameObjects().size());
 		
 		
 	}

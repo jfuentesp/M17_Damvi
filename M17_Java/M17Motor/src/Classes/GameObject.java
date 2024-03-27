@@ -3,6 +3,8 @@ package Classes;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import Motor.GameLoop;
+
 public final class GameObject {
 	
 	private String m_Name = "GameObject";
@@ -10,12 +12,15 @@ public final class GameObject {
 	private ArrayList<Component> m_ComponentsToAdd = new ArrayList<Component>();
 	private ArrayList<Component> m_ComponentsToRemove = new ArrayList<Component>();
 	private boolean m_IsActive;
+	private GameLoop m_GameLoop;
  	
 	public GameObject(String name) {
 		this.m_Name = name;
+		this.m_GameLoop = GameLoop.getInstance();
 		Transform transform = new Transform(this);
 		m_Components.add(transform);
 		System.out.println("Creado un GameObject con nombre " + this.m_Name + " y un componente Transform requerido.");
+		m_GameLoop.addGameObject(this);
 		start();
 	}
 	
@@ -26,11 +31,13 @@ public final class GameObject {
 	
 	public void destroy() 
 	{
-
+		m_GameLoop.removeGameObject(this);
+		System.out.println("Destroy: Añadido GameObject " + m_Name + " a eliminar.");
 	}
 	
 	public void update() 
 	{
+		System.out.println("Actualizando componentes de " + m_Name + ". Count: " + m_Components.size());
 		for (Component component : m_Components) {
 			component.update();
 		}
@@ -45,8 +52,8 @@ public final class GameObject {
 		{
 			Component currentComponent = iterator.next();
 			m_Components.add(currentComponent);
-			m_ComponentsToAdd.remove(currentComponent);
 		}
+		m_ComponentsToAdd.clear();
 	}
 	
 	public void removeComponents()
@@ -56,8 +63,8 @@ public final class GameObject {
 		{
 			Component currentComponent = iterator.next();
 			m_Components.remove(currentComponent);
-			m_ComponentsToRemove.remove(currentComponent);
 		}
+		m_ComponentsToRemove.clear();
 	}
 	
 	public void addComponent(Component component)
@@ -76,6 +83,15 @@ public final class GameObject {
 	{
 		for (Component component : m_Components) {
 			if(component.equals(componentClass))
+				return true;
+		}
+		return false;
+	}
+	
+	public <T extends Component> boolean hasComponent(Class<T> componentClass)
+	{
+		for (Component component : m_Components) {
+			if(componentClass.isInstance(component))
 				return true;
 		}
 		return false;

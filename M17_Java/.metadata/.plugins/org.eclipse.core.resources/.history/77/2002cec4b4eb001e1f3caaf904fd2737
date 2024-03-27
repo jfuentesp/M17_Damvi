@@ -1,0 +1,39 @@
+package Main;
+
+import Classes.DummyBehaviour;
+import Classes.GameObject;
+import Classes.ShooterBehaviour;
+import Classes.Transform;
+import Motor.GameLoop;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		//Initializing the GameLoop. It's a singleton so we initiate it using the method getInstance()
+		GameLoop gameLoop = GameLoop.getInstance();
+		System.out.println("GameLoop cargado. (Capturada la instancia del Singleton)");
+		
+		GameObject shooter = new GameObject("Shooter", gameLoop);
+		Transform shooterTransform = shooter.getComponent(Transform.class);
+		ShooterBehaviour shooterComponent = new ShooterBehaviour(shooter);
+		shooter.addComponent(shooterComponent);
+		shooterTransform.setPosition(-13, 0, 0);
+		
+		//Spawner will be spawning dummies 
+		GameObject spawner = new GameObject("Spawner", gameLoop);
+		
+		GameObject dummy = new GameObject("Dummy", gameLoop);
+		Transform dummyTransform = dummy.getComponent(Transform.class);
+		DummyBehaviour dummyComponent = new DummyBehaviour(dummy);
+		dummy.addComponent(dummyComponent);
+		dummyTransform.setPosition(13, 0, 0);
+		
+		System.out.println("Iniciando GameLoop...");
+		gameLoop.init();
+		
+		
+		
+		
+	}
+}

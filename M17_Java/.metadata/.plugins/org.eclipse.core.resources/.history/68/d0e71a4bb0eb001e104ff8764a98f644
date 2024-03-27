@@ -1,0 +1,31 @@
+package Classes;
+
+import java.util.ArrayList;
+
+import Motor.GameLoop;
+
+public class ShooterBehaviour extends Component 
+{
+	private GameObject m_Owner;
+	private GameLoop m_GameLoop;
+	private DummyBehaviour target;
+	
+	public ShooterBehaviour(GameObject owner) 
+	{
+		super("Shooter");
+		this.m_Owner = owner;
+		this.m_GameLoop = GameLoop.getInstance();
+	}
+
+	@Override
+	public void update() 
+	{
+		for (GameObject object : m_GameLoop.getGameObjects()) {
+
+			if(object.hasComponent())
+			{
+				
+			}
+		}
+	}
+}

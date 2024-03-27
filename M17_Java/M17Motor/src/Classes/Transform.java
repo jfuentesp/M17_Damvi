@@ -31,7 +31,7 @@ public class Transform extends Component {
 		this.m_Rotation[0] = x % 360;
 		this.m_Rotation[1] = y % 360;
 		this.m_Rotation[2] = z % 360;
-		System.out.println(String.format("Cambiada la rotación del objeto %1$s a la rotación (X=%1$f | Y=%2$f | Z=%3$f).",
+		System.out.println(String.format("Cambiada la rotación del objeto %1$s a la rotación (X=%2$s | Y=%3$s | Z=%4$s).",
 				this.m_Owner.getName(), this.m_Rotation[0], this.m_Rotation[1], this.m_Rotation[2]));
 	}
 	
@@ -40,7 +40,7 @@ public class Transform extends Component {
 		this.m_Position[0] = x;
 		this.m_Position[1] = y;
 		this.m_Position[2] = z;
-		System.out.println(String.format("Cambiada la posición del objeto %1$s a la posición (X=%1$f | Y=%2$f | Z=%3$f).", 
+		System.out.println(String.format("Cambiada la posición del objeto %1$s a la posición (X=%2$s | Y=%3$s | Z=%4$s).", 
 				this.m_Owner.getName(), this.m_Position[0], this.m_Position[1], this.m_Position[2]));
 	}
 	
@@ -49,7 +49,7 @@ public class Transform extends Component {
 		this.m_Scale[0] = x;
 		this.m_Scale[1] = y;
 		this.m_Scale[2] = z;
-		System.out.println(String.format("Cambiada la escala del objeto %1$s a la escala (X=%1$f | Y=%2$f | Z=%3$f).", 
+		System.out.println(String.format("Cambiada la escala del objeto %1$s a la escala (X=%2$s | Y=%3$s | Z=%4$s).", 
 				this.m_Owner.getName(), this.m_Scale[0], this.m_Scale[1], this.m_Scale[2]));
 	}
 

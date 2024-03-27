@@ -1,8 +1,0 @@
-package Classes;
-
-public class Transform extends Component {
-
-	private float [] position;
-	private float [] rotation;
-	
-}

@@ -1,0 +1,18 @@
+package Classes;
+
+public class Health extends Component {
+
+	private GameObject m_Owner;
+	
+	public Health(GameObject owner) {
+		super("Health");
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -1,0 +1,26 @@
+package Classes;
+
+import Motor.GameLoop;
+
+public class ShooterBehaviour extends Component 
+{
+	private GameObject m_Owner;
+	private GameLoop m_GameLoop;
+	
+	public ShooterBehaviour(GameObject owner) 
+	{
+		super("Shooter");
+		this.m_Owner = owner;
+		this.m_GameLoop = GameLoop.getInstance();
+	}
+
+	@Override
+	public void update() 
+	{
+		//Shooter will read the list of gameobjects. If an object spawns (we could do this later with observers), it will choose a target and shoot at him.
+		if(m_GameLoop.getGameObjects().size() > 1)
+		{
+			//Selects the first item
+		}	
+	}
+}

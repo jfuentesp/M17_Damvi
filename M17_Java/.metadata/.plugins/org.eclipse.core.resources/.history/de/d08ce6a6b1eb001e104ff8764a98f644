@@ -1,0 +1,38 @@
+package Classes;
+
+import java.util.ArrayList;
+
+import Motor.GameLoop;
+
+public class ShooterBehaviour extends Component 
+{
+	private GameObject m_Owner;
+	private GameLoop m_GameLoop;
+	private GameObject target;
+	
+	public ShooterBehaviour(GameObject owner) 
+	{
+		super("Shooter");
+		this.m_Owner = owner;
+		this.m_GameLoop = GameLoop.getInstance();
+	}
+
+	@Override
+	public void update() 
+	{
+
+	}
+	
+	private void Shoot(ArrayList<GameObject> targetlist)
+	{
+		for (GameObject object : targetlist) {
+
+			if(object.hasComponent(DummyBehaviour.class))
+			{
+				target = object;
+				System.out.println("El tirador " + m_Owner.getName() + " ha encontrado un nuevo objetivo: " + object.getName() + "."
+						+ " Le dispara.");
+			}
+		}
+	}
+}

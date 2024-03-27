@@ -1,0 +1,21 @@
+package Classes;
+
+public class Health extends Component {
+
+	private GameObject m_Owner;
+	private int m_MaxHealth;
+	private int m_CurrentHealth;
+	
+	public Health(GameObject owner, int maxHealth) {
+		super("Health");
+		this.m_MaxHealth = maxHealth;
+		this.m_CurrentHealth = m_MaxHealth;
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

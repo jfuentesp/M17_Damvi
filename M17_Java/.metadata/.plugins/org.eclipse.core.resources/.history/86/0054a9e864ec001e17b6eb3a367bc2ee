@@ -1,0 +1,16 @@
+package Classes;
+
+public class SpawnerBehaviour extends Component {
+
+	public SpawnerBehaviour(String name) {
+		super("Spawner");
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

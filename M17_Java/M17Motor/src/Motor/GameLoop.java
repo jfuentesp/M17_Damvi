@@ -1,29 +1,37 @@
 package Motor;
 import java.util.ArrayList;
+import java.util.ListIterator;
+
+import Classes.Component;
 import Classes.GameObject;
 
 public class GameLoop 
 {
 
-	public static GameLoop Instance = null;
+	public static GameLoop Instance;
 	private int m_FixedFrames = 60;
 	private int m_FramesPerSecond = 1000 / m_FixedFrames;
 	private double m_DeltaTime;
 	private boolean m_endOfExecution;
 	
-	private ArrayList<GameObject> m_GameObjects = new ArrayList<GameObject>();
-	private ArrayList<GameObject> m_GameObjectsToAdd = new ArrayList<GameObject>();
-	private ArrayList<GameObject> m_GameObjectsToRemove = new ArrayList<GameObject>();
+	private ArrayList<GameObject> m_GameObjects;
+	private ArrayList<GameObject> m_GameObjectsToAdd;
+	private ArrayList<GameObject> m_GameObjectsToRemove;
 
 	private GameLoop()
 	{
+		this.m_GameObjects = new ArrayList<GameObject>();
+		this.m_GameObjectsToAdd = new ArrayList<GameObject>();
+		this.m_GameObjectsToRemove = new ArrayList<GameObject>();
 		StartExecution();
 	}
 
 	public static GameLoop getInstance()
 	{
 		if(Instance == null)
+		{
 			Instance = new GameLoop();
+		}
 		return Instance;
 	}
 	
@@ -40,6 +48,8 @@ public class GameLoop
 			
 			m_DeltaTime = elapsedTime/1000000000d;
 			update();
+			addGameObjects();
+			removeGameObjects();
 			
 			executionTime = System.nanoTime() - previousTime;
 			try 
@@ -73,8 +83,9 @@ public class GameLoop
 		 */
 	private void update()
 	{
-		System.out.println("Updating things.");
+		System.out.println("Actualizando GameObjects. Count: " + m_GameObjects.size() + " | A añadir: " + m_GameObjectsToAdd.size() + " | A eliminar: " + m_GameObjectsToRemove.size());
 		for (GameObject gameObject : m_GameObjects) {
+			//System.out.println("Trying to update: " + gameObject.getName());
 			gameObject.update();
 		}
 	}
@@ -108,6 +119,11 @@ public class GameLoop
 		return m_DeltaTime;
 	}
 	
+	public ArrayList<GameObject> getGameObjects()
+	{
+		return m_GameObjects;
+	}
+	
 	public void addGameObject(GameObject gameObject)
 	{
 		m_GameObjectsToAdd.add(gameObject);
@@ -116,6 +132,28 @@ public class GameLoop
 	public void removeGameObject(GameObject gameObject)
 	{
 		m_GameObjectsToRemove.add(gameObject);
+	}
+	
+	public void addGameObjects()
+	{
+		ListIterator<GameObject> iterator = m_GameObjectsToAdd.listIterator();
+		while(iterator.hasNext())
+		{
+			GameObject currentGameObject = iterator.next();
+			m_GameObjects.add(currentGameObject);
+		}
+		m_GameObjectsToAdd.clear();
+	}
+	
+	public void removeGameObjects()
+	{
+		ListIterator<GameObject> iterator = m_GameObjectsToRemove.listIterator();
+		while(iterator.hasNext())
+		{
+			GameObject currentGameObject = iterator.next();
+			m_GameObjects.remove(currentGameObject);
+		}
+		m_GameObjectsToRemove.clear();
 	}
 		
 }

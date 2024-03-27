@@ -1,0 +1,21 @@
+package Classes;
+
+public class SpawnerBehaviour extends Component {
+
+	private GameObject m_Owner;
+	private GameObject m_ObjectToSpawn;
+	private float m_SpawnTime; 
+	
+	
+	public SpawnerBehaviour(GameObject owner, GameObject objectToSpawn, float spawnTime) {
+		super("Spawner");
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

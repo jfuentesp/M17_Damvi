@@ -1,5 +1,0 @@
-package Classes;
-
-public abstract class Component {
-	public String name = "Component";
-}

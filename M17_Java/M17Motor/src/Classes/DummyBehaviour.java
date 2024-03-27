@@ -17,4 +17,9 @@ public class DummyBehaviour extends Component
 		
 	}
 	
+	public void RecieveShot(int damage)
+	{
+		m_Owner.getComponent(Health.class).receiveDamage(damage);
+	}
+	
 }
