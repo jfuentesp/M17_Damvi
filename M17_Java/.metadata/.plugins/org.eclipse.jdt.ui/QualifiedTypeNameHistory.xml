@@ -8,9 +8,11 @@
     <fullyQualifiedTypeName name="java.util.LinkedList"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="Classes.ShooterBehaviour"/>
-    <fullyQualifiedTypeName name="Classes.DummyBehaviour"/>
-    <fullyQualifiedTypeName name="Motor.GameLoop"/>
     <fullyQualifiedTypeName name="java.util.Iterator"/>
     <fullyQualifiedTypeName name="java.util.ListIterator"/>
     <fullyQualifiedTypeName name="Classes.GameObject"/>
+    <fullyQualifiedTypeName name="Classes.Health"/>
+    <fullyQualifiedTypeName name="Classes.DummyBehaviour"/>
+    <fullyQualifiedTypeName name="Classes.SpawnerBehaviour"/>
+    <fullyQualifiedTypeName name="Motor.GameLoop"/>
 </qualifiedTypeNameHistroy>
